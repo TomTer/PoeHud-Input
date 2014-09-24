@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{E86368B2-AE1E-4489-A749-E29A0AB48F83}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <OutputType>WinExe</OutputType>
+    <AssemblyName>ExileHUD</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="SlimDX" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BotFramework\GameWindow.cs" />
+    <Compile Include="BotFramework\Imports.cs" />
+    <Compile Include="BotFramework\Memory.cs" />
+    <Compile Include="BotFramework\Rect.cs" />
+    <Compile Include="BotFramework\Vec2.cs" />
+    <Compile Include="BotFramework\Vec3.cs" />
+    <Compile Include="ExileBot\Actor.cs" />
+    <Compile Include="ExileBot\Area.cs" />
+    <Compile Include="ExileBot\AreaChangeEvent.cs" />
+    <Compile Include="ExileBot\AreaTransition.cs" />
+    <Compile Include="ExileBot\Armour.cs" />
+    <Compile Include="ExileBot\BaseItemTypes.cs" />
+    <Compile Include="ExileBot\Buff.cs" />
+    <Compile Include="ExileBot\Chest.cs" />
+    <Compile Include="ExileBot\Component.cs" />
+    <Compile Include="ExileBot\Entity.cs" />
+    <Compile Include="ExileBot\EntityEvent.cs" />
+    <Compile Include="ExileBot\EntityList.cs" />
+    <Compile Include="ExileBot\FileIndex.cs" />
+    <Compile Include="ExileBot\Inventory.cs" />
+    <Compile Include="ExileBot\InventoryIndex.cs" />
+    <Compile Include="ExileBot\ItemRarity.cs" />
+    <Compile Include="ExileBot\ItemStat.cs" />
+    <Compile Include="ExileBot\ItemStats.cs" />
+    <Compile Include="ExileBot\ItemType.cs" />
+    <Compile Include="ExileBot\Life.cs" />
+    <Compile Include="ExileBot\Link.cs" />
+    <Compile Include="ExileBot\Map.cs" />
+    <Compile Include="ExileBot\Mods.cs" />
+    <Compile Include="ExileBot\Monster.cs" />
+    <Compile Include="ExileBot\MonsterRarity.cs" />
+    <Compile Include="ExileBot\ObjectMagicProperties.cs" />
+    <Compile Include="ExileBot\Offsets.cs" />
+    <Compile Include="ExileBot\PathOfExile.cs" />
+    <Compile Include="ExileBot\Player.cs" />
+    <Compile Include="ExileBot\Poe_Area.cs" />
+    <Compile Include="ExileBot\Poe_Buff.cs" />
+    <Compile Include="ExileBot\Poe_Camera.cs" />
+    <Compile Include="ExileBot\Poe_Entity.cs" />
+    <Compile Include="ExileBot\Poe_EntityList.cs" />
+    <Compile Include="ExileBot\Poe_Game.cs" />
+    <Compile Include="ExileBot\Poe_IngameData.cs" />
+    <Compile Include="ExileBot\Poe_IngameState.cs" />
+    <Compile Include="ExileBot\Poe_IngameUIElements.cs" />
+    <Compile Include="ExileBot\Poe_Inventory.cs" />
+    <Compile Include="ExileBot\Poe_InventorySet.cs" />
+    <Compile Include="ExileBot\Poe_ItemMod.cs" />
+    <Compile Include="ExileBot\Poe_ServerData.cs" />
+    <Compile Include="ExileBot\Poe_UIElement.cs" />
+    <Compile Include="ExileBot\Poe_UI_BigMinimap.cs" />
+    <Compile Include="ExileBot\Poe_UI_EntityLabel.cs" />
+    <Compile Include="ExileBot\Poe_UI_Inventory.cs" />
+    <Compile Include="ExileBot\Poe_UI_InventoryItemIcon.cs" />
+    <Compile Include="ExileBot\Poe_UI_Label.cs" />
+    <Compile Include="ExileBot\Poe_UI_Tooltip.cs" />
+    <Compile Include="ExileBot\Positioned.cs" />
+    <Compile Include="ExileBot\Quality.cs" />
+    <Compile Include="ExileBot\RemoteMemoryObject.cs" />
+    <Compile Include="ExileBot\Render.cs" />
+    <Compile Include="ExileBot\SelectionState.cs" />
+    <Compile Include="ExileBot\SkillGem.cs" />
+    <Compile Include="ExileBot\Socket.cs" />
+    <Compile Include="ExileBot\Sockets.cs" />
+    <Compile Include="ExileBot\Stat.cs" />
+    <Compile Include="ExileBot\Stats.cs" />
+    <Compile Include="ExileBot\Targetable.cs" />
+    <Compile Include="ExileBot\UpdateEvent.cs" />
+    <Compile Include="ExileBot\Vec2f.cs" />
+    <Compile Include="ExileBot\Weapon.cs" />
+    <Compile Include="ExileBot\WorldItem.cs" />
+    <Compile Include="ExileHUD\BooleanButton.cs" />
+    <Compile Include="ExileHUD\ChestMinimapIcon.cs" />
+    <Compile Include="ExileHUD\ClientHacks.cs" />
+    <Compile Include="ExileHUD\Constants.cs" />
+    <Compile Include="ExileHUD\DangerAlert.cs" />
+    <Compile Include="ExileHUD\HealthBarRenderer.cs" />
+    <Compile Include="ExileHUD\HUDPlugin.cs" />
+    <Compile Include="ExileHUD\IntPicker.cs" />
+    <Compile Include="ExileHUD\ItemAlerter.cs" />
+    <Compile Include="ExileHUD\ItemLevelRenderer.cs" />
+    <Compile Include="ExileHUD\ItemMinimapIcon.cs" />
+    <Compile Include="ExileHUD\Menu.cs" />
+    <Compile Include="ExileHUD\MenuItem.cs" />
+    <Compile Include="ExileHUD\MinimapIcon.cs" />
+    <Compile Include="ExileHUD\MinimapRenderer.cs" />
+    <Compile Include="ExileHUD\MinimapRenderPriority.cs" />
+    <Compile Include="ExileHUD\MinionMinimapIcon.cs" />
+    <Compile Include="ExileHUD\MonsterMinimapIcon.cs" />
+    <Compile Include="ExileHUD\MouseEventID.cs" />
+    <Compile Include="ExileHUD\MouseHook.cs" />
+    <Compile Include="ExileHUD\OverlayRenderer.cs" />
+    <Compile Include="ExileHUD\PreloadAlert.cs" />
+    <Compile Include="ExileHUD\Program.cs" />
+    <Compile Include="ExileHUD\RenderCallback.cs" />
+    <Compile Include="ExileHUD\RenderingContext.cs" />
+    <Compile Include="ExileHUD\Settings.cs" />
+    <Compile Include="ExileHUD\SettingsEditor.cs" />
+    <Compile Include="ExileHUD\SettingsEditorStatus.cs" />
+    <Compile Include="ExileHUD\SettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ExileHUD\Sounds.cs" />
+    <Compile Include="ExileHUD\StrongboxMinimapIcon.cs" />
+    <Compile Include="ExileHUD\TextAlignment.cs" />
+    <Compile Include="ExileHUD\TextureRenderer.cs" />
+    <Compile Include="ExileHUD\TransparentDXOverlay.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ExileHUD\XPHRenderer.cs" />
+    <Compile Include="Pattern.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ExileHUD\SettingsForm.resources" />
+    <EmbeddedResource Include="ExileHUD\TransparentDXOverlay.resources" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
