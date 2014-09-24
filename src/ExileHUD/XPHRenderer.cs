@@ -96,18 +96,18 @@ namespace ExileHUD
 			int bgAlpha = Settings.GetInt("XphDisplay.BgAlpha");
 
 			Rect clientRect = this.poe.Internal.IngameState.IngameUi.Minimap.SmallMinimap.GetClientRect();
-			Vec2 vec = new Vec2(clientRect.X - 10, clientRect.Y + 5);
+			Vec2 mapWithOffset = new Vec2(clientRect.X - 10, clientRect.Y + 5);
 			int num7 = 0;
-			Vec2 vec2 = rc.AddTextWithHeight(new Vec2(vec.X, vec.Y), this.curDisplayString, Color.White, fontSize, DrawTextFormat.Right);
+			Vec2 vec2 = rc.AddTextWithHeight(new Vec2(mapWithOffset.X, mapWithOffset.Y), this.curDisplayString, Color.White, fontSize, DrawTextFormat.Right);
 			num7 += vec2.Y;
-			Vec2 vec3 = rc.AddTextWithHeight(new Vec2(vec.X, vec.Y + num7), this.curTimeLeftString, Color.White, fontSize, DrawTextFormat.Right);
+			Vec2 vec3 = rc.AddTextWithHeight(new Vec2(mapWithOffset.X, mapWithOffset.Y + num7), this.curTimeLeftString, Color.White, fontSize, DrawTextFormat.Right);
 			num7 += vec3.Y;
 			int val = Math.Max(vec2.X, vec3.X) + 10;
 			int num8 = Math.Max(val, Math.Max(clientRect.W, this.overlay.PreloadAlert.Bounds.W));
-			Rect rect = new Rect(vec.X - num8 + 5, vec.Y - 5, num8, num7 + 10);
+			Rect rect = new Rect(mapWithOffset.X - num8 + 5, mapWithOffset.Y - 5, num8, num7 + 10);
 			this.Bounds = rect;
 
-			rc.AddTextWithHeight(new Vec2(rect.X - num8, rect.Y), dtNow.ToShortTimeString(), Color.White, fontSize, DrawTextFormat.Left);
+			rc.AddTextWithHeight(new Vec2(rect.X + 5, mapWithOffset.Y), dtNow.ToShortTimeString(), Color.White, fontSize, DrawTextFormat.Left);
 			rc.AddBox(rect, Color.FromArgb(bgAlpha, 1, 1, 1));
 		}
 	}
