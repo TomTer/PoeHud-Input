@@ -171,7 +171,7 @@ namespace ExileHUD
 			ip.IsCurrency = item.Path.Contains("Currency");
 			ip.IsSkillGem = sk != null;
 			ip.Quality = q == null ? 0 : q.ItemQuality;
-
+			ip.WorthChrome = socks != null && socks.IsRGB;
 			return ip;
 		}
 
