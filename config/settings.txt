@@ -1,11 +1,11 @@
 bool Window.RequireForeground=True
-bool Window.ShowIngameMenu=False
+bool Window.ShowIngameMenu=True
 bool ClientHacks=False
 bool ClientHacks.Maphack=False
 bool ClientHacks.Zoomhack=False
 bool ClientHacks.Fullbright=False
 bool PreloadAlert=True
-bool Healthbars=False
+bool Healthbars=True
 bool Healthbars.ShowES=True
 bool Healthbars.ShowIncrements=True
 bool Healthbars.ShowInTown=True
