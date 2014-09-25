@@ -33,7 +33,9 @@ namespace ExileHUD.ExileHUD
             this.hudRenderers.Add(this.PreloadAlert = new PreloadAlert());
             if (Settings.GetBool("Window.ShowIngameMenu"))
             {
+#if !DEBUG
                 this.hudRenderers.Add(new Menu());
+#endif
             }
             rc.OnRender += new RenderCallback(this.rc_OnRender);
             if (action == null)
