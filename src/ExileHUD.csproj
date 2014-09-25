@@ -156,4 +156,7 @@
     <EmbeddedResource Include="ExileHUD\TransparentDXOverlay.resources" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy $(TargetPath) $(ProjectDir)\..</PostBuildEvent>
+  </PropertyGroup>
 </Project>
