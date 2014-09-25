@@ -233,6 +233,7 @@ namespace ExileHUD.ExileHUD
 			Settings.bools.Add("Healthbars.Enemies.Rare", true);
 			Settings.bools.Add("Healthbars.Enemies.Unique", true);
 			Settings.bools.Add("XphDisplay", true);
+			Settings.bools.Add("ExitWithGame", true);
 			Settings.ints.Add("PreloadAlert.FontSize", 12);
 			Settings.ints.Add("PreloadAlert.BgAlpha", 180);
 			Settings.ints.Add("XphDisplay.FontSize", 12);
