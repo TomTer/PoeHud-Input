@@ -46,10 +46,10 @@ namespace ExileHUD.ExileBot
             fixed (byte* numRef = base.m.ReadBytes(addr, 0x40))
             {
                 float* numPtr = (float*)numRef;
-                double num5 = (((numPtr[12] * vec3.x) + (numPtr[0x1c] * vec3.y)) + (numPtr[0x2c] * vec3.z)) + numPtr[60];
-                num2 = ((double)((((numPtr[0] * vec3.x) + (numPtr[0x10] * vec3.y)) + (numPtr[0x20] * vec3.z)) + numPtr[0x30])) / num5;
-                num3 = ((double)((((numPtr[4] * vec3.x) + (numPtr[20] * vec3.y)) + (numPtr[0x24] * vec3.z)) + numPtr[0x34])) / num5;
-                num4 = ((double)((((numPtr[8] * vec3.x) + (numPtr[0x18] * vec3.y)) + (numPtr[40] * vec3.z)) + numPtr[0x38])) / num5;
+                double num5 = (((numPtr[3] * vec3.x) + (numPtr[7] * vec3.y)) + (numPtr[11] * vec3.z)) + numPtr[15];
+                num2 = ((double)((((numPtr[0] * vec3.x) + (numPtr[4] * vec3.y)) + (numPtr[8] * vec3.z)) + numPtr[12])) / num5;
+                num3 = ((double)((((numPtr[1] * vec3.x) + (numPtr[5] * vec3.y)) + (numPtr[9] * vec3.z)) + numPtr[13])) / num5;
+                num4 = ((double)((((numPtr[2] * vec3.x) + (numPtr[6] * vec3.y)) + (numPtr[10] * vec3.z)) + numPtr[14])) / num5;
             }
             if (((num4 < 0.0) || (Math.Abs(num2) > 1.0)) || (Math.Abs(num3) > 1.0))
             {

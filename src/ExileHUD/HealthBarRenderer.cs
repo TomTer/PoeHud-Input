@@ -67,28 +67,28 @@ namespace ExileHUD.ExileHUD
 			{
 				return;
 			}
-			float num = (float)this.poe.Window.ClientRect().W / 2560f;
-			float num2 = (float)this.poe.Window.ClientRect().H / 1600f;
+			float clientWidth = (float)this.poe.Window.ClientRect().W / 2560f;
+			float clientHeight = (float)this.poe.Window.ClientRect().H / 1600f;
 			List<HealthBarRenderer.Healthbar>[] array = this.healthBars;
 			for (int i = 0; i < array.Length; i++)
 			{
-				List<HealthBarRenderer.Healthbar> list = array[i];
-				list.RemoveAll((HealthBarRenderer.Healthbar x) => !x.entity.IsValid);
-				foreach (HealthBarRenderer.Healthbar current in 
-					from x in list
-					where x.entity.IsAlive && Settings.GetBool(x.settings)
-					select x)
+				array[i].RemoveAll((HealthBarRenderer.Healthbar x) => !x.entity.IsValid);
+				foreach (HealthBarRenderer.Healthbar current in array[i].Where(x => x.entity.IsAlive && Settings.GetBool(x.settings)))
 				{
-					Vec2 left = this.poe.Internal.IngameState.Camera.WorldToScreen(current.entity.Pos.Translate(0f, 0f, -170f));
-					if (left != Vec2.Empty)
+					Vec3 worldCoords = current.entity.Pos;
+					Vec2 mobScreenCoords = this.poe.Internal.IngameState.Camera.WorldToScreen(worldCoords.Translate(0f, 0f, -170f));
+					System.Diagnostics.Debug.WriteLine("{0} is at {1} => {2} on screen", current.entity.Path, worldCoords, mobScreenCoords);
+					if (mobScreenCoords != Vec2.Empty)
 					{
-						int num3 = (int)((float)Settings.GetInt(current.settings + ".Width") * num);
-						int num4 = (int)((float)Settings.GetInt(current.settings + ".Height") * num2);
+						int scaledWidth = (int)(Settings.GetInt(current.settings + ".Width") * clientWidth);
+						int scaledHeight = (int)(Settings.GetInt(current.settings + ".Height") * clientHeight);
 						Color color = Settings.GetColor(current.settings + ".Color");
 						Color color2 = Settings.GetColor(current.settings + ".Outline");
-						float hpWidth = current.entity.GetComponent<Life>().HPPercentage * (float)num3;
-						float esWidth = current.entity.GetComponent<Life>().ESPercentage * (float)num3;
-						Rect bg = new Rect(left.X - num3 / 2, left.Y - num4 / 2, num3, num4);
+						float hpPercent = current.entity.GetComponent<Life>().HPPercentage;
+						float esPercent = current.entity.GetComponent<Life>().ESPercentage;
+						float hpWidth = hpPercent * scaledWidth;
+						float esWidth = esPercent * scaledWidth;
+						Rect bg = new Rect(mobScreenCoords.X - scaledWidth / 2, mobScreenCoords.Y - scaledHeight / 2, scaledWidth, scaledHeight);
 						this.DrawEntityHealthbar(color, color2, bg, hpWidth, esWidth, rc);
 					}
 				}
