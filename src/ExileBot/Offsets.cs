@@ -1,11 +1,25 @@
+//#define STEAM
 using ExileHUD.Framework;
 
 namespace ExileHUD.ExileBot
 {
 	public class Offsets
 	{
+#if STEAM
+		public const string ProcessName = "PathOfExileSteam";
+		public const int ISOffset = 28;
+		public const int ISDelta = 4;
+		public static int Base = 8841968;
+		public static int FileRoot = 8820476;
+		public static int MaphackFunc = 4939552;
+		public static int ZoomHackFunc = 2225383;
+		public static int AreaChangeCount = 8730996;
+		public static int Fullbright1 = 7639804;
+		public static int Fullbright2 = 8217084;
+#else
 		public const string ProcessName = "PathOfExile";
 		public const int IngameStateOffset = 0;
+		public const int IngameStateDelta = 0;
 		public static int Base = 8825704;
 		public static int FileRoot = 8804204;
 		public static int MaphackFunc = 4927600;
@@ -13,6 +27,7 @@ namespace ExileHUD.ExileBot
 		public static int AreaChangeCount = 8714612;
 		public static int Fullbright1 = 7627500;
 		public static int Fullbright2 = 8206296;
+#endif
 		private static Pattern maphackPattern = new Pattern(new byte[]
 		{
 			81,

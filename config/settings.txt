@@ -27,6 +27,7 @@ bool ItemAlert.ShowText=True
 bool ItemAlert.Crafting=True
 bool Tooltip=True
 bool Tooltip.ShowItemLevel=False
+bool Tooltip.ShowItemMods=False
 bool DangerAlert=True
 bool DangerAlert.ShowText=True
 bool DangerAlert.PlaySound=True

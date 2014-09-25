@@ -27,6 +27,7 @@ namespace ExileHUD.ExileHUD
             this.hudRenderers.Add(new ItemAlerter());
             this.hudRenderers.Add(this.MinimapRenderer = new MinimapRenderer());
             this.hudRenderers.Add(new ItemLevelRenderer());
+			this.hudRenderers.Add(new ItemRollsRenderer());
             this.hudRenderers.Add(new DangerAlert());
             this.hudRenderers.Add(this.XphRenderer = new XPHRenderer());
             this.hudRenderers.Add(new ClientHacks());
