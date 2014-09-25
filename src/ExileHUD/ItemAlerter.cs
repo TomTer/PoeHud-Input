@@ -71,7 +71,7 @@ namespace ExileHUD.ExileHUD
 				case ItemRarity.White : color = Color.White; break;
 				case ItemRarity.Magic: color = AlertDrawStyle.MagicColor; break;
 				case ItemRarity.Rare : color = AlertDrawStyle.RareColor; break;
-				case ItemRarity.Unique : color = Color.Orange; break;
+				case ItemRarity.Unique : color = AlertDrawStyle.UniqueColor; break;
 			}
 			if( IsSkillGem )
 				color = AlertDrawStyle.SkillGemColor;
@@ -93,7 +93,9 @@ namespace ExileHUD.ExileHUD
 		public static readonly Color MagicColor = Color.FromArgb(136, 136, 255);
 		public static readonly Color RareColor = Color.FromArgb(255, 255, 119);
 		public static readonly Color CurrencyColor = Color.FromArgb(170, 158, 130);
+		public static readonly Color UniqueColor = Color.FromArgb(175, 96, 37);
 		public static readonly Color SkillGemColor = Color.FromArgb(26, 162, 155);
+
 
 		public Color color;
 		public int FrameWidth;
