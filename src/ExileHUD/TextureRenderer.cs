@@ -45,7 +45,6 @@ namespace ExileHUD.ExileHUD
 		{
 			public float X;
 			public float Y;
-			public float Z;
 			public float U;
 			public float V;
 			public int Color;
@@ -56,25 +55,20 @@ namespace ExileHUD.ExileHUD
 					return VertexFormat.Position | VertexFormat.Diffuse | VertexFormat.Texture1;
 				}
 			}
-			public ColoredTexturedVertex(float x, float y, float z, float u, float v, Color color)
+			public ColoredTexturedVertex(float x, float y, float u, float v, Color color)
 			{
 				this.X = x;
 				this.Y = y;
-				this.Z = z;
 				this.U = u;
 				this.V = v;
 				this.Color = color.ToArgb();
 			}
-			public ColoredTexturedVertex(float x, float y, float u, float v, Color color)
-			{
-				this = new TextureRenderer.ColoredTexturedVertex(x, y, 0f, u, v, color);
-			}
 
 			public static readonly VertexElement[] VertexElements = new VertexElement[]
 			{
-				new VertexElement(0, 0, DeclarationType.Float3, DeclarationMethod.Default, DeclarationUsage.Position, 0),
-				new VertexElement(0, 12, DeclarationType.Float2, DeclarationMethod.Default, DeclarationUsage.TextureCoordinate, 0),
-				new VertexElement(0, 20, DeclarationType.Color, DeclarationMethod.Default, DeclarationUsage.Color, 0),
+				new VertexElement(0, 0, DeclarationType.Float2, DeclarationMethod.Default, DeclarationUsage.Position, 0),
+				new VertexElement(0, 8, DeclarationType.Float2, DeclarationMethod.Default, DeclarationUsage.TextureCoordinate, 0),
+				new VertexElement(0, 16, DeclarationType.Color, DeclarationMethod.Default, DeclarationUsage.Color, 0),
 				VertexElement.VertexDeclarationEnd
 			};
 		}
