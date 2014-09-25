@@ -25,14 +25,7 @@ namespace ExileHUD.ExileBot
 		}
 		public override string ToString()
 		{
-			return string.Concat(new object[]
-			{
-				"[",
-				this.X,
-				", ",
-				this.Y,
-				"]"
-			});
+			return string.Concat(new object[] { "[", this.X, ", ", this.Y, "]" });
 		}
 		public static bool operator ==(Vec2f left, Vec2f right)
 		{

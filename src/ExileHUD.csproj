@@ -145,7 +145,6 @@
     </Compile>
     <Compile Include="ExileHUD\Sounds.cs" />
     <Compile Include="ExileHUD\StrongboxMinimapIcon.cs" />
-    <Compile Include="ExileHUD\TextAlignment.cs" />
     <Compile Include="ExileHUD\TextureRenderer.cs" />
     <Compile Include="ExileHUD\TransparentDXOverlay.cs">
       <SubType>Form</SubType>
