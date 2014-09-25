@@ -26,7 +26,7 @@ namespace ExileHUD.ExileHUD
 		public const int LWA_COLORKEY = 1;
 		private IContainer components;
 		private Device dx;
-		private GameWindow window;
+		private readonly GameWindow window;
 		private Thread dxThread;
 		private bool wantsExit;
 		public static IntPtr CurrentHandle;
@@ -52,7 +52,6 @@ namespace ExileHUD.ExileHUD
 			this.BackColor = SystemColors.Control;
 			base.ClientSize = new Size(594, 448);
 			base.Name = "TransparentDXOverlay";
-			this.Text = "ExileHUD";
 			base.TopMost = true;
 			base.TransparencyKey = Color.Transparent;
 			base.Deactivate += new EventHandler(this.TransparentDXOverlay_Deactivate);
@@ -66,7 +65,8 @@ namespace ExileHUD.ExileHUD
 			base.ShowIcon = false;
 			base.TopMost = true;
 			base.FormClosing += new FormClosingEventHandler(this.TransparentDXOverlay_FormClosing);
-			this.Text = Settings.GetString("Window.Name");
+			string textForTitle = Settings.GetString("Window.Name");
+			this.Text = String.IsNullOrWhiteSpace(textForTitle) ? "ExileHUD" : textForTitle;
 			base.FormBorderStyle = FormBorderStyle.None;
 			base.Load += new EventHandler(this.TransparentDXOverlay_Load);
 		}
