@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
-namespace BotFramework
+
+namespace ExileHUD.Framework
 {
 	public class GameWindow
 	{

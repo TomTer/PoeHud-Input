@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-namespace ExileBot
+
+namespace ExileHUD.EntityComponents
 {
 	public class Sockets : Component
 	{

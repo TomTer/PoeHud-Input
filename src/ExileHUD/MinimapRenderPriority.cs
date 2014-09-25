@@ -1,5 +1,4 @@
-using System;
-namespace ExileHUD
+namespace ExileHUD.ExileHUD
 {
 	public enum MinimapRenderPriority
 	{

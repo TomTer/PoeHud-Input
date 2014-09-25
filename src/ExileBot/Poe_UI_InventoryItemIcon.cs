@@ -1,5 +1,4 @@
-using System;
-namespace ExileBot
+namespace ExileHUD.ExileBot
 {
 	public class Poe_UI_InventoryItemIcon : Poe_UIElement
 	{

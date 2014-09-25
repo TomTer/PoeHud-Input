@@ -5,7 +5,8 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
-namespace ExileHUD
+
+namespace ExileHUD.ExileHUD
 {
 	public class Settings
 	{

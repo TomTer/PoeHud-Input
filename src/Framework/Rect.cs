@@ -1,5 +1,4 @@
-using System;
-namespace BotFramework
+namespace ExileHUD.Framework
 {
 	public struct Rect
 	{

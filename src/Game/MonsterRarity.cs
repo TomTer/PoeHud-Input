@@ -1,5 +1,4 @@
-using System;
-namespace ExileBot
+namespace ExileHUD.Game
 {
 	public enum MonsterRarity
 	{

@@ -1,5 +1,4 @@
-using System;
-namespace ExileHUD
+namespace ExileHUD.ExileHUD
 {
 	public delegate void RenderCallback(RenderingContext rc);
 }

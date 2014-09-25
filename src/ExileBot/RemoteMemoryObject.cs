@@ -1,6 +1,7 @@
-using BotFramework;
 using System;
-namespace ExileBot
+using ExileHUD.Framework;
+
+namespace ExileHUD.ExileBot
 {
 	public abstract class RemoteMemoryObject
 	{

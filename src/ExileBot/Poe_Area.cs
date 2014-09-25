@@ -1,5 +1,4 @@
-using System;
-namespace ExileBot
+namespace ExileHUD.ExileBot
 {
 	public class Poe_Area : RemoteMemoryObject
 	{

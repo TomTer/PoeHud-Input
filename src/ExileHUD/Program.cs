@@ -1,10 +1,11 @@
-using BotFramework;
-using ExileBot;
 using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
-namespace ExileHUD
+using ExileHUD.ExileBot;
+using ExileHUD.Framework;
+
+namespace ExileHUD.ExileHUD
 {
 	public class Program
 	{

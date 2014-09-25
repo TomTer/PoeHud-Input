@@ -1,10 +1,13 @@
-using BotFramework;
-using ExileBot;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-namespace ExileHUD
+using ExileHUD.EntityComponents;
+using ExileHUD.ExileBot;
+using ExileHUD.Framework;
+using ExileHUD.Game;
+
+namespace ExileHUD.ExileHUD
 {
 	public class MinimapRenderer : HUDPlugin
 	{

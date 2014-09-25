@@ -1,11 +1,14 @@
-using BotFramework;
-using ExileBot;
-using SlimDX.Direct3D9;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-namespace ExileHUD
+using ExileHUD.EntityComponents;
+using ExileHUD.ExileBot;
+using ExileHUD.Framework;
+using ExileHUD.Game;
+using SlimDX.Direct3D9;
+
+namespace ExileHUD.ExileHUD
 {
 
 	public class ItemUsefulProperties {

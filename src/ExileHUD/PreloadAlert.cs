@@ -1,11 +1,12 @@
-using BotFramework;
-using ExileBot;
-using SlimDX.Direct3D9;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-namespace ExileHUD
+using ExileHUD.ExileBot;
+using ExileHUD.Framework;
+using SlimDX.Direct3D9;
+
+namespace ExileHUD.ExileHUD
 {
 	public class PreloadAlert : HUDPlugin
 	{

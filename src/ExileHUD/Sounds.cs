@@ -1,7 +1,8 @@
 using System;
 using System.Media;
 using System.Windows.Forms;
-namespace ExileHUD
+
+namespace ExileHUD.ExileHUD
 {
 	public class Sounds
 	{

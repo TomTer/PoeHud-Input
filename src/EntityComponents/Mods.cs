@@ -1,6 +1,8 @@
-using System;
 using System.Collections.Generic;
-namespace ExileBot
+using ExileHUD.ExileBot;
+using ExileHUD.Game;
+
+namespace ExileHUD.EntityComponents
 {
 	public class Mods : Component
 	{

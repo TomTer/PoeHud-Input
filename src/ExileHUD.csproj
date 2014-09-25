@@ -31,6 +31,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>ExileHUD</RootNamespace>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System" />
@@ -39,12 +42,12 @@
     <Reference Include="SlimDX" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BotFramework\GameWindow.cs" />
-    <Compile Include="BotFramework\Imports.cs" />
-    <Compile Include="BotFramework\Memory.cs" />
-    <Compile Include="BotFramework\Rect.cs" />
-    <Compile Include="BotFramework\Vec2.cs" />
-    <Compile Include="BotFramework\Vec3.cs" />
+    <Compile Include="Framework\GameWindow.cs" />
+    <Compile Include="Framework\Imports.cs" />
+    <Compile Include="Framework\Memory.cs" />
+    <Compile Include="Framework\Rect.cs" />
+    <Compile Include="Framework\Vec2.cs" />
+    <Compile Include="Framework\Vec3.cs" />
     <Compile Include="EntityComponents\Actor.cs" />
     <Compile Include="ExileBot\Area.cs" />
     <Compile Include="ExileBot\AreaChangeEvent.cs" />

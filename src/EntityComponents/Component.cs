@@ -1,5 +1,6 @@
-using System;
-namespace ExileBot
+using ExileHUD.ExileBot;
+
+namespace ExileHUD.EntityComponents
 {
 	public abstract class Component : RemoteMemoryObject
 	{

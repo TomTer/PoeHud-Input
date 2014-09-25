@@ -1,5 +1,4 @@
-using System;
-namespace ExileBot
+namespace ExileHUD.ExileBot
 {
 	public struct Vec2f
 	{

@@ -1,9 +1,10 @@
-using BotFramework;
-using ExileBot;
-using SlimDX.Direct3D9;
-using System;
 using System.Drawing;
-namespace ExileHUD
+using ExileHUD.EntityComponents;
+using ExileHUD.ExileBot;
+using ExileHUD.Framework;
+using SlimDX.Direct3D9;
+
+namespace ExileHUD.ExileHUD
 {
 	public class ItemLevelRenderer : HUDPlugin
 	{

@@ -1,8 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-namespace ExileBot
+
+namespace ExileHUD.ExileBot
 {
 	public class Poe_EntityList : RemoteMemoryObject
 	{

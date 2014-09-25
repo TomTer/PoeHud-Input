@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
-namespace ExileHUD
+
+namespace ExileHUD.ExileHUD
 {
 	public class SettingsForm : Form
 	{

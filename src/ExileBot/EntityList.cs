@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-namespace ExileBot
+
+namespace ExileHUD.ExileBot
 {
 	public class EntityList
 	{

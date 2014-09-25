@@ -1,7 +1,7 @@
-using BotFramework;
-using System;
 using System.Windows.Forms;
-namespace ExileHUD
+using ExileHUD.Framework;
+
+namespace ExileHUD.ExileHUD
 {
 	public class SettingsEditor
 	{

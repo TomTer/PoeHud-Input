@@ -1,6 +1,6 @@
-using System;
 using System.Collections.Generic;
-namespace ExileBot
+
+namespace ExileHUD.ExileBot
 {
 	public class Inventory
 	{

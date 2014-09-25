@@ -1,7 +1,8 @@
-using BotFramework;
-using ExileBot;
 using System;
-namespace ExileHUD
+using ExileHUD.ExileBot;
+using ExileHUD.Framework;
+
+namespace ExileHUD.ExileHUD
 {
 	public class ClientHacks : HUDPlugin
 	{

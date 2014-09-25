@@ -1,8 +1,8 @@
-using BotFramework;
-using SlimDX.Direct3D9;
-using System;
 using System.Drawing;
-namespace ExileHUD
+using ExileHUD.Framework;
+using SlimDX.Direct3D9;
+
+namespace ExileHUD.ExileHUD
 {
 	public class BooleanButton : MenuItem
 	{

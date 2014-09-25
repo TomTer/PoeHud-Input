@@ -1,5 +1,4 @@
-using System;
-namespace ExileBot
+namespace ExileHUD.EntityComponents
 {
 	public class Quality : Component
 	{

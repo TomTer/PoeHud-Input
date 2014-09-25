@@ -1,8 +1,9 @@
-using BotFramework;
-using ExileBot;
-using System;
 using System.Drawing;
-namespace ExileHUD
+using ExileHUD.EntityComponents;
+using ExileHUD.ExileBot;
+using ExileHUD.Framework;
+
+namespace ExileHUD.ExileHUD
 {
 	public abstract class MinimapIcon
 	{

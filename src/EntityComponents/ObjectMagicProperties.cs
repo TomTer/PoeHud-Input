@@ -1,7 +1,8 @@
-using BotFramework;
-using System;
 using System.Collections.Generic;
-namespace ExileBot
+using ExileHUD.Framework;
+using ExileHUD.Game;
+
+namespace ExileHUD.EntityComponents
 {
 	public class ObjectMagicProperties : Component
 	{

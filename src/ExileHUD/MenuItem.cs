@@ -1,7 +1,7 @@
-using BotFramework;
-using System;
 using System.Collections.Generic;
-namespace ExileHUD
+using ExileHUD.Framework;
+
+namespace ExileHUD.ExileHUD
 {
 	public abstract class MenuItem
 	{

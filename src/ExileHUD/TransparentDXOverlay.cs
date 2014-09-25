@@ -1,13 +1,14 @@
-using BotFramework;
-using SlimDX;
-using SlimDX.Direct3D9;
 using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
-namespace ExileHUD
+using ExileHUD.Framework;
+using SlimDX;
+using SlimDX.Direct3D9;
+
+namespace ExileHUD.ExileHUD
 {
 	public class TransparentDXOverlay : Form
 	{

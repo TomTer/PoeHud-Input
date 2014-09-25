@@ -1,6 +1,7 @@
-using System;
 using System.Collections.Generic;
-namespace ExileBot
+using ExileHUD.ExileBot;
+
+namespace ExileHUD.EntityComponents
 {
 	public class Life : Component
 	{

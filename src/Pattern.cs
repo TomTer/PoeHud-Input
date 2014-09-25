@@ -1,11 +1,13 @@
-using System;
-public struct Pattern
+namespace ExileHUD
 {
-	public byte[] Bytes;
-	public string Mask;
-	public Pattern(byte[] pattern, string mask)
+	public struct Pattern
 	{
-		this.Bytes = pattern;
-		this.Mask = mask;
+		public byte[] Bytes;
+		public string Mask;
+		public Pattern(byte[] pattern, string mask)
+		{
+			this.Bytes = pattern;
+			this.Mask = mask;
+		}
 	}
 }

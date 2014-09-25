@@ -1,8 +1,9 @@
-using BotFramework;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-namespace ExileBot
+using ExileHUD.EntityComponents;
+using ExileHUD.Framework;
+
+namespace ExileHUD.ExileBot
 {
 	public class PathOfExile
 	{

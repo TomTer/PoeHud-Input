@@ -1,7 +1,7 @@
-using BotFramework;
-using System;
 using System.Collections.Generic;
-namespace ExileBot
+using ExileHUD.Framework;
+
+namespace ExileHUD.ExileBot
 {
 	public class Poe_UIElement : RemoteMemoryObject
 	{

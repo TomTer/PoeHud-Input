@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
-namespace ExileBot
+using ExileHUD.EntityComponents;
+using ExileHUD.Game;
+
+namespace ExileHUD.ExileBot
 {
 	public class ItemStats
 	{

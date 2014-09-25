@@ -1,5 +1,6 @@
 using System;
-namespace ExileBot
+
+namespace ExileHUD.Game
 {
 	public class Link
 	{

@@ -1,7 +1,7 @@
-using ExileBot;
-using System;
 using System.Drawing;
-namespace ExileHUD
+using ExileHUD.ExileBot;
+
+namespace ExileHUD.ExileHUD
 {
 	public class ItemMinimapIcon : MinimapIcon
 	{

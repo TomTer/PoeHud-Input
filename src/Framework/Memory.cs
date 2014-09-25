@@ -4,7 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-namespace BotFramework
+
+namespace ExileHUD.Framework
 {
 	public class Memory : IDisposable
 	{
