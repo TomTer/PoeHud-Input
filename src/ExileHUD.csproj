@@ -41,8 +41,12 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="SlimDX" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExileHUD\ItemRollsRenderer.cs" />
+    <Compile Include="ExileHUD\MaxRolls.cs" />
     <Compile Include="Framework\GameWindow.cs" />
     <Compile Include="Framework\Imports.cs" />
     <Compile Include="Framework\Memory.cs" />

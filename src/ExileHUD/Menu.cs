@@ -125,7 +125,9 @@ namespace ExileHUD.ExileHUD
 			this.AddButton(parent4, "Play sound", "ItemAlert.PlaySound");
 			BooleanButton booleanButton7 = this.AddButton(parent4, "Show text", "ItemAlert.ShowText");
 			booleanButton7.AddChild(new IntPicker("Font size", 6, 32, "ItemAlert.ShowText.FontSize"));
-			this.CreateRootMenu("Item level on hover", 3, "Tooltip.ShowItemLevel");
+			BooleanButton tooltip = this.CreateRootMenu("Advanced tooltips", 3, "Tooltip");
+			this.AddButton(tooltip, "Item level on hover", "Tooltip.ShowItemLevel");
+			this.AddButton(tooltip, "Item mods on hover", "Tooltip.ShowItemMods");
 			BooleanButton parent5 = this.CreateRootMenu("Boss warnings", 4, "DangerAlert");
 			this.AddButton(parent5, "Sound warning", "DangerAlert.PlaySound");
 			BooleanButton booleanButton8 = this.AddButton(parent5, "Text warning", "DangerAlert.ShowText");

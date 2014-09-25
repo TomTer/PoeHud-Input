@@ -12,7 +12,7 @@ namespace ExileHUD.ExileHUD
 		[STAThread]
 		public static void Main(string[] args)
 		{
-			Process process = Process.GetProcessesByName("PathOfExile").FirstOrDefault<Process>();
+			Process process = Process.GetProcessesByName(Offsets.ProcessName).FirstOrDefault<Process>();
 			if (process == null)
 			{
 				MessageBox.Show("Path of Exile is not running!");
