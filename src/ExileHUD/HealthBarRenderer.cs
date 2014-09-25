@@ -77,7 +77,7 @@ namespace ExileHUD.ExileHUD
 				{
 					Vec3 worldCoords = current.entity.Pos;
 					Vec2 mobScreenCoords = this.poe.Internal.IngameState.Camera.WorldToScreen(worldCoords.Translate(0f, 0f, -170f));
-					System.Diagnostics.Debug.WriteLine("{0} is at {1} => {2} on screen", current.entity.Path, worldCoords, mobScreenCoords);
+					// System.Diagnostics.Debug.WriteLine("{0} is at {1} => {2} on screen", current.entity.Path, worldCoords, mobScreenCoords);
 					if (mobScreenCoords != Vec2.Empty)
 					{
 						int scaledWidth = (int)(Settings.GetInt(current.settings + ".Width") * clientWidth);
