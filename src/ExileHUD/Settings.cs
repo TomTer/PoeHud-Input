@@ -104,33 +104,15 @@ namespace ExileHUD.ExileHUD
 			StringBuilder stringBuilder = new StringBuilder();
 			foreach (KeyValuePair<string, bool> current in Settings.bools)
 			{
-				stringBuilder.AppendLine(string.Concat(new object[]
-				{
-					"bool ",
-					current.Key,
-					"=",
-					current.Value
-				}));
+				stringBuilder.AppendLine(string.Concat(new object[] { "bool ", current.Key, "=", current.Value }));
 			}
 			foreach (KeyValuePair<string, int> current2 in Settings.ints)
 			{
-				stringBuilder.AppendLine(string.Concat(new object[]
-				{
-					"int ",
-					current2.Key,
-					"=",
-					current2.Value
-				}));
+				stringBuilder.AppendLine(string.Concat(new object[] { "int ", current2.Key, "=", current2.Value }));
 			}
 			foreach (KeyValuePair<string, float> current3 in Settings.floats)
 			{
-				stringBuilder.AppendLine(string.Concat(new object[]
-				{
-					"float ",
-					current3.Key,
-					"=",
-					current3.Value
-				}));
+				stringBuilder.AppendLine(string.Concat(new object[] { "float ", current3.Key, "=", current3.Value }));
 			}
 			foreach (KeyValuePair<string, string> current4 in Settings.strings)
 			{
@@ -155,76 +137,49 @@ namespace ExileHUD.ExileHUD
 				MessageBox.Show("config/settings.txt does not exist!");
 				return false;
 			}
-			string[] array = File.ReadAllLines("config/settings.txt");
-			string[] array2 = array;
-			for (int i = 0; i < array2.Length; i++)
+			string[] allLines = File.ReadAllLines("config/settings.txt");
+			foreach (string text in allLines)
 			{
-				string text = array2[i];
 				try
 				{
 					string text2 = text.Trim().Replace("\n", "").Replace("\r", "");
-					if (!string.IsNullOrWhiteSpace(text2))
+					if (string.IsNullOrWhiteSpace(text2)) continue;
+
+
+					string[] allWords = text2.Split(new []{' '}, 2, StringSplitOptions.RemoveEmptyEntries);
+					if (allWords.Length != 2)
 					{
-						string[] array3 = text2.Split(new char[]
+						Console.WriteLine("Invalid settings line: " + text2);
+						continue;
+					}
+
+					string firstWord = allWords[0];
+					string[] kv = allWords[1].Split(new []{'='}, 2, StringSplitOptions.RemoveEmptyEntries);
+					if (kv.Length < 2)
+					{
+						Console.WriteLine("Invalid settings line: " + text2);
+					}
+					else
+					{
+						string key = kv[0].Trim();
+						string value = kv[1].Trim();
+						switch (firstWord.ToLowerInvariant())
 						{
-							' '
-						});
-						if (array3.Length != 2)
-						{
-							Console.WriteLine("Invalid settings line: " + text2);
-						}
-						else
-						{
-							string text3 = array3[0];
-							string[] array4 = array3[1].Split(new char[]
-							{
-								'='
-							});
-							if (array4.Length != 2)
-							{
-								Console.WriteLine("Invalid settings line: " + text2);
-							}
-							else
-							{
-								string key = array4[0];
-								string text4 = array4[1];
-								string a;
-								if ((a = text3) != null)
-								{
-									if (!(a == "bool"))
-									{
-										if (!(a == "int"))
-										{
-											if (!(a == "float"))
-											{
-												if (!(a == "string"))
-												{
-													if (a == "color")
-													{
-														Settings.colors[key] = Color.FromArgb(int.Parse(text4, NumberStyles.HexNumber));
-													}
-												}
-												else
-												{
-													Settings.strings[key] = text4;
-												}
-											}
-											else
-											{
-												Settings.floats[key] = float.Parse(text4);
-											}
-										}
-										else
-										{
-											Settings.ints[key] = int.Parse(text4);
-										}
-									}
-									else
-									{
-										Settings.bools[key] = bool.Parse(text4);
-									}
-								}
-							}
+							case "bool":
+								Settings.bools[key] = bool.Parse(value);
+								break;
+							case "int":
+								Settings.ints[key] = int.Parse(value);
+								break;
+							case "float":
+								Settings.floats[key] = float.Parse(value);
+								break;
+							case "string":
+								Settings.strings[key] = value;
+								break;
+							case "color":
+								Settings.colors[key] = Color.FromArgb(int.Parse(value, NumberStyles.HexNumber));
+								break;
 						}
 					}
 				}
@@ -240,8 +195,8 @@ namespace ExileHUD.ExileHUD
 		{
 			Settings.bools.Add("Window.RequireForeground", false);
 			Settings.bools.Add("Window.ShowIngameMenu", true);
-			Settings.bools.Add("ClientHacks", true);
-			Settings.bools.Add("ClientHacks.Maphack", true);
+			Settings.bools.Add("ClientHacks", false);
+			Settings.bools.Add("ClientHacks.Maphack", false);
 			Settings.bools.Add("ClientHacks.Zoomhack", false);
 			Settings.bools.Add("ClientHacks.Fullbright", false);
 			Settings.bools.Add("PreloadAlert", true);
