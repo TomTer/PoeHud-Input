@@ -182,8 +182,9 @@ namespace ExileHUD.ExileHUD
 
 		private void DoAlert(Entity entity, ItemUsefulProperties ip)
 		{
-			this.currentAlerts.Add(entity, ip.GetDrawStyle());
-			this.overlay.MinimapRenderer.AddIcon(new ItemMinimapIcon(entity, "minimap_default_icon.png", 8));
+			var drawStyle = ip.GetDrawStyle();
+			this.currentAlerts.Add(entity, drawStyle);
+			this.overlay.MinimapRenderer.AddIcon(new ItemMinimapIcon(entity, "minimap_default_icon.png", drawStyle.color, 8));
 			if (Settings.GetBool("ItemAlert.PlaySound") && !this.playedSoundsCache.Contains(entity.LongId))
 			{
 				this.playedSoundsCache.Add(entity.LongId);
