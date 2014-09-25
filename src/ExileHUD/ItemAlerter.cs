@@ -67,7 +67,7 @@ namespace ExileHUD
 			switch(this.Rarity) {
 				case ItemRarity.White : color = Color.White; break;
 				case ItemRarity.Magic: color = AlertDrawStyle.MagicColor; break;
-				case ItemRarity.Rare : color = Color.Yellow; break;
+				case ItemRarity.Rare : color = AlertDrawStyle.RareColor; break;
 				case ItemRarity.Unique : color = Color.Orange; break;
 			}
 			if( IsSkillGem )
