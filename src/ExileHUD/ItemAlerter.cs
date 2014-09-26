@@ -112,9 +112,6 @@ namespace ExileHUD.ExileHUD
 
 	public class ItemAlerter : HUDPlugin
 	{
-
-
-
 		public struct CraftingBase
 		{
 			public string Name;
@@ -241,7 +238,7 @@ namespace ExileHUD.ExileHUD
 
 					Vec2 textPos = new Vec2(vec.X - vPadding.X, y + vPadding.Y);
 
-					var vTextFrame = rc.AddTextWithHeight(textPos, text, drawStyle.color, fontSize, DrawTextFormat.Right);
+					var vTextFrame = rc.AddTextWithHeightAndOutline(textPos, text, drawStyle.color, Color.Black, fontSize, DrawTextFormat.Right);
 					if( frameWidth > 0)
 					{
 						rc.AddFrame(new Rect(vec.X - vTextFrame.X - 2 * vPadding.X, y, vTextFrame.X + 2 * vPadding.X, vTextFrame.Y + 2 * vPadding.Y), kv.Value.color, frameWidth);

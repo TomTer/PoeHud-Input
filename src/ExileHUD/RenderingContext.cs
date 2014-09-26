@@ -65,6 +65,30 @@ namespace ExileHUD.ExileHUD
 			font.DrawString(this.textSprite, text, rectangle, format, color);
 			return new Vec2(rectangle.Width, rectangle.Height);
 		}
+
+		public Vec2 AddTextWithHeightAndOutline(Vec2 pos, string text, Color color, Color outLine, int height, DrawTextFormat format)
+		{
+			SlimDX.Direct3D9.Font font = this.GetFont(height);
+			Rectangle rectangle = font.MeasureString(this.textSprite, text, format);
+			rectangle.X += pos.X;
+			rectangle.Y += pos.Y;
+
+			rectangle.X -= 1;
+			rectangle.Y -= 1;
+			font.DrawString(this.textSprite, text, rectangle, format, outLine);
+			rectangle.Y += 2;
+			font.DrawString(this.textSprite, text, rectangle, format, outLine);
+			rectangle.X += 2;
+			font.DrawString(this.textSprite, text, rectangle, format, outLine);
+			rectangle.Y -= 2;
+			font.DrawString(this.textSprite, text, rectangle, format, outLine);
+
+			rectangle.X -= 1;
+			rectangle.Y += 1;
+			font.DrawString(this.textSprite, text, rectangle, format, color);
+			return new Vec2(rectangle.Width, rectangle.Height);
+		}
+
 		private bool Validate(params Vec2[] vertices)
 		{
 			for (int i = 0; i < vertices.Length; i++)
