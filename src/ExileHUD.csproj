@@ -51,6 +51,7 @@
     <Compile Include="Framework\Imports.cs" />
     <Compile Include="Framework\Memory.cs" />
     <Compile Include="Framework\Rect.cs" />
+    <Compile Include="Framework\RectUV.cs" />
     <Compile Include="Framework\Vec2.cs" />
     <Compile Include="Framework\Vec3.cs" />
     <Compile Include="EntityComponents\Actor.cs" />

@@ -8,10 +8,10 @@ namespace ExileHUD.Framework
 		public int H;
 		public Rect(int x, int y, int w, int h)
 		{
-			this.X = x;
-			this.Y = y;
-			this.W = w;
-			this.H = h;
+			X = x;
+			Y = y;
+			W = w;
+			H = h;
 		}
 		public Rect(int w, int h)
 		{
@@ -19,25 +19,25 @@ namespace ExileHUD.Framework
 		}
 		public bool HasPoint(Vec2 v)
 		{
-			return this.HasPoint(v.X, v.Y);
+			return HasPoint(v.X, v.Y);
 		}
 		public bool HasPoint(int x, int y)
 		{
-			return x >= this.X && y >= this.Y && x <= this.X + this.W && y <= this.Y + this.H;
+			return x >= X && y >= Y && x <= X + W && y <= Y + H;
 		}
 		public bool HasRect(Rect r)
 		{
-			return r.X >= this.X && r.Y >= this.Y && r.W <= this.W && r.H <= this.H;
+			return r.X >= X && r.Y >= Y && r.W <= W && r.H <= H;
 		}
 		public Rect Expand(int xd, int yd)
 		{
-			return new Rect(this.X - xd, this.Y - yd, this.W + xd, this.H + yd);
+			return new Rect(X - xd, Y - yd, W + xd, H + yd);
 		}
 		public Rect Adjust(int width, int height)
 		{
 			float num = (float)width / 2560f;
 			float num2 = (float)height / 1600f;
-			return new Rect((int)((float)this.X * num), (int)((float)this.Y * num2), (int)((float)this.W * num), (int)((float)this.H * num2));
+			return new Rect((int)((float)X * num), (int)((float)Y * num2), (int)((float)W * num), (int)((float)H * num2));
 		}
 		public override bool Equals(object obj)
 		{
@@ -46,26 +46,15 @@ namespace ExileHUD.Framework
 				return false;
 			}
 			Rect rect = (Rect)obj;
-			return rect.X == this.X && rect.Y == this.Y && rect.W == this.W && rect.H == this.H;
+			return rect.X == X && rect.Y == Y && rect.W == W && rect.H == H;
 		}
 		public override string ToString()
 		{
-			return string.Concat(new object[]
-			{
-				"[",
-				this.X,
-				", ",
-				this.Y,
-				", ",
-				this.W,
-				", ",
-				this.H,
-				"]"
-			});
+			return string.Concat(new object[] { "[", X, ", ", Y, ", ", W, ", ", H, "]" });
 		}
 		public override int GetHashCode()
 		{
-			return this.X + this.Y + this.W + this.H;
+			return X + Y + W + H;
 		}
 	}
 }

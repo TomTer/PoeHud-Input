@@ -25,14 +25,14 @@ namespace ExileHUD.ExileHUD
 			}
 			public ColoredVertex(float x, float y, float z, Color color)
 			{
-				this.X = x;
-				this.Y = y;
-				this.Z = z;
-				this.Color = color.ToArgb();
+				X = x;
+				Y = y;
+				Z = z;
+				Color = color.ToArgb();
 			}
 			public ColoredVertex(float x, float y, Color color)
 			{
-				this = new TextureRenderer.ColoredVertex(x, y, 0f, color);
+				this = new ColoredVertex(x, y, 0f, color);
 			}
 
 			public static readonly VertexElement[] VertexElements = new VertexElement[] {
@@ -57,11 +57,11 @@ namespace ExileHUD.ExileHUD
 			}
 			public ColoredTexturedVertex(float x, float y, float u, float v, Color color)
 			{
-				this.X = x;
-				this.Y = y;
-				this.U = u;
-				this.V = v;
-				this.Color = color.ToArgb();
+				X = x;
+				Y = y;
+				U = u;
+				V = v;
+				Color = color.ToArgb();
 			}
 
 			public static readonly VertexElement[] VertexElements = new VertexElement[]
@@ -78,21 +78,22 @@ namespace ExileHUD.ExileHUD
 		public TextureRenderer(Device dx)
 		{
 			this.dx = dx;
-			this.sprite = new Sprite(dx);
-			this.textures = new Dictionary<string, Texture>();
+			sprite = new Sprite(dx);
+			textures = new Dictionary<string, Texture>();
 		}
 		public void Begin()
 		{
-			this.sprite.Begin(SpriteFlags.None);
+			sprite.Begin(SpriteFlags.None);
 		}
-		public void DrawTexture(string fileName, Rect position, Color color)
+
+		private Texture GetTextureFrom(string fileName)
 		{
 			fileName = "textures/" + fileName;
-			if (!this.textures.ContainsKey(fileName))
+			if (!textures.ContainsKey(fileName))
 			{
 				try
 				{
-					this.textures.Add(fileName, Texture.FromFile(this.dx, fileName));
+					textures.Add(fileName, Texture.FromFile(dx, fileName));
 				}
 				catch (Exception ex)
 				{
@@ -100,87 +101,123 @@ namespace ExileHUD.ExileHUD
 					Environment.Exit(0);
 				}
 			}
-			this.DrawTexture(this.textures[fileName], position, color);
+			var tex = textures[fileName];
+			return tex;
 		}
+
 		public void DrawTexture(string fileName, Rect position)
 		{
-			this.DrawTexture(fileName, position, Color.White);
+			DrawTexture(GetTextureFrom(fileName), position, Color.White);
 		}
+
+		public void DrawTexture(string fileName, Rect position, Color color)
+		{
+			DrawTexture(GetTextureFrom(fileName), position, color);
+		}
+
 		public void DrawTexture(Texture texture, Rect position)
 		{
-			this.DrawTexture(texture, position);
+			DrawTexture(texture, position, Color.White);
 		}
+
 		public void DrawTexture(Texture texture, Rect rect, Color color)
 		{
-			TextureRenderer.ColoredTexturedVertex[] data = new TextureRenderer.ColoredTexturedVertex[]
-			{
-				new TextureRenderer.ColoredTexturedVertex((float)rect.X, (float)rect.Y, 0f, 0f, color),
-				new TextureRenderer.ColoredTexturedVertex((float)(rect.X + rect.W), (float)rect.Y, 1f, 0f, color),
-				new TextureRenderer.ColoredTexturedVertex((float)(rect.X + rect.W), (float)(rect.Y + rect.H), 1f, 1f, color),
-				new TextureRenderer.ColoredTexturedVertex((float)rect.X, (float)(rect.Y + rect.H), 0f, 1f, color)
+			ColoredTexturedVertex[] data = {
+				new ColoredTexturedVertex(rect.X, rect.Y, 0f, 0f, color),
+				new ColoredTexturedVertex(rect.X + rect.W, rect.Y, 1f, 0f, color),
+				new ColoredTexturedVertex(rect.X + rect.W, rect.Y + rect.H, 1f, 1f, color),
+				new ColoredTexturedVertex(rect.X, rect.Y + rect.H, 0f, 1f, color)
 			};
-			this.dx.SetTexture(0, texture);
-			SendVerticesToDevice(data, 2, PrimitiveType.TriangleFan, TextureRenderer.ColoredTexturedVertex.VertexElements);
+			dx.SetTexture(0, texture);
+			SendVerticesToDevice(data, 2, PrimitiveType.TriangleFan, ColoredTexturedVertex.VertexElements);
 		}
+
+		public void DrawSprite(string fileName, Rect rect, RectUV uvCoords)
+		{
+			DrawSprite(GetTextureFrom(fileName), rect, uvCoords, Color.White);
+		}
+
+		public void DrawSprite(string fileName, Rect rect, RectUV uvCoords, Color color)
+		{
+			DrawSprite(GetTextureFrom(fileName), rect, uvCoords, color);
+		}
+
+		public void DrawSprite(Texture texture, Rect rect, RectUV uvCoords)
+		{
+			DrawSprite(texture, rect, uvCoords, Color.White);
+		}
+
+		public void DrawSprite(Texture texture, Rect rect, RectUV uvCoords, Color color)
+		{
+			ColoredTexturedVertex[] data = {
+				new ColoredTexturedVertex(rect.X, rect.Y, uvCoords.U1, uvCoords.V1, color),
+				new ColoredTexturedVertex(rect.X + rect.W, rect.Y, uvCoords.U2, uvCoords.V1, color),
+				new ColoredTexturedVertex(rect.X + rect.W, rect.Y + rect.H, uvCoords.U2, uvCoords.V2, color),
+				new ColoredTexturedVertex(rect.X, rect.Y + rect.H, uvCoords.U1, uvCoords.V2, color)
+			};
+			dx.SetTexture(0, texture);
+			SendVerticesToDevice(data, 2, PrimitiveType.TriangleFan, ColoredTexturedVertex.VertexElements);
+		}
+
+
 		public void DrawBox(Rect rect, Color color)
 		{
-			TextureRenderer.ColoredVertex[] data = new TextureRenderer.ColoredVertex[]
-			{
-				new TextureRenderer.ColoredVertex((float)rect.X, (float)rect.Y, color),
-				new TextureRenderer.ColoredVertex((float)(rect.X + rect.W), (float)rect.Y, color),
-				new TextureRenderer.ColoredVertex((float)(rect.X + rect.W), (float)(rect.Y + rect.H), color),
-				new TextureRenderer.ColoredVertex((float)rect.X, (float)(rect.Y + rect.H), color)
+			ColoredVertex[] data = {
+				new ColoredVertex(rect.X, rect.Y, color),
+				new ColoredVertex(rect.X + rect.W, rect.Y, color),
+				new ColoredVertex(rect.X + rect.W, rect.Y + rect.H, color),
+				new ColoredVertex(rect.X, rect.Y + rect.H, color)
 			};
-			this.dx.SetTexture(0, null);
-			SendVerticesToDevice(data, 2, PrimitiveType.TriangleFan, TextureRenderer.ColoredVertex.VertexElements);
+			dx.SetTexture(0, null);
+			SendVerticesToDevice(data, 2, PrimitiveType.TriangleFan, ColoredVertex.VertexElements);
 		}
 
 		private void SendVerticesToDevice<T>(T[] data, int cntPrimitives, PrimitiveType primitiveType, VertexElement[] structFields) where T : struct
 		{
 			using (VertexDeclaration declaration = new VertexDeclaration(dx, structFields))
 			{
-				VertexDeclaration vertexDeclaration = this.dx.VertexDeclaration;
-				this.dx.VertexDeclaration = declaration;
-				this.dx.DrawUserPrimitives<T>(primitiveType, cntPrimitives, data);
-				this.dx.VertexDeclaration = vertexDeclaration;
+				VertexDeclaration vertexDeclaration = dx.VertexDeclaration;
+				dx.VertexDeclaration = declaration;
+				dx.DrawUserPrimitives<T>(primitiveType, cntPrimitives, data);
+				dx.VertexDeclaration = vertexDeclaration;
 			}
 		}
 
 		public void DrawHollowBox(Rect rect, int frameWidth, Color color)
 		{
-			var p1 = new TextureRenderer.ColoredVertex((float)rect.X, (float)rect.Y, color);
-			var p2 = new TextureRenderer.ColoredVertex((float)(rect.X + rect.W), (float)rect.Y, color);
-			var p3 = new TextureRenderer.ColoredVertex((float)(rect.X + rect.W), (float)(rect.Y + rect.H), color);
-			var p4 = new TextureRenderer.ColoredVertex((float)rect.X, (float)(rect.Y + rect.H), color);
+			var p1 = new ColoredVertex(rect.X, rect.Y, color);
+			var p2 = new ColoredVertex(rect.X + rect.W, rect.Y, color);
+			var p3 = new ColoredVertex(rect.X + rect.W, rect.Y + rect.H, color);
+			var p4 = new ColoredVertex(rect.X, rect.Y + rect.H, color);
 
-			var p5 = new TextureRenderer.ColoredVertex((float)rect.X + frameWidth, (float)rect.Y + frameWidth, color);
-			var p6 = new TextureRenderer.ColoredVertex((float)(rect.X + rect.W) - frameWidth, (float)rect.Y + frameWidth, color);
-			var p7 = new TextureRenderer.ColoredVertex((float)(rect.X + rect.W) - frameWidth, (float)(rect.Y + rect.H) - frameWidth, color);
-			var p8 = new TextureRenderer.ColoredVertex((float)rect.X + frameWidth, (float)(rect.Y + rect.H) - frameWidth, color);
+			var p5 = new ColoredVertex((float)rect.X + frameWidth, (float)rect.Y + frameWidth, color);
+			var p6 = new ColoredVertex((float)(rect.X + rect.W) - frameWidth, (float)rect.Y + frameWidth, color);
+			var p7 = new ColoredVertex((float)(rect.X + rect.W) - frameWidth, (float)(rect.Y + rect.H) - frameWidth, color);
+			var p8 = new ColoredVertex((float)rect.X + frameWidth, (float)(rect.Y + rect.H) - frameWidth, color);
 
-			TextureRenderer.ColoredVertex[] data = new TextureRenderer.ColoredVertex[] { p1, p5, p2, p6, p3, p7, p4, p8, p1, p5 };
-			this.dx.SetTexture(0, null);
+			ColoredVertex[] data = new ColoredVertex[] { p1, p5, p2, p6, p3, p7, p4, p8, p1, p5 };
+			dx.SetTexture(0, null);
 			SendVerticesToDevice(data, 8, PrimitiveType.TriangleStrip, ColoredVertex.VertexElements);
 		}
 
 		public void End()
 		{
-			this.sprite.End();
+			sprite.End();
 		}
 		[DllImport("user32.dll", SetLastError = true)]
 		private static extern bool AdjustWindowRect(ref Rectangle lpRect, uint dwStyle, bool bMenu);
 		public void OnLostDevice()
 		{
-			foreach (Texture current in this.textures.Values)
+			foreach (Texture current in textures.Values)
 			{
 				current.Dispose();
 			}
-			this.textures.Clear();
-			this.sprite.OnLostDevice();
+			textures.Clear();
+			sprite.OnLostDevice();
 		}
 		public void OnResetDevice()
 		{
-			this.sprite.OnResetDevice();
+			sprite.OnResetDevice();
 		}
 	}
 }

@@ -78,11 +78,18 @@ namespace ExileHUD.ExileHUD
 			if (IsCurrency)
 				color = AlertDrawStyle.CurrencyColor;
 
+			int iconIndex = -1;
+			if (WorthChrome)
+				iconIndex = 1;
+			if (NumSockets == 6)
+				iconIndex = 0;
+
 			return new AlertDrawStyle()
 			{
 				color = color,
 				FrameWidth = MapLevel > 0 ? 1 : 0,
-				Text = Name
+				Text = Name,
+				IconIndex = iconIndex
 			};
 		}
 	}
@@ -100,6 +107,7 @@ namespace ExileHUD.ExileHUD
 		public Color color;
 		public int FrameWidth;
 		public string Text;
+		public int IconIndex;
 	}
 
 	public class ItemAlerter : HUDPlugin
@@ -182,7 +190,7 @@ namespace ExileHUD.ExileHUD
 
 		private void DoAlert(Entity entity, ItemUsefulProperties ip)
 		{
-			var drawStyle = ip.GetDrawStyle();
+			AlertDrawStyle drawStyle = ip.GetDrawStyle();
 			this.currentAlerts.Add(entity, drawStyle);
 			this.overlay.MinimapRenderer.AddIcon(new ItemMinimapIcon(entity, "minimap_default_icon.png", drawStyle.color, 8));
 			if (Settings.GetBool("ItemAlert.PlaySound") && !this.playedSoundsCache.Contains(entity.LongId))
@@ -226,16 +234,26 @@ namespace ExileHUD.ExileHUD
 						text = labelFromEntity.Text;
 					}
 
-					int frameWidth = kv.Value.FrameWidth;
-					Vec2 vPadding = new Vec2(frameWidth * 5, frameWidth);
-					int frameMargin = frameWidth * 2;
+					var drawStyle = kv.Value;
+					int frameWidth = drawStyle.FrameWidth;
+					Vec2 vPadding = new Vec2(frameWidth + 5, frameWidth);
+					int frameMargin = frameWidth + 2;
 
 					Vec2 textPos = new Vec2(vec.X - vPadding.X, y + vPadding.Y);
 
-					var vTextFrame = rc.AddTextWithHeight(textPos, text, kv.Value.color, fontSize, DrawTextFormat.Right);
+					var vTextFrame = rc.AddTextWithHeight(textPos, text, drawStyle.color, fontSize, DrawTextFormat.Right);
 					if( frameWidth > 0)
 					{
 						rc.AddFrame(new Rect(vec.X - vTextFrame.X - 2 * vPadding.X, y, vTextFrame.X + 2 * vPadding.X, vTextFrame.Y + 2 * vPadding.Y), kv.Value.color, frameWidth);
+					}
+
+					if (drawStyle.IconIndex >= 0)
+					{
+						const float iconsInSprite = 2;
+						int iconSize = vTextFrame.Y;
+						Rect iconPos = new Rect(textPos.X - iconSize - vTextFrame.X, textPos.Y, iconSize, iconSize);
+						RectUV uv = new RectUV(drawStyle.IconIndex / iconsInSprite, 0, (drawStyle.IconIndex + 1)/ iconsInSprite, 1);
+						rc.AddSprite("item_icons.png", iconPos, uv);
 					}
 					y += vTextFrame.Y + 2 * vPadding.Y + frameMargin;
 				}

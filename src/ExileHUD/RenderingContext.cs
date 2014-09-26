@@ -39,6 +39,15 @@ namespace ExileHUD.ExileHUD
 		{
 			this.texrenderer.DrawTexture(file, rect, color);
 		}
+
+		public void AddSprite(string file, Rect rect, RectUV uv)
+		{
+			this.texrenderer.DrawSprite(file, rect, uv);
+		}
+		public void AddSprite(string file, Rect rect, RectUV uv, Color color)
+		{
+			this.texrenderer.DrawSprite(file, rect, uv, color);
+		}
 		public void AddBox(Rect rect, Color color)
 		{
 			this.texrenderer.DrawBox(rect, color);
