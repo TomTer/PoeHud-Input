@@ -101,14 +101,8 @@ namespace ExileHUD.ExileHUD
 				Rect rect = new Rect(bg.X - 2, bg.Y - 2, bg.W + 4, bg.H + 4);
 				rc.AddBox(rect, outline);
 			}
-			if (Settings.GetBool("Healthbars.ShowIncrements"))
-			{
-				rc.AddTexture("healthbar_increment.png", bg, color);
-			}
-			else
-			{
-				rc.AddTexture("healthbar.png", bg, color);
-			}
+			rc.AddTexture(Settings.GetBool("Healthbars.ShowIncrements") ? "healthbar_increment.png" : "healthbar.png", bg, color);
+			
 			if ((int)hpWidth < bg.W)
 			{
 				Rect rect2 = new Rect(bg.X + (int)hpWidth, bg.Y, bg.W - (int)hpWidth, bg.H);

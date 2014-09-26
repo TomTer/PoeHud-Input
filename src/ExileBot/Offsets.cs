@@ -9,17 +9,11 @@ namespace ExileHUD.ExileBot
 		public const string ProcessName = "PathOfExileSteam";
 		public const int ISOffset = 28;
 		public const int ISDelta = 4;
-		public static int Base = 8841968;
-		public static int FileRoot = 8820476;
-		public static int MaphackFunc = 4939552;
-		public static int ZoomHackFunc = 2225383;
-		public static int AreaChangeCount = 8730996;
-		public static int Fullbright1 = 7639804;
-		public static int Fullbright2 = 8217084;
 #else
 		public const string ProcessName = "PathOfExile";
-		public const int IngameStateOffset = 0;
-		public const int IngameStateDelta = 0;
+		public const int ISOffset = 0;
+		public const int ISDelta = 0;
+#endif
 		public static int Base = 8825704;
 		public static int FileRoot = 8804204;
 		public static int MaphackFunc = 4927600;
@@ -27,72 +21,18 @@ namespace ExileHUD.ExileBot
 		public static int AreaChangeCount = 8714612;
 		public static int Fullbright1 = 7627500;
 		public static int Fullbright2 = 8206296;
-#endif
+
+
 		private static Pattern maphackPattern = new Pattern(new byte[]
 		{
-			81,
-			139,
-			70,
-			104,
-			139,
-			8,
-			104,
-			0,
-			32,
-			0,
-			0,
-			141,
-			84,
-			36,
-			4,
-			82,
-			106,
-			0,
-			106,
-			0,
-			80,
-			139,
-			65,
-			44,
-			255,
-			208,
-			139,
-			70,
-			72,
-			59,
-			70,
-			76
+			81, 139, 70, 104, 139, 8, 104, 0, 32, 0, 0, 141, 84, 36, 4, 82, 
+			106, 0, 106, 0, 80, 139, 65, 44, 255, 208, 139, 70, 72, 59, 70, 76 
 		}, "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+		
 		private static Pattern zoomhackPattern = new Pattern(new byte[]
 		{
-			85,
-			139,
-			236,
-			131,
-			228,
-			248,
-			139,
-			69,
-			12,
-			131,
-			236,
-			44,
-			128,
-			56,
-			0,
-			83,
-			86,
-			87,
-			139,
-			217,
-			15,
-			133,
-			233,
-			0,
-			0,
-			0,
-			131,
-			187
+			85, 139, 236, 131, 228, 248, 139, 69, 12, 131, 236, 44, 128, 56, 0, 83, 
+			86, 87, 139, 217, 15, 133, 233, 0, 0, 0, 131, 187
 		}, "xxxxxxxxxxxxxxxxxxxxxxxxxxxx");
 		private static Pattern fullbrightPattern = new Pattern(new byte[]
 		{
