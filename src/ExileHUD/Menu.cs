@@ -143,7 +143,7 @@ namespace ExileHUD.ExileHUD
 			BooleanButton booleanButton10 = this.CreateRootMenu("Preload Alert", 7, "PreloadAlert");
 			booleanButton10.AddChild(new IntPicker("Font size", 6, 32, "PreloadAlert.FontSize"));
 			booleanButton10.AddChild(new IntPicker("Background alpha", 0, 255, "PreloadAlert.BgAlpha"));
-			BooleanButton closeWithGame = this.CreateRootMenu("Exit when game is closed", 7, "ExitWithGame");
+			// BooleanButton closeWithGame = this.CreateRootMenu("Exit when game is closed", 8, "ExitWithGame");
 		}
 		private BooleanButton AddButton(BooleanButton parent, string text, string setting)
 		{
