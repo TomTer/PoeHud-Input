@@ -42,6 +42,7 @@ namespace ExileHUD.ExileHUD
 				{
 					Console.WriteLine("Starting overlay");
 					TransparentDXOverlay transparentDXOverlay = new TransparentDXOverlay(pathOfExile.Window);
+					transparentDXOverlay.fnHasGameEnded = () => memory.IsInvalid();
 					transparentDXOverlay.InitD3D();
 					overlay = new OverlayRenderer(pathOfExile, transparentDXOverlay.RC);
 					Application.Run(transparentDXOverlay);

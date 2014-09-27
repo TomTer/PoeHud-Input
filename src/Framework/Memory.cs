@@ -13,11 +13,7 @@ namespace ExileHUD.Framework
 		private bool closed;
 		private IntPtr procHandle;
 		private Dictionary<string, int> modules;
-		public Process Process
-		{
-			get;
-			private set;
-		}
+		public Process Process { get; private set; }
 		public Memory(int pId)
 		{
 			this.Process = Process.GetProcessById(pId);
@@ -42,10 +38,7 @@ namespace ExileHUD.Framework
 			{
 				return this.modules[name];
 			}
-			int num = (
-				from ProcessModule m in this.Process.Modules
-				where m.ModuleName == name
-				select m).FirstOrDefault<ProcessModule>().BaseAddress.ToInt32();
+			int num = this.Process.Modules.Cast<ProcessModule>().First(m => m.ModuleName == name).BaseAddress.ToInt32();
 			this.modules.Add(name, num);
 			return num;
 		}

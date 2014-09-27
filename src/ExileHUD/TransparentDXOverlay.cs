@@ -31,6 +31,9 @@ namespace ExileHUD.ExileHUD
 		private bool wantsExit;
 		public static IntPtr CurrentHandle;
 		private TransparentDXOverlay.Margins marg;
+
+		public Func<bool> fnHasGameEnded = null;
+		private Thread poeGuard;
 		public RenderingContext RC
 		{
 			get;
@@ -69,7 +72,18 @@ namespace ExileHUD.ExileHUD
 			this.Text = String.IsNullOrWhiteSpace(textForTitle) ? "ExileHUD" : textForTitle;
 			base.FormBorderStyle = FormBorderStyle.None;
 			base.Load += new EventHandler(this.TransparentDXOverlay_Load);
+
+			this.poeGuard = new Thread(CheckGameStillRunningLoop);
+			this.poeGuard.Start();
 		}
+
+		private void CheckGameStillRunningLoop()
+		{
+			while (!fnHasGameEnded())
+				System.Threading.Thread.Sleep(500);
+			Invoke(new Action(this.Close));
+		}
+
 		private void TransparentDXOverlay_Load(object sender, EventArgs e)
 		{
 			Console.WriteLine("SetWindowLong: " + TransparentDXOverlay.SetWindowLong(base.Handle, -20, (IntPtr)((long)((ulong)(TransparentDXOverlay.GetWindowLong(base.Handle, -20) | 524288u | 32u)))));
@@ -84,7 +98,7 @@ namespace ExileHUD.ExileHUD
 			Console.WriteLine("DwmExtendFrameIntoClientArea: " + intPtr);
 			base.Bounds = new Rectangle(rect.X, rect.Y, rect.W, rect.H);
 			TransparentDXOverlay.CurrentHandle = base.Handle;
-			this.dxThread = new Thread(new ThreadStart(this.DxLoop));
+			this.dxThread = new Thread(this.DxLoop);
 			this.dxThread.IsBackground = true;
 			this.dxThread.Start();
 		}
@@ -133,13 +147,9 @@ namespace ExileHUD.ExileHUD
 				presentParameters.BackBufferWidth = rect.W;
 				presentParameters.BackBufferHeight = rect.H;
 				presentParameters.PresentationInterval = PresentInterval.One;
-				this.dx.Reset(new PresentParameters[]
-				{
-					presentParameters
-				});
+				this.dx.Reset(new[] { presentParameters });
 				this.RC.OnResetDevice();
-				this.dxThread = new Thread(new ThreadStart(this.DxLoop));
-				this.dxThread.IsBackground = true;
+				this.dxThread = new Thread(this.DxLoop) {IsBackground = true};
 				this.dxThread.Start();
 			}
 		}
@@ -151,7 +161,7 @@ namespace ExileHUD.ExileHUD
 				this.dx.SetRenderState(RenderState.ZEnable, false);
 				this.dx.SetRenderState(RenderState.Lighting, false);
 				this.dx.SetRenderState(RenderState.AlphaBlendEnable, true);
-				this.dx.SetRenderState<Cull>(RenderState.CullMode, Cull.None);
+				this.dx.SetRenderState(RenderState.CullMode, Cull.None);
 				this.dx.BeginScene();
 				this.RC.RenderFrame();
 				this.dx.EndScene();
