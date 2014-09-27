@@ -38,7 +38,7 @@ namespace ExileHUD.ExileBot
 			}
 		}
 
-		public int Level
+		public int NominalLevel
 		{
 			get
 			{

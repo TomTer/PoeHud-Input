@@ -9,6 +9,22 @@ namespace ExileHUD.ExileBot
 				return base.ReadObject<Poe_Area>(this.address + 8);
 			}
 		}
+
+		public int CurrentAreaLevel
+		{
+			get
+			{
+				return this.m.ReadInt(this.address + 12);
+			}
+		}
+		public int CurrentAreaHash
+		{
+			get
+			{
+				return this.m.ReadInt(this.address + 16);
+			}
+		}
+
 		public Poe_Entity LocalPlayer
 		{
 			get

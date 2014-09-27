@@ -4,6 +4,8 @@ namespace ExileHUD.ExileBot
 	{
 		private int lastAddress;
 		private Poe_Area current;
+		public int Level { get; private set; }
+		public int Hash { get; private set; }
 		private PathOfExile Poe;
 		public event AreaChangeEvent OnAreaChange;
 		public string RawName
@@ -19,7 +21,6 @@ namespace ExileHUD.ExileBot
 		}
 		public string Name { get { return this.current != null ? this.current.Name : ""; } }
 		public int Act { get { return this.current != null ? this.current.Act : 1; } }
-		public int Level { get { return this.current != null ? this.current.Level : 0; } }
 
 		public bool IsTown
 		{
@@ -42,7 +43,8 @@ namespace ExileHUD.ExileBot
 		}
 		private void poe_OnUpdate()
 		{
-			Poe_Area currentArea = this.Poe.Internal.game.IngameState.Data.CurrentArea;
+			var igsd = this.Poe.Internal.game.IngameState.Data;
+			Poe_Area currentArea = igsd.CurrentArea;
 			if (currentArea.address == this.lastAddress)
 			{
 				return;
@@ -50,7 +52,10 @@ namespace ExileHUD.ExileBot
 			this.current = currentArea;
 			if (this.OnAreaChange != null)
 			{
+				this.Level = igsd.CurrentAreaLevel;
+				this.Hash = igsd.CurrentAreaHash;
 				this.OnAreaChange(this);
+
 			}
 			this.lastAddress = this.current.address;
 		}
@@ -58,5 +63,7 @@ namespace ExileHUD.ExileBot
 		{
 			return this.RawName == s || this.RawName.StartsWith(s) || s == this.Name;
 		}
+
+		
 	}
 }
