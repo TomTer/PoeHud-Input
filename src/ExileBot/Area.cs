@@ -17,28 +17,10 @@ namespace ExileHUD.ExileBot
 				return "";
 			}
 		}
-		public string Name
-		{
-			get
-			{
-				if (this.current != null)
-				{
-					return this.current.Name;
-				}
-				return "";
-			}
-		}
-		public int Act
-		{
-			get
-			{
-				if (this.current != null)
-				{
-					return this.current.Act;
-				}
-				return 1;
-			}
-		}
+		public string Name { get { return this.current != null ? this.current.Name : ""; } }
+		public int Act { get { return this.current != null ? this.current.Act : 1; } }
+		public int Level { get { return this.current != null ? this.current.Level : 0; } }
+
 		public bool IsTown
 		{
 			get
