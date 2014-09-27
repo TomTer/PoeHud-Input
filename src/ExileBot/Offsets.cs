@@ -1,19 +1,12 @@
-//#define STEAM
 using ExileHUD.Framework;
 
 namespace ExileHUD.ExileBot
 {
 	public class Offsets
 	{
-#if STEAM
-		public const string ProcessName = "PathOfExileSteam";
-		public const int ISOffset = 28;
-		public const int ISDelta = 4;
-#else
-		public const string ProcessName = "PathOfExile";
-		public const int ISOffset = 0;
-		public const int ISDelta = 0;
-#endif
+		public enum clientType { Steam, Garena };
+		public static int ISOffset = 0;
+		public static int ISDelta = 0;
 		public static int Base = 8825704;
 		public static int FileRoot = 8804204;
 		public static int MaphackFunc = 4927600;
@@ -22,6 +15,27 @@ namespace ExileHUD.ExileBot
 		public static int Fullbright1 = 7627500;
 		public static int Fullbright2 = 8206296;
 
+		public static void InitSpecific(clientType type)
+		{
+			switch (type)
+			{
+				case clientType.Steam:
+					ISOffset = 28;
+					ISDelta = 4;
+					Base = 8841968;
+					FileRoot = 8820476;
+					MaphackFunc = 4939552;
+					ZoomHackFunc = 2225383;
+					AreaChangeCount = 8730996;
+					Fullbright1 = 7639804;
+					Fullbright2 = 8217084;
+					break;
+				case clientType.Garena:
+					break;
+				default:
+					break;
+			}
+		}
 
 		private static Pattern maphackPattern = new Pattern(new byte[]
 		{
