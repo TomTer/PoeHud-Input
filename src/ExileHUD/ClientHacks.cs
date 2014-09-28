@@ -95,34 +95,34 @@ namespace ExileHUD.ExileHUD
 			if (!this.hasSetWriteAccess)
 			{
 				this.hasSetWriteAccess = true;
-				this.m.MakeMemoryWriteable(this.m.BaseAddress + Offsets.Fullbright1, 4);
-				this.m.MakeMemoryWriteable(this.m.BaseAddress + Offsets.Fullbright2, 4);
+				this.m.MakeMemoryWriteable(this.m.BaseAddress + m.offsets.Fullbright1, 4);
+				this.m.MakeMemoryWriteable(this.m.BaseAddress + m.offsets.Fullbright2, 4);
 			}
-			this.m.WriteFloat(this.m.BaseAddress + Offsets.Fullbright1, 15000f);
-			this.m.WriteFloat(this.m.BaseAddress + Offsets.Fullbright2, 5000f);
+			this.m.WriteFloat(this.m.BaseAddress + m.offsets.Fullbright1, 15000f);
+			this.m.WriteFloat(this.m.BaseAddress + m.offsets.Fullbright2, 5000f);
 		}
 		private void DisableFullbright()
 		{
-			this.m.WriteFloat(this.m.BaseAddress + Offsets.Fullbright1, 1300f);
-			this.m.WriteFloat(this.m.BaseAddress + Offsets.Fullbright2, 350f);
+			this.m.WriteFloat(this.m.BaseAddress + m.offsets.Fullbright1, 1300f);
+			this.m.WriteFloat(this.m.BaseAddress + m.offsets.Fullbright2, 350f);
 		}
 		private void EnableZoomhack()
 		{
-			this.m.WriteBytes(this.m.BaseAddress + Offsets.ZoomHackFunc, new byte[]
+			this.m.WriteBytes(this.m.BaseAddress + m.offsets.ZoomHackFunc, new byte[]
 			{
 				16
 			});
 		}
 		private void DisableZoomhack()
 		{
-			this.m.WriteBytes(this.m.BaseAddress + Offsets.ZoomHackFunc, new byte[]
+			this.m.WriteBytes(this.m.BaseAddress + m.offsets.ZoomHackFunc, new byte[]
 			{
 				20
 			});
 		}
 		private void EnableMaphack()
 		{
-			int num = this.m.BaseAddress + Offsets.MaphackFunc;
+			int num = this.m.BaseAddress + m.offsets.MaphackFunc;
 			if (this.m.ReadByte(num) != 81)
 			{
 				Console.WriteLine("Something is wrong with maphackfunc");
@@ -145,7 +145,7 @@ namespace ExileHUD.ExileHUD
 		}
 		private void DisableMaphack()
 		{
-			int num = this.m.BaseAddress + Offsets.MaphackFunc;
+			int num = this.m.BaseAddress + m.offsets.MaphackFunc;
 			if (this.m.ReadByte(num) != 81)
 			{
 				Console.WriteLine("Something is wrong with maphackfunc");

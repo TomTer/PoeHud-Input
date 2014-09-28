@@ -11,6 +11,9 @@ namespace ExileHUD.ExileBot
 		public RemoteMemoryObject()
 		{
 		}
+
+		protected Offsets Offsets { get { return this.m.offsets; } }
+
 		public T GetObject<T>(int address) where T : RemoteMemoryObject, new()
 		{
 			T t = Activator.CreateInstance<T>();

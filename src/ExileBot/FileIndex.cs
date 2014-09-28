@@ -18,7 +18,7 @@ namespace ExileHUD.ExileBot
 		{
 			if (!this.files.ContainsKey(name))
 			{
-				int num = this.mem.ReadInt(this.mem.BaseAddress + Offsets.FileRoot, new int[]
+				int num = this.mem.ReadInt(this.mem.BaseAddress + mem.offsets.FileRoot, new int[]
 				{
 					8
 				});

@@ -49,17 +49,14 @@ namespace ExileHUD.ExileHUD
 		private void Parse()
 		{
 			this.disp.Clear();
-			int num = this.poe.Memory.ReadInt(this.poe.Memory.BaseAddress + Offsets.FileRoot);
+			int num = this.poe.Memory.ReadInt(this.poe.Memory.BaseAddress + poe.Memory.offsets.FileRoot);
 			int num2 = this.poe.Memory.ReadInt(num + 12);
 			int num3 = this.poe.Memory.ReadInt(num + 20);
 			int areaChangeCount = this.poe.Internal.AreaChangeCount;
 			for (int i = 0; i < num2; i++)
 			{
 				num3 = this.poe.Memory.ReadInt(num3);
-				if (this.poe.Memory.ReadInt(num3 + 8) != 0 && this.poe.Memory.ReadInt(num3 + 12, new int[]
-				{
-					36
-				}) == areaChangeCount)
+				if (this.poe.Memory.ReadInt(num3 + 8) != 0 && this.poe.Memory.ReadInt(num3 + 12, new int[]{ 36 }) == areaChangeCount)
 				{
 					string text = this.poe.Memory.ReadStringU(this.poe.Memory.ReadInt(num3 + 8), 256, true);
 					if (text.Contains("vaal_sidearea"))
@@ -68,10 +65,7 @@ namespace ExileHUD.ExileHUD
 					}
 					if (text.Contains('@'))
 					{
-						text = text.Split(new char[]
-						{
-							'@'
-						})[0];
+						text = text.Split(new char[] { '@' })[0];
 					}
 					if (text.StartsWith("Metadata/Monsters/Missions/MasterStrDex"))
 					{
@@ -99,7 +93,7 @@ namespace ExileHUD.ExileHUD
 			{
 				return;
 			}
-			int num = this.poe.Memory.ReadInt(this.poe.Memory.BaseAddress + Offsets.FileRoot, new int[]
+			int num = this.poe.Memory.ReadInt(this.poe.Memory.BaseAddress + poe.Memory.offsets.FileRoot, new int[]
 			{
 				12
 			});

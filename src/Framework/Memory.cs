@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using ExileHUD.ExileBot;
 
 namespace ExileHUD.Framework
 {
@@ -13,17 +14,17 @@ namespace ExileHUD.Framework
 		private bool closed;
 		private IntPtr procHandle;
 		private Dictionary<string, int> modules;
+		public Offsets offsets;
 		public Process Process { get; private set; }
-		public Memory(int pId)
+		public Memory(Offsets offs, int pId)
 		{
+			this.offsets = offs;
 			this.Process = Process.GetProcessById(pId);
 			this.BaseAddress = this.Process.MainModule.BaseAddress.ToInt32();
 			this.Open();
 			this.modules = new Dictionary<string, int>();
 		}
-		public Memory(string name) : this(Process.GetProcessesByName(name)[0].Id)
-		{
-		}
+
 		public void Dispose()
 		{
 			this.Close();
@@ -32,6 +33,8 @@ namespace ExileHUD.Framework
 		{
 			this.Close();
 		}
+
+		protected Offsets Offsets { get { return this.offsets; } }
 		public int GetModule(string name)
 		{
 			if (this.modules.ContainsKey(name))
@@ -192,33 +195,28 @@ namespace ExileHUD.Framework
 		private static extern bool VirtualProtectEx(IntPtr hProcess, IntPtr lpAddress, IntPtr dwSize, uint flNewProtect, ref uint lpflOldProtect);
 		public int[] FindPatterns(params Pattern[] patterns)
 		{
-			byte[] array = this.ReadBytes(this.BaseAddress, 33554432);
-			int[] array2 = new int[patterns.Length];
-			bool[] array3 = new bool[patterns.Length];
-			for (int i = 0; i < array.Length; i += 4)
+			byte[] exeImage = this.ReadBytes(this.BaseAddress, 0x2000000);
+			int[] address = new int[patterns.Length];
+
+			for (int iPattern = 0; iPattern < patterns.Length; iPattern++)
 			{
-				for (int j = 0; j < patterns.Length; j++)
+				Pattern pattern = patterns[iPattern];
+				byte[] patternData = pattern.Bytes;
+				int patternLength = patternData.Length;
+
+				for (int offset = 0; offset < exeImage.Length - patternLength; offset += 4)
 				{
-					if (!array3[j])
-					{
-						Pattern pattern = patterns[j];
-						if (this.CompareData(pattern, array, i))
-						{
-							array2[j] = i;
-							array3[j] = true;
-							Console.WriteLine("Pattern " + j + " is done");
-						}
+					if (this.CompareData(pattern, exeImage, offset)) {
+						address[iPattern] = offset;
+						Console.WriteLine("Pattern " + iPattern + " is found");
+						break;
 					}
 				}
 			}
-			return array2;
+			return address;
 		}
 		private bool CompareData(Pattern pattern, byte[] data, int offset)
 		{
-			if (data.Length - offset <= pattern.Bytes.Length)
-			{
-				return false;
-			}
 			for (int i = 0; i < pattern.Bytes.Length; i++)
 			{
 				if (pattern.Mask[i] == 'x' && pattern.Bytes[i] != data[offset + i])

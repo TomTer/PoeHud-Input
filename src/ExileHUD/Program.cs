@@ -9,17 +9,28 @@ namespace ExileHUD.ExileHUD
 {
 	public class Program
 	{
+
+		private static int FindPoeProcess(out Offsets offs)
+		{
+			offs = Offsets.Regular;
+			Process process = Process.GetProcessesByName(offs.ExeName).FirstOrDefault<Process>();
+			if (process != null)
+			{
+				return process.Id;
+			}
+	
+			offs = Offsets.Steam;
+			process = Process.GetProcessesByName(offs.ExeName).FirstOrDefault<Process>();
+			return process == null ? 0 : process.Id;
+		}
+
 		[STAThread]
 		public static void Main(string[] args)
 		{
-			Process process = Process.GetProcessesByName("PathOfExile").FirstOrDefault<Process>();
-			if (process == null)
-			{
-				process = Process.GetProcessesByName("PathOfExileSteam").FirstOrDefault<Process>();
-				Offsets.InitSpecific(Offsets.clientType.Steam);
-			}
+			Offsets offs;
+			int pid = FindPoeProcess(out offs);
 
-			if (process == null)
+			if (pid == 0)
 			{
 				MessageBox.Show("Path of Exile is not running!");
 				return;
@@ -30,9 +41,9 @@ namespace ExileHUD.ExileHUD
 			{
 				return;
 			}
-			using (Memory memory = new Memory(process.Id))
+			using (Memory memory = new Memory(offs, pid))
 			{
-				Offsets.DoPatternScans(memory);
+				offs.DoPatternScans(memory);
 				PathOfExile pathOfExile = new PathOfExile(memory);
 				pathOfExile.Update();
 				OverlayRenderer overlay = null;
