@@ -10,7 +10,7 @@ namespace ExileHUD.ExileBot
 		public GameWindow Window;
 		public Poe_Game Internal;
 		public EntityList EntityList;
-		public Area CurrentArea;
+		public AreaController Area;
 		public event UpdateEvent OnUpdate;
 		public Memory Memory
 		{
@@ -46,7 +46,7 @@ namespace ExileHUD.ExileBot
 		public PathOfExile(Memory memory)
 		{
 			this.Memory = memory;
-			this.CurrentArea = new Area(this);
+			this.Area = new AreaController(this);
 			this.EntityList = new EntityList(this);
 			this.Window = new GameWindow(memory.Process);
 			this.Internal = new Poe_Game(memory);

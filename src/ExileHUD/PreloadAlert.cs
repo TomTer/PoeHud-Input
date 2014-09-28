@@ -33,13 +33,13 @@ namespace ExileHUD.ExileHUD
 		{
 			this.disp = new HashSet<string>();
 			this.InitAlertStrings();
-			this.poe.CurrentArea.OnAreaChange += new AreaChangeEvent(this.CurrentArea_OnAreaChange);
-			this.CurrentArea_OnAreaChange(this.poe.CurrentArea);
+			this.poe.Area.OnAreaChange += this.CurrentArea_OnAreaChange;
+			this.CurrentArea_OnAreaChange(this.poe.Area);
 		}
 		public override void OnDisable()
 		{
 		}
-		private void CurrentArea_OnAreaChange(Area area)
+		private void CurrentArea_OnAreaChange(AreaController area)
 		{
 			if (Settings.GetBool("PreloadAlert"))
 			{
@@ -49,16 +49,16 @@ namespace ExileHUD.ExileHUD
 		private void Parse()
 		{
 			this.disp.Clear();
-			int num = this.poe.Memory.ReadInt(this.poe.Memory.BaseAddress + poe.Memory.offsets.FileRoot);
-			int num2 = this.poe.Memory.ReadInt(num + 12);
-			int num3 = this.poe.Memory.ReadInt(num + 20);
+			int pFileRoot = this.poe.Memory.ReadInt(this.poe.Memory.BaseAddress + poe.Memory.offsets.FileRoot);
+			int num2 = this.poe.Memory.ReadInt(pFileRoot + 12);
+			int listIterator = this.poe.Memory.ReadInt(pFileRoot + 20);
 			int areaChangeCount = this.poe.Internal.AreaChangeCount;
 			for (int i = 0; i < num2; i++)
 			{
-				num3 = this.poe.Memory.ReadInt(num3);
-				if (this.poe.Memory.ReadInt(num3 + 8) != 0 && this.poe.Memory.ReadInt(num3 + 12, new int[]{ 36 }) == areaChangeCount)
+				listIterator = this.poe.Memory.ReadInt(listIterator);
+				if (this.poe.Memory.ReadInt(listIterator + 8) != 0 && this.poe.Memory.ReadInt(listIterator + 12, 36) == areaChangeCount)
 				{
-					string text = this.poe.Memory.ReadStringU(this.poe.Memory.ReadInt(num3 + 8), 256, true);
+					string text = this.poe.Memory.ReadStringU(this.poe.Memory.ReadInt(listIterator + 8), 256, true);
 					if (text.Contains("vaal_sidearea"))
 					{
 						this.disp.Add("Area contains Corrupted Area");

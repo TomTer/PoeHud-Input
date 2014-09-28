@@ -20,7 +20,7 @@ namespace ExileHUD.ExileHUD
 			this.alertBlacklist = new HashSet<int>();
 			this.currentAlerts = new Dictionary<Entity, string>();
 			this.InitAlertStrings();
-			this.poe.CurrentArea.OnAreaChange += new AreaChangeEvent(this.CurrentArea_OnAreaChange);
+			this.poe.Area.OnAreaChange += this.CurrentArea_OnAreaChange;
 			this.poe.EntityList.OnEntityAdded += new EntityEvent(this.EntityList_OnEntityAdded);
 			this.poe.EntityList.OnEntityRemoved += new EntityEvent(this.EntityList_OnEntityRemoved);
 			foreach (Entity current in this.poe.Entities)
@@ -83,7 +83,7 @@ namespace ExileHUD.ExileHUD
 				this.alertBlacklist.Add(entity.Id);
 			}
 		}
-		private void CurrentArea_OnAreaChange(Area area)
+		private void CurrentArea_OnAreaChange(AreaController area)
 		{
 			this.alertBlacklist.Clear();
 			this.currentAlerts.Clear();

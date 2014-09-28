@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using ExileHUD.Framework;
@@ -12,7 +13,8 @@ namespace ExileHUD.ExileHUD
 		private GameWindow window;
 		private TextureRenderer texrenderer;
 		private Dictionary<int, SlimDX.Direct3D9.Font> fonts = new Dictionary<int, SlimDX.Direct3D9.Font>();
-		public event RenderCallback OnRender;
+		
+		public event Action<RenderingContext> OnRender;
 		public RenderingContext(Device dx, GameWindow window)
 		{
 			this.dx = dx;
@@ -66,25 +68,32 @@ namespace ExileHUD.ExileHUD
 			return new Vec2(rectangle.Width, rectangle.Height);
 		}
 
-		public Vec2 AddTextWithHeightAndOutline(Vec2 pos, string text, Color color, Color outLine, int height, DrawTextFormat format)
+		public Vec2 MeasureString(string text, int height, DrawTextFormat format)
+		{
+			SlimDX.Direct3D9.Font font = this.GetFont(height);
+			Rectangle rectangle = font.MeasureString(this.textSprite, text, format);
+			return new Vec2(rectangle.Width, rectangle.Height);
+		}
+
+		public Vec2 AddTextWithHeightAndOutline(Vec2 pos, string text, Color color, Color outLine, int height, DrawTextFormat format, int outlineOsset = 1)
 		{
 			SlimDX.Direct3D9.Font font = this.GetFont(height);
 			Rectangle rectangle = font.MeasureString(this.textSprite, text, format);
 			rectangle.X += pos.X;
 			rectangle.Y += pos.Y;
 
-			rectangle.X -= 1;
-			rectangle.Y -= 1;
+			rectangle.X -= 1 * outlineOsset;
+			rectangle.Y -= 1 * outlineOsset;
 			font.DrawString(this.textSprite, text, rectangle, format, outLine);
-			rectangle.Y += 2;
+			rectangle.Y += 2 * outlineOsset;
 			font.DrawString(this.textSprite, text, rectangle, format, outLine);
-			rectangle.X += 2;
+			rectangle.X += 2 * outlineOsset;
 			font.DrawString(this.textSprite, text, rectangle, format, outLine);
-			rectangle.Y -= 2;
+			rectangle.Y -= 2 * outlineOsset;
 			font.DrawString(this.textSprite, text, rectangle, format, outLine);
 
-			rectangle.X -= 1;
-			rectangle.Y += 1;
+			rectangle.X -= 1 * outlineOsset;
+			rectangle.Y += 1 * outlineOsset;
 			font.DrawString(this.textSprite, text, rectangle, format, color);
 			return new Vec2(rectangle.Width, rectangle.Height);
 		}

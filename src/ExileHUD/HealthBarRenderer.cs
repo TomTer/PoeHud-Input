@@ -63,7 +63,7 @@ namespace ExileHUD.ExileHUD
 			{
 				return;
 			}
-			if (!Settings.GetBool("Healthbars.ShowInTown") && this.poe.CurrentArea.IsTown)
+			if (!Settings.GetBool("Healthbars.ShowInTown") && this.poe.Area.CurrentArea.IsTown)
 			{
 				return;
 			}

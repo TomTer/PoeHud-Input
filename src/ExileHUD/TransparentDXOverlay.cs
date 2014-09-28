@@ -80,8 +80,8 @@ namespace ExileHUD.ExileHUD
 
 		private void CheckGameStillRunningLoop()
 		{
-			while (!fnHasGameEnded())
-				System.Threading.Thread.Sleep(500);
+			while (!wantsExit && !fnHasGameEnded())
+				Thread.Sleep(500);
 			Invoke(new Action(this.Close));
 		}
 

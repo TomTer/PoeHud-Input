@@ -129,7 +129,7 @@ namespace ExileHUD.ExileHUD
 			this.currentAlerts = new Dictionary<Entity, AlertDrawStyle>();
 			this.currencyNames = this.LoadCurrency();
 			this.craftingBases = this.LoadCraftingBases();
-			this.poe.CurrentArea.OnAreaChange += new AreaChangeEvent(this.CurrentArea_OnAreaChange);
+			this.poe.Area.OnAreaChange += this.CurrentArea_OnAreaChange;
 			this.poe.EntityList.OnEntityAdded += new EntityEvent(this.EntityList_OnEntityAdded);
 			this.poe.EntityList.OnEntityRemoved += new EntityEvent(this.EntityList_OnEntityRemoved);
 		}
@@ -196,7 +196,7 @@ namespace ExileHUD.ExileHUD
 				Sounds.AlertSound.Play();
 			}
 		}
-		private void CurrentArea_OnAreaChange(Area area)
+		private void CurrentArea_OnAreaChange(AreaController area)
 		{
 			this.playedSoundsCache.Clear();
 		}

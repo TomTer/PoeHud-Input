@@ -35,10 +35,10 @@ namespace ExileHUD.ExileBot
 			this.Poe = poe;
 			this.entities = new Dictionary<int, Entity>();
 			this.blackList = new HashSet<string>();
-			poe.CurrentArea.OnAreaChange += new AreaChangeEvent(this.AreaChanged);
+			poe.Area.OnAreaChange += this.AreaChanged;
 			poe.OnUpdate += new UpdateEvent(this.Update);
 		}
-		private void AreaChanged(Area area)
+		private void AreaChanged(AreaController area)
 		{
 			this.blackList.Clear();
 			foreach (Entity current in this.entities.Values)
