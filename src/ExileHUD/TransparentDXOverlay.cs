@@ -32,7 +32,7 @@ namespace ExileHUD.ExileHUD
 		public static IntPtr CurrentHandle;
 		private TransparentDXOverlay.Margins marg;
 
-		public Func<bool> fnHasGameEnded = null;
+		private readonly Func<bool> fnHasGameEnded = null;
 		private Thread poeGuard;
 		public RenderingContext RC
 		{
@@ -60,7 +60,7 @@ namespace ExileHUD.ExileHUD
 			base.Deactivate += new EventHandler(this.TransparentDXOverlay_Deactivate);
 			base.ResumeLayout(false);
 		}
-		public TransparentDXOverlay(GameWindow window)
+		public TransparentDXOverlay(GameWindow window, Func<bool> fnGameEnded)
 		{
 			this.InitializeComponent();
 			this.BackColor = Color.Black;
@@ -73,6 +73,7 @@ namespace ExileHUD.ExileHUD
 			base.FormBorderStyle = FormBorderStyle.None;
 			base.Load += new EventHandler(this.TransparentDXOverlay_Load);
 
+			fnHasGameEnded = fnGameEnded;
 			this.poeGuard = new Thread(CheckGameStillRunningLoop);
 			this.poeGuard.Start();
 		}
