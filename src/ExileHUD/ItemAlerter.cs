@@ -14,6 +14,7 @@ namespace ExileHUD.ExileHUD
 	public class ItemUsefulProperties {
 
 		public string Name;
+		public string DisplayName { get { return (Quality > 0 ? "Superior " : String.Empty) + Name; } }
 		public bool IsCurrency;
 		public bool IsSkillGem;
 		public ItemRarity Rarity;
@@ -88,7 +89,7 @@ namespace ExileHUD.ExileHUD
 			{
 				color = color,
 				FrameWidth = MapLevel > 0 ? 1 : 0,
-				Text = Name,
+				Text = DisplayName,
 				IconIndex = iconIndex
 			};
 		}
@@ -171,8 +172,7 @@ namespace ExileHUD.ExileHUD
 			SkillGem sk = item.HasComponent<SkillGem>() ? item.GetComponent<SkillGem>() : null;
 			Quality q = item.HasComponent<Quality>() ? item.GetComponent<Quality>() : null;
 
-			string prefix = q != null && q.ItemQuality > 0 ? "Superior " : String.Empty;
-			ip.Name = prefix + this.poe.Files.BaseItemTypes.Translate(item.Path);
+			ip.Name = this.poe.Files.BaseItemTypes.Translate(item.Path);
 			ip.ItemLevel = mods.ItemLevel;
 			ip.NumLinks = socks.LargestLinkSize;
 			ip.NumSockets = socks.NumberOfSockets;
