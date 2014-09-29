@@ -19,6 +19,8 @@ namespace ExileHUD.ExileHUD
 		public bool IsSkillGem;
 		public ItemRarity Rarity;
 		public bool WorthChrome;
+
+		public bool IsCraftingBase;
 		
 		public int NumSockets;
 		public int NumLinks;
@@ -27,7 +29,7 @@ namespace ExileHUD.ExileHUD
 		public int Quality;
 		public int MapLevel;
 
-		public bool IsWorthAlertingPlayer(HashSet<string> currencyNames, Dictionary<string, ItemAlerter.CraftingBase> craftingBases)
+		public bool IsWorthAlertingPlayer(HashSet<string> currencyNames)
 		{			
 			if( Rarity == ItemRarity.Rare && Settings.GetBool("ItemAlert.Rares"))
 				return true;
@@ -53,16 +55,7 @@ namespace ExileHUD.ExileHUD
 			if (NumSockets >= Settings.GetInt("ItemAlert.MinSockets"))
 				return true;
 
-			if (craftingBases.ContainsKey(Name) && Settings.GetBool("ItemAlert.Crafting"))
-			{
-				ItemAlerter.CraftingBase craftingBase = craftingBases[Name];
-				if (ItemLevel >= craftingBase.MinItemLevel && Quality >= craftingBase.MinQuality)
-				{
-					return true;
-				}
-				
-			}
-			return false;
+			return IsCraftingBase;
 		}
 
 		internal AlertDrawStyle GetDrawStyle()
@@ -84,6 +77,8 @@ namespace ExileHUD.ExileHUD
 				iconIndex = 1;
 			if (NumSockets == 6)
 				iconIndex = 0;
+			if (IsCraftingBase)
+				iconIndex = 2;
 
 			return new AlertDrawStyle()
 			{
@@ -154,7 +149,7 @@ namespace ExileHUD.ExileHUD
 				Entity item = new Entity(this.poe, entity.GetComponent<WorldItem>().ItemEntity);
 				ItemUsefulProperties props = this.EvaluateItem(item);
 
-				if (props.IsWorthAlertingPlayer(currencyNames, craftingBases))
+				if (props.IsWorthAlertingPlayer(currencyNames))
 				{
 					this.DoAlert(entity, props);
 				}
@@ -182,6 +177,11 @@ namespace ExileHUD.ExileHUD
 			ip.IsSkillGem = sk != null;
 			ip.Quality = q == null ? 0 : q.ItemQuality;
 			ip.WorthChrome = socks != null && socks.IsRGB;
+
+			CraftingBase craftingBase;
+			if (craftingBases.TryGetValue(ip.Name, out craftingBase) && Settings.GetBool("ItemAlert.Crafting"))
+				ip.IsCraftingBase = ip.ItemLevel >= craftingBase.MinItemLevel && ip.Quality >= craftingBase.MinQuality;
+
 			return ip;
 		}
 
@@ -246,7 +246,7 @@ namespace ExileHUD.ExileHUD
 
 					if (drawStyle.IconIndex >= 0)
 					{
-						const float iconsInSprite = 2;
+						const float iconsInSprite = 3;
 						int iconSize = vTextFrame.Y;
 						Rect iconPos = new Rect(textPos.X - iconSize - vTextFrame.X, textPos.Y, iconSize, iconSize);
 						RectUV uv = new RectUV(drawStyle.IconIndex / iconsInSprite, 0, (drawStyle.IconIndex + 1)/ iconsInSprite, 1);
