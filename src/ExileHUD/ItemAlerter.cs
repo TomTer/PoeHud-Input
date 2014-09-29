@@ -79,6 +79,8 @@ namespace ExileHUD.ExileHUD
 				iconIndex = 0;
 			if (IsCraftingBase)
 				iconIndex = 2;
+			if (NumLinks == 6)
+				iconIndex = 3;
 
 			return new AlertDrawStyle()
 			{
@@ -246,7 +248,7 @@ namespace ExileHUD.ExileHUD
 
 					if (drawStyle.IconIndex >= 0)
 					{
-						const float iconsInSprite = 3;
+						const float iconsInSprite = 4;
 						int iconSize = vTextFrame.Y;
 						Rect iconPos = new Rect(textPos.X - iconSize - vTextFrame.X, textPos.Y, iconSize, iconSize);
 						RectUV uv = new RectUV(drawStyle.IconIndex / iconsInSprite, 0, (drawStyle.IconIndex + 1)/ iconsInSprite, 1);
