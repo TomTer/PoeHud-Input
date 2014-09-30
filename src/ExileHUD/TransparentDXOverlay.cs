@@ -24,7 +24,6 @@ namespace ExileHUD.ExileHUD
 		public const int WS_EX_TRANSPARENT = 32;
 		public const int LWA_ALPHA = 2;
 		public const int LWA_COLORKEY = 1;
-		private IContainer components;
 		private Device dx;
 		private readonly GameWindow window;
 		private Thread dxThread;
@@ -39,14 +38,7 @@ namespace ExileHUD.ExileHUD
 			get;
 			private set;
 		}
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing && this.components != null)
-			{
-				this.components.Dispose();
-			}
-			base.Dispose(disposing);
-		}
+
 		private void InitializeComponent()
 		{
 			base.SuspendLayout();

@@ -10,6 +10,7 @@ namespace ExileHUD.ExileHUD
 		private delegate int HookProc(int nCode, IntPtr wParam, IntPtr lParam);
 		public delegate bool MouseEvent(MouseEventID eventId, int x, int y);
 		private struct POINT
+#pragma warning disable 649
 		{
 			public int x;
 			public int y;
@@ -22,6 +23,7 @@ namespace ExileHUD.ExileHUD
 			public uint time;
 			public IntPtr dwExtraInfo;
 		}
+#pragma warning restore 649
 		private int mousehookId;
 		private MouseHook.MouseEvent mouseEvent;
 		private MouseHook.HookProc LLHookProc;
