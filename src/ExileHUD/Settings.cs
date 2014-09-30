@@ -241,6 +241,8 @@ namespace ExileHUD.ExileHUD
 			Settings.ints.Add("ItemAlert.MinLinks", 5);
 			Settings.ints.Add("ItemAlert.MinSockets", 6);
 			Settings.ints.Add("ItemAlert.ShowText.FontSize", 16);
+			Settings.ints.Add("ItemAlert.PositionHeight", 200);
+            		Settings.ints.Add("ItemAlert.PositionWidth", 0);
 			Settings.ints.Add("DangerAlert.ShowText.FontSize", 16);
 			Settings.ints.Add("DangerAlert.ShowText.BgAlpha", 128);
 			Settings.ints.Add("Healthbars.Players.Width", 105);
