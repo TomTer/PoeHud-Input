@@ -16,7 +16,7 @@ namespace ExileHUD.ExileHUD
 		private bool menuVisible;
 		public override void OnEnable()
 		{
-			this.bounds = new Rect(0, 0, 256, 32);
+			this.bounds = new Rect(0, 75, 256, 32);
 			this.CreateButtons();
 			this.hook = new MouseHook(new MouseHook.MouseEvent(this.OnMouseEvent));
 		}
@@ -154,7 +154,7 @@ namespace ExileHUD.ExileHUD
 		private BooleanButton CreateRootMenu(string text, int yIndex, string setting)
 		{
 			BooleanButton booleanButton = new BooleanButton(text, setting);
-			booleanButton.Bounds = new Rect(0, 32 + yIndex * booleanButton.DesiredHeight, booleanButton.DesiredWidth, booleanButton.DesiredHeight);
+			booleanButton.Bounds = new Rect(0, 105 + yIndex * booleanButton.DesiredHeight, booleanButton.DesiredWidth, booleanButton.DesiredHeight);
 			this.buttons.Add(booleanButton);
 			return booleanButton;
 		}
