@@ -207,7 +207,7 @@ namespace ExileHUD.ExileHUD
 				return;
 			}
 			Rect clientRect = this.poe.Internal.game.IngameState.IngameUi.Minimap.SmallMinimap.GetClientRect();
-			Vec2 vec = new Vec2(clientRect.X + clientRect.W, clientRect.Y + clientRect.H +200);
+			Vec2 vec = new Vec2(clientRect.X + clientRect.W - Settings.GetInt("ItemAlert.PositionWidth"), clientRect.Y + clientRect.H + Settings.GetInt("ItemAlert.PositionHeight"));
 			
 			int y = vec.Y;
 			int fontSize = Settings.GetInt("ItemAlert.ShowText.FontSize");
