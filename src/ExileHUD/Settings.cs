@@ -193,6 +193,10 @@ namespace ExileHUD.ExileHUD
 		}
 		private static void SetDefault()
 		{
+			Settings.ints.Add("Menu.Size", 25);
+            		Settings.ints.Add("Menu.Length", 50);
+            		Settings.ints.Add("Menu.PositionWidth", 0);
+            		Settings.ints.Add("Menu.PositionHeight", 100);
 			Settings.bools.Add("Window.RequireForeground", false);
 			Settings.bools.Add("Window.ShowIngameMenu", true);
 			Settings.bools.Add("ClientHacks", false);
