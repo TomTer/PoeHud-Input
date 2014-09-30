@@ -82,7 +82,8 @@ namespace ExileHUD.ExileHUD
 		{
 			while (!wantsExit && !fnHasGameEnded())
 				Thread.Sleep(500);
-			Invoke(new Action(this.Close));
+			if( !wantsExit )
+				Invoke(new Action(this.Close));
 		}
 
 		private void TransparentDXOverlay_Load(object sender, EventArgs e)
