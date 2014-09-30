@@ -193,6 +193,10 @@ namespace ExileHUD.ExileHUD
 		}
 		private static void SetDefault()
 		{
+			Settings.ints.Add("Menu.Size", 25);
+            		Settings.ints.Add("Menu.Length", 50);
+            		Settings.ints.Add("Menu.PositionWidth", 0);
+            		Settings.ints.Add("Menu.PositionHeight", 100);
 			Settings.bools.Add("Window.RequireForeground", false);
 			Settings.bools.Add("Window.ShowIngameMenu", true);
 			Settings.bools.Add("ClientHacks", false);
@@ -241,6 +245,8 @@ namespace ExileHUD.ExileHUD
 			Settings.ints.Add("ItemAlert.MinLinks", 5);
 			Settings.ints.Add("ItemAlert.MinSockets", 6);
 			Settings.ints.Add("ItemAlert.ShowText.FontSize", 16);
+			Settings.ints.Add("ItemAlert.PositionHeight", 200);
+            		Settings.ints.Add("ItemAlert.PositionWidth", 0);
 			Settings.ints.Add("DangerAlert.ShowText.FontSize", 16);
 			Settings.ints.Add("DangerAlert.ShowText.BgAlpha", 128);
 			Settings.ints.Add("Healthbars.Players.Width", 105);
