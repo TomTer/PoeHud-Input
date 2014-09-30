@@ -13,14 +13,14 @@ namespace ExileHUD.ExileHUD
 		{
 			get
 			{
-				return 32;
+				return 25;
 			}
 		}
 		public override int DesiredWidth
 		{
 			get
 			{
-				return 256;
+				return 210;
 			}
 		}
 		public BooleanButton(string text, string settingName)
@@ -36,7 +36,7 @@ namespace ExileHUD.ExileHUD
 				return;
 			}
 			Color color = this.isEnabled ? Color.Green : Color.Red;
-			rc.AddTextWithHeight(new Vec2(base.Bounds.X + base.Bounds.W / 2, base.Bounds.Y + base.Bounds.H / 2), this.text, Color.White, 16, DrawTextFormat.VerticalCenter | DrawTextFormat.Center);
+			rc.AddTextWithHeight(new Vec2(base.Bounds.X + base.Bounds.W / 2, base.Bounds.Y + base.Bounds.H / 2), this.text, Color.White, 12, DrawTextFormat.VerticalCenter | DrawTextFormat.Center);
 			rc.AddBox(base.Bounds, Color.Black);
 			rc.AddBox(new Rect(base.Bounds.X + 1, base.Bounds.Y + 1, base.Bounds.W - 2, base.Bounds.H - 2), color);
 			if (this.children.Count > 0)
