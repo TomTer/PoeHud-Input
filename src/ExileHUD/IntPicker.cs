@@ -42,7 +42,7 @@ namespace ExileHUD.ExileHUD
 				return;
 			}
 			Color gray = Color.Gray;
-			rc.AddTextWithHeight(new Vec2(base.Bounds.X + base.Bounds.W / 2, base.Bounds.Y + base.Bounds.H / 4), this.text + ": " + this.value, Color.White, 11, DrawTextFormat.VerticalCenter | DrawTextFormat.Center);
+			rc.AddTextWithHeight(new Vec2(base.Bounds.X + base.Bounds.W / 2, base.Bounds.Y + base.Bounds.H / 3), this.text + ": " + this.value, Color.White, 11, DrawTextFormat.VerticalCenter | DrawTextFormat.Center);
 			rc.AddBox(base.Bounds, Color.Black);
 			rc.AddBox(new Rect(base.Bounds.X + 1, base.Bounds.Y + 1, base.Bounds.W - 2, base.Bounds.H - 2), gray);
 			rc.AddBox(new Rect(base.Bounds.X + 5, base.Bounds.Y + 3 * base.Bounds.H / 4, base.Bounds.W - 10, 5), Color.Black);
