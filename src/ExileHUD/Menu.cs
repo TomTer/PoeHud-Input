@@ -28,7 +28,7 @@ namespace ExileHUD.ExileHUD
 		{
 			int alpha = this.menuVisible ? 255 : 50;
 			rc.AddBox(this.bounds, Color.FromArgb(alpha, Color.Gray));
-			rc.AddTextWithHeight(new Vec2(128, 16), "Menu", Color.White, 16, DrawTextFormat.VerticalCenter | DrawTextFormat.Center);
+			rc.AddTextWithHeight(new Vec2(128, 16), "Menu", Color.Gray, 16, DrawTextFormat.VerticalCenter | DrawTextFormat.Center);
 			foreach (BooleanButton current in this.buttons)
 			{
 				current.Render(rc);
