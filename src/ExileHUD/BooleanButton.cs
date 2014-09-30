@@ -35,7 +35,7 @@ namespace ExileHUD.ExileHUD
 			{
 				return;
 			}
-			Color color = this.isEnabled ? Color.Green : Color.Red;
+			Color color = this.isEnabled ? Color.Gray : Color.Crimson;
 			rc.AddTextWithHeight(new Vec2(base.Bounds.X + base.Bounds.W / 2, base.Bounds.Y + base.Bounds.H / 2), this.text, Color.White, 12, DrawTextFormat.VerticalCenter | DrawTextFormat.Center);
 			rc.AddBox(base.Bounds, Color.Black);
 			rc.AddBox(new Rect(base.Bounds.X + 1, base.Bounds.Y + 1, base.Bounds.W - 2, base.Bounds.H - 2), color);
