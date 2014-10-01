@@ -7,10 +7,10 @@ namespace PoeHUD.ExileBot
 {
 	public class Entity
 	{
-		private Poe.Entity InternalEntity;
-		private PathOfExile Poe;
-		private Dictionary<string, int> Components;
-		private int cachedId;
+		private readonly Poe.Entity InternalEntity;
+		private readonly PathOfExile Poe;
+		private readonly Dictionary<string, int> Components;
+		private readonly int cachedId;
 		public bool IsInList = true;
 		public string Path
 		{

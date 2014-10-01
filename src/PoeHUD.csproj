@@ -49,6 +49,7 @@
     <Compile Include="Hud\Health\Healthbar.cs" />
     <Compile Include="Hud\Health\RenderPrio.cs" />
     <Compile Include="Hud\Loot\AlertDrawStyle.cs" />
+    <Compile Include="Hud\Loot\CraftingBase.cs" />
     <Compile Include="Hud\Loot\ItemUsefulProperties.cs" />
     <Compile Include="Hud\MaxRolls\ItemRollsRenderer.cs" />
     <Compile Include="Hud\MaxRolls\MaxRolls.cs" />

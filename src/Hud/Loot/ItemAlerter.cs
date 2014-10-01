@@ -14,15 +14,9 @@ namespace PoeHUD.Hud.Loot
 {
 	public class ItemAlerter : HUDPlugin
 	{
-		public struct CraftingBase
-		{
-			public string Name;
-			public int MinItemLevel;
-			public int MinQuality;
-		}
 		private HashSet<long> playedSoundsCache;
 		private Dictionary<ExileBot.Entity, AlertDrawStyle> currentAlerts;
-		private Dictionary<string, ItemAlerter.CraftingBase> craftingBases;
+		private Dictionary<string, CraftingBase> craftingBases;
 		private HashSet<string> currencyNames;
 		public override void OnEnable()
 		{
@@ -113,62 +107,76 @@ namespace PoeHUD.Hud.Loot
 				return;
 			}
 			Rect clientRect = this.poe.Internal.game.IngameState.IngameUi.Minimap.SmallMinimap.GetClientRect();
-			Vec2 vec = new Vec2(clientRect.X + clientRect.W - Settings.GetInt("ItemAlert.PositionWidth"), clientRect.Y + clientRect.H + Settings.GetInt("ItemAlert.PositionHeight"));
+			Vec2 rightTopAnchor = new Vec2(clientRect.X + clientRect.W, clientRect.Y + clientRect.H + 5);
 			
-			int y = vec.Y;
+			int y = rightTopAnchor.Y;
 			int fontSize = Settings.GetInt("ItemAlert.ShowText.FontSize");
+
 			foreach (KeyValuePair<ExileBot.Entity, AlertDrawStyle> kv in this.currentAlerts)
 			{
-				if (kv.Key.IsValid)
+				if (!kv.Key.IsValid) continue;
+
+				string text = GetItemName(kv);
+				if( null == text ) continue;
+
+				AlertDrawStyle drawStyle = kv.Value;
+				int frameWidth = drawStyle.FrameWidth;
+				Vec2 vPadding = new Vec2(frameWidth + 5, frameWidth);
+				int frameMargin = frameWidth + 2;
+
+				Vec2 textPos = new Vec2(rightTopAnchor.X - vPadding.X, y + vPadding.Y);
+
+				var vTextFrame = rc.AddTextWithHeight(textPos, text, drawStyle.color, fontSize, DrawTextFormat.Right);
+				int iconSize = vTextFrame.Y;
+				bool hasIcon = drawStyle.IconIndex >= 0;
+
+				int maxHeight = vTextFrame.Y + 2*vPadding.Y + frameMargin;
+				int maxWidth = vTextFrame.X + 2 * vPadding.X + (hasIcon ? iconSize : 0);
+				rc.AddBox(new Rect(rightTopAnchor.X - maxWidth, y, maxWidth, maxHeight), Color.FromArgb(180, 0, 0, 0));
+
+				if (hasIcon)
 				{
-					EntityLabel labelFromEntity = this.poe.GetLabelFromEntity(kv.Key);
-					string text;
-					if (labelFromEntity == null)
-					{
-						Entity itemEntity = kv.Key.GetComponent<WorldItem>().ItemEntity;
-						if (!itemEntity.IsValid)
-						{
-							continue;
-						}
-						text = kv.Value.Text;
-					}
-					else
-					{
-						text = labelFromEntity.Text;
-					}
+					const float iconsInSprite = 4;
 
-					var drawStyle = kv.Value;
-					int frameWidth = drawStyle.FrameWidth;
-					Vec2 vPadding = new Vec2(frameWidth + 5, frameWidth);
-					int frameMargin = frameWidth + 2;
-
-					Vec2 textPos = new Vec2(vec.X - vPadding.X, y + vPadding.Y);
-
-					var vTextFrame = rc.AddTextWithHeightAndOutline(textPos, text, drawStyle.color, Color.Black, fontSize, DrawTextFormat.Right);
-					if( frameWidth > 0)
-					{
-						rc.AddFrame(new Rect(vec.X - vTextFrame.X - 2 * vPadding.X, y, vTextFrame.X + 2 * vPadding.X, vTextFrame.Y + 2 * vPadding.Y), kv.Value.color, frameWidth);
-					}
-
-					if (drawStyle.IconIndex >= 0)
-					{
-						const float iconsInSprite = 4;
-						int iconSize = vTextFrame.Y;
-						Rect iconPos = new Rect(textPos.X - iconSize - vTextFrame.X, textPos.Y, iconSize, iconSize);
-						RectUV uv = new RectUV(drawStyle.IconIndex / iconsInSprite, 0, (drawStyle.IconIndex + 1)/ iconsInSprite, 1);
-						rc.AddSprite("item_icons.png", iconPos, uv);
-					}
-					y += vTextFrame.Y + 2 * vPadding.Y + frameMargin;
+					Rect iconPos = new Rect(textPos.X - iconSize - vTextFrame.X, textPos.Y, iconSize, iconSize);
+					RectUV uv = new RectUV(drawStyle.IconIndex / iconsInSprite, 0, (drawStyle.IconIndex + 1) / iconsInSprite, 1);
+					rc.AddSprite("item_icons.png", iconPos, uv);
 				}
+				if( frameWidth > 0) {
+					Rect frame = new Rect(rightTopAnchor.X - vTextFrame.X - 2*vPadding.X, y, vTextFrame.X + 2*vPadding.X, vTextFrame.Y + 2*vPadding.Y);
+					rc.AddFrame(frame, kv.Value.color, frameWidth);
+				}
+				y += vTextFrame.Y + 2 * vPadding.Y + frameMargin;
 			}
+			
 		}
-		private Dictionary<string, ItemAlerter.CraftingBase> LoadCraftingBases()
+
+		private string GetItemName(KeyValuePair<ExileBot.Entity, AlertDrawStyle> kv)
+		{
+			string text;
+			EntityLabel labelFromEntity = this.poe.GetLabelFromEntity(kv.Key);
+
+			if (labelFromEntity == null)
+			{
+				Entity itemEntity = kv.Key.GetComponent<WorldItem>().ItemEntity;
+				if (!itemEntity.IsValid)
+					return null;
+				text = kv.Value.Text;
+			}
+			else
+			{
+				text = labelFromEntity.Text;
+			}
+			return text;
+		}
+
+		private Dictionary<string, CraftingBase> LoadCraftingBases()
 		{
 			if (!File.Exists("config/crafting_bases.txt"))
 			{
-				return new Dictionary<string, ItemAlerter.CraftingBase>();
+				return new Dictionary<string, CraftingBase>();
 			}
-			Dictionary<string, ItemAlerter.CraftingBase> dictionary = new Dictionary<string, ItemAlerter.CraftingBase>(StringComparer.OrdinalIgnoreCase);
+			Dictionary<string, CraftingBase> dictionary = new Dictionary<string, CraftingBase>(StringComparer.OrdinalIgnoreCase);
 			string[] array = File.ReadAllLines("config/crafting_bases.txt");
 			for (int i = 0; i < array.Length; i++)
 			{
@@ -195,7 +203,7 @@ namespace PoeHUD.Hud.Loot
 							{
 								minQuality = int.Parse(array2[2].Trim());
 							}
-							dictionary.Add(text3, new ItemAlerter.CraftingBase
+							dictionary.Add(text3, new CraftingBase
 							{
 								Name = text3,
 								MinItemLevel = minItemLevel,
