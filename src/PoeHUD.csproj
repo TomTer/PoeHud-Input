@@ -46,8 +46,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExileBot\AreaInstance.cs" />
-    <Compile Include="ExileHUD\ItemRollsRenderer.cs" />
-    <Compile Include="ExileHUD\MaxRolls.cs" />
+    <Compile Include="Hud\Health\Healthbar.cs" />
+    <Compile Include="Hud\Health\RenderPrio.cs" />
+    <Compile Include="Hud\Loot\AlertDrawStyle.cs" />
+    <Compile Include="Hud\Loot\ItemUsefulProperties.cs" />
+    <Compile Include="Hud\MaxRolls\ItemRollsRenderer.cs" />
+    <Compile Include="Hud\MaxRolls\MaxRolls.cs" />
     <Compile Include="Framework\GameWindow.cs" />
     <Compile Include="Framework\Imports.cs" />
     <Compile Include="Framework\Memory.cs" />
@@ -55,6 +59,7 @@
     <Compile Include="Framework\RectUV.cs" />
     <Compile Include="Framework\Vec2.cs" />
     <Compile Include="Framework\Vec3.cs" />
+    <Compile Include="Hud\MaxRolls\MaxRolls_Mod.cs" />
     <Compile Include="Poe\EntityComponents\Actor.cs" />
     <Compile Include="ExileBot\AreaController.cs" />
     <Compile Include="Poe\EntityComponents\AreaTransition.cs" />
@@ -116,50 +121,49 @@
     <Compile Include="ExileBot\Vec2f.cs" />
     <Compile Include="Poe\EntityComponents\Weapon.cs" />
     <Compile Include="Poe\EntityComponents\WorldItem.cs" />
-    <Compile Include="ExileHUD\Menu\BooleanButton.cs" />
-    <Compile Include="ExileHUD\MapIcon\ChestMinimapIcon.cs" />
-    <Compile Include="ExileHUD\ClientHacks.cs" />
+    <Compile Include="Hud\Menu\BooleanButton.cs" />
+    <Compile Include="Hud\Icons\ChestMinimapIcon.cs" />
+    <Compile Include="Hud\ClientHacks.cs" />
     <Compile Include="Game\Constants.cs" />
-    <Compile Include="ExileHUD\DangerAlert.cs" />
-    <Compile Include="ExileHUD\HealthBarRenderer.cs" />
-    <Compile Include="ExileHUD\HUDPlugin.cs" />
-    <Compile Include="ExileHUD\Menu\IntPicker.cs" />
-    <Compile Include="ExileHUD\ItemAlerter.cs" />
-    <Compile Include="ExileHUD\ItemLevelRenderer.cs" />
-    <Compile Include="ExileHUD\MapIcon\ItemMinimapIcon.cs" />
-    <Compile Include="ExileHUD\Menu\Menu.cs" />
-    <Compile Include="ExileHUD\Menu\MenuItem.cs" />
-    <Compile Include="ExileHUD\MapIcon\MinimapIcon.cs" />
-    <Compile Include="ExileHUD\MinimapRenderer.cs" />
-    <Compile Include="ExileHUD\MinimapRenderPriority.cs" />
-    <Compile Include="ExileHUD\MapIcon\MinionMinimapIcon.cs" />
-    <Compile Include="ExileHUD\MapIcon\MonsterMinimapIcon.cs" />
-    <Compile Include="ExileHUD\MouseEventID.cs" />
-    <Compile Include="ExileHUD\MouseHook.cs" />
-    <Compile Include="ExileHUD\OverlayRenderer.cs" />
-    <Compile Include="ExileHUD\PreloadAlert.cs" />
-    <Compile Include="ExileHUD\Program.cs" />
-    <Compile Include="ExileHUD\RenderCallback.cs" />
-    <Compile Include="ExileHUD\RenderingContext.cs" />
-    <Compile Include="ExileHUD\Settings.cs" />
-    <Compile Include="ExileHUD\SettingsEditor.cs" />
-    <Compile Include="ExileHUD\SettingsEditorStatus.cs" />
-    <Compile Include="ExileHUD\SettingsForm.cs">
+    <Compile Include="Hud\Monster\DangerAlert.cs" />
+    <Compile Include="Hud\Health\HealthBarRenderer.cs" />
+    <Compile Include="Hud\HUDPlugin.cs" />
+    <Compile Include="Hud\Menu\IntPicker.cs" />
+    <Compile Include="Hud\Loot\ItemAlerter.cs" />
+    <Compile Include="Hud\ItemLevelRenderer.cs" />
+    <Compile Include="Hud\Icons\ItemMinimapIcon.cs" />
+    <Compile Include="Hud\Menu\Menu.cs" />
+    <Compile Include="Hud\Menu\MenuItem.cs" />
+    <Compile Include="Hud\Icons\MinimapIcon.cs" />
+    <Compile Include="Hud\Icons\MinimapRenderer.cs" />
+    <Compile Include="Hud\Icons\MinimapRenderPriority.cs" />
+    <Compile Include="Hud\Icons\MinionMinimapIcon.cs" />
+    <Compile Include="Hud\Icons\MonsterMinimapIcon.cs" />
+    <Compile Include="Hud\MouseEventID.cs" />
+    <Compile Include="Hud\MouseHook.cs" />
+    <Compile Include="Hud\OverlayRenderer.cs" />
+    <Compile Include="Hud\Preload\PreloadAlert.cs" />
+    <Compile Include="Hud\Program.cs" />
+    <Compile Include="Hud\RenderingContext.cs" />
+    <Compile Include="Hud\Settings.cs" />
+    <Compile Include="Hud\SettingsEditor.cs" />
+    <Compile Include="Hud\SettingsEditorStatus.cs" />
+    <Compile Include="Hud\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ExileHUD\Sounds.cs" />
-    <Compile Include="ExileHUD\MapIcon\StrongboxMinimapIcon.cs" />
-    <Compile Include="ExileHUD\TextureRenderer.cs" />
-    <Compile Include="ExileHUD\TransparentDXOverlay.cs">
+    <Compile Include="Hud\Sounds.cs" />
+    <Compile Include="Hud\Icons\StrongboxMinimapIcon.cs" />
+    <Compile Include="Hud\TextureRenderer.cs" />
+    <Compile Include="Hud\TransparentDXOverlay.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ExileHUD\XPHRenderer.cs" />
+    <Compile Include="Hud\XpRate\XPHRenderer.cs" />
     <Compile Include="Pattern.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ExileHUD\SettingsForm.resources" />
-    <EmbeddedResource Include="ExileHUD\TransparentDXOverlay.resources" />
+    <EmbeddedResource Include="Hud\SettingsForm.resources" />
+    <EmbeddedResource Include="Hud\TransparentDXOverlay.resources" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
