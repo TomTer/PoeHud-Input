@@ -1,6 +1,6 @@
 using System;
 
-namespace ExileHUD.Framework
+namespace PoeHUD.Framework
 {
 	public struct Vec2
 	{

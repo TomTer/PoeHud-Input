@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using ExileHUD.EntityComponents;
-using ExileHUD.ExileBot;
-using ExileHUD.Framework;
-using ExileHUD.Game;
+using PoeHUD.ExileBot;
+using PoeHUD.ExileHUD.MapIcon;
+using PoeHUD.Framework;
+using PoeHUD.Game;
+using PoeHUD.Poe.EntityComponents;
+using PoeHUD.Poe.UI;
 
-namespace ExileHUD.ExileHUD
+namespace PoeHUD.ExileHUD
 {
 	public class MinimapRenderer : HUDPlugin
 	{
@@ -21,7 +23,7 @@ namespace ExileHUD.ExileHUD
 			{
 				this.icons[i] = new List<MinimapIcon>();
 			}
-			this.poe.EntityList.OnEntityAdded += new EntityEvent(this.EntityList_OnEntityAdded);
+			this.poe.EntityList.OnEntityAdded += this.EntityList_OnEntityAdded;
 			foreach (Entity current in this.poe.Entities)
 			{
 				this.EntityList_OnEntityAdded(current);
@@ -45,7 +47,7 @@ namespace ExileHUD.ExileHUD
 				return;
 			}
 			this.playerPos = this.poe.Player.GetComponent<Positioned>().GridPos;
-			Poe_UIElement smallMinimap = this.poe.Internal.IngameState.IngameUi.Minimap.SmallMinimap;
+			Element smallMinimap = this.poe.Internal.IngameState.IngameUi.Minimap.SmallMinimap;
 			float scale = 240f;
 			Rect clientRect = smallMinimap.GetClientRect();
 			Vec2 minimapCenter = new Vec2(clientRect.X + clientRect.W / 2, clientRect.Y + clientRect.H / 2);

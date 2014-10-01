@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace ExileHUD.ExileHUD
+namespace PoeHUD.ExileHUD
 {
 	public class SettingsForm : Form
 	{

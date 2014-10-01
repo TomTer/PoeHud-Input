@@ -6,7 +6,7 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
-namespace ExileHUD.ExileHUD
+namespace PoeHUD.ExileHUD
 {
 	public class Settings
 	{

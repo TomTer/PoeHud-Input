@@ -1,4 +1,4 @@
-namespace ExileHUD.ExileHUD
+namespace PoeHUD.ExileHUD
 {
 	public enum SettingsEditorStatus
 	{

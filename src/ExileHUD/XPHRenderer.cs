@@ -1,11 +1,12 @@
 using System;
 using System.Drawing;
-using ExileHUD.EntityComponents;
-using ExileHUD.ExileBot;
-using ExileHUD.Framework;
+using PoeHUD.ExileBot;
+using PoeHUD.Framework;
+using PoeHUD.Game;
+using PoeHUD.Poe.EntityComponents;
 using SlimDX.Direct3D9;
 
-namespace ExileHUD.ExileHUD
+namespace PoeHUD.ExileHUD
 {
 	public class XPHRenderer : HUDPlugin
 	{

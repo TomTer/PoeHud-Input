@@ -1,6 +1,6 @@
-using ExileHUD.Framework;
+using PoeHUD.Framework;
 
-namespace ExileHUD.ExileBot
+namespace PoeHUD.ExileBot
 {
 	public class Buff
 	{

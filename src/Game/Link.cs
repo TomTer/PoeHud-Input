@@ -1,6 +1,6 @@
 using System;
 
-namespace ExileHUD.Game
+namespace PoeHUD.Game
 {
 	public class Link
 	{

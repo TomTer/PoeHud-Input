@@ -1,14 +1,13 @@
 using System;
-using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
-using ExileHUD.Framework;
+using PoeHUD.Framework;
 using SlimDX;
 using SlimDX.Direct3D9;
 
-namespace ExileHUD.ExileHUD
+namespace PoeHUD.ExileHUD
 {
 	public class TransparentDXOverlay : Form
 	{

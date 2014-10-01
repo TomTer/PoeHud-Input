@@ -1,15 +1,16 @@
 using System;
 using System.Collections.Generic;
-using ExileHUD.EntityComponents;
-using ExileHUD.Game;
+using PoeHUD.Game;
+using PoeHUD.Poe;
+using PoeHUD.Poe.EntityComponents;
 
-namespace ExileHUD.ExileBot
+namespace PoeHUD.ExileBot
 {
 	public class ItemStats
 	{
 		private class StatTranslator
 		{
-			private delegate void AddStat(ItemStats stats, Poe_ItemMod m);
+			private delegate void AddStat(ItemStats stats, ItemMod m);
 			private Dictionary<string, ItemStats.StatTranslator.AddStat> dict;
 			public StatTranslator()
 			{
@@ -84,7 +85,7 @@ namespace ExileHUD.ExileBot
 					ItemStat.LocalESPercent
 				}));
 			}
-			public void Translate(ItemStats stats, Poe_ItemMod m)
+			public void Translate(ItemStats stats, ItemMod m)
 			{
 				if (!this.dict.ContainsKey(m.Name))
 				{
@@ -94,21 +95,21 @@ namespace ExileHUD.ExileBot
 			}
 			private ItemStats.StatTranslator.AddStat Single(ItemStat stat)
 			{
-				return delegate(ItemStats x, Poe_ItemMod m)
+				return delegate(ItemStats x, ItemMod m)
 				{
 					x.AddToMod(stat, (float)m.Value1);
 				};
 			}
 			private ItemStats.StatTranslator.AddStat Average(ItemStat stat)
 			{
-				return delegate(ItemStats x, Poe_ItemMod m)
+				return delegate(ItemStats x, ItemMod m)
 				{
 					x.AddToMod(stat, (float)(m.Value1 + m.Value2) / 2f);
 				};
 			}
 			private ItemStats.StatTranslator.AddStat Dual(ItemStat s1, ItemStat s2)
 			{
-				return delegate(ItemStats x, Poe_ItemMod m)
+				return delegate(ItemStats x, ItemMod m)
 				{
 					x.AddToMod(s1, (float)m.Value1);
 					x.AddToMod(s2, (float)m.Value2);
@@ -116,7 +117,7 @@ namespace ExileHUD.ExileBot
 			}
 			private ItemStats.StatTranslator.AddStat MultipleSame(params ItemStat[] stats)
 			{
-				return delegate(ItemStats x, Poe_ItemMod m)
+				return delegate(ItemStats x, ItemMod m)
 				{
 					ItemStat[] stats2 = stats;
 					for (int i = 0; i < stats2.Length; i++)
@@ -127,10 +128,10 @@ namespace ExileHUD.ExileBot
 				};
 			}
 		}
-		protected Poe_Entity item;
+		protected Poe.Entity item;
 		protected float[] stats;
 		private static ItemStats.StatTranslator translate;
-		public ItemStats(Poe_Entity item)
+		public ItemStats(Poe.Entity item)
 		{
 			this.item = item;
 			if (ItemStats.translate == null)
@@ -167,7 +168,7 @@ namespace ExileHUD.ExileBot
 		}
 		private void ParseExplicitMods()
 		{
-			foreach (Poe_ItemMod current in this.item.GetComponent<Mods>().ItemMods)
+			foreach (ItemMod current in this.item.GetComponent<Mods>().ItemMods)
 			{
 				ItemStats.translate.Translate(this, current);
 			}

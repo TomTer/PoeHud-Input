@@ -1,6 +1,7 @@
 using System;
+using PoeHUD.Poe;
 
-namespace ExileHUD.ExileBot
+namespace PoeHUD.ExileBot
 {
 	public class AreaInstance
 	{
@@ -14,7 +15,7 @@ namespace ExileHUD.ExileBot
 
 		public TimeSpan TimeSpent = new TimeSpan(0);
 
-		public AreaInstance(Poe_Area area, int hash, int realLevel)
+		public AreaInstance(AreaTemplate area, int hash, int realLevel)
 		{
 			this.Hash = hash;
 			this.RealLevel = realLevel;

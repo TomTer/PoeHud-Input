@@ -1,4 +1,4 @@
-namespace ExileHUD.ExileBot
+namespace PoeHUD.ExileBot
 {
 	public enum InventoryIndex
 	{

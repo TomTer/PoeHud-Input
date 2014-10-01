@@ -1,4 +1,4 @@
-namespace ExileHUD.Game
+namespace PoeHUD.Game
 {
 	public enum Socket
 	{

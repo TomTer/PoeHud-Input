@@ -1,7 +1,7 @@
 using System.Windows.Forms;
-using ExileHUD.Framework;
+using PoeHUD.Framework;
 
-namespace ExileHUD.ExileHUD
+namespace PoeHUD.ExileHUD
 {
 	public class SettingsEditor
 	{

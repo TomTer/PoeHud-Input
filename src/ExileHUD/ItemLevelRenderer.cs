@@ -1,10 +1,11 @@
 using System.Drawing;
-using ExileHUD.EntityComponents;
-using ExileHUD.ExileBot;
-using ExileHUD.Framework;
+using PoeHUD.Framework;
+using PoeHUD.Poe;
+using PoeHUD.Poe.EntityComponents;
+using PoeHUD.Poe.UI;
 using SlimDX.Direct3D9;
 
-namespace ExileHUD.ExileHUD
+namespace PoeHUD.ExileHUD
 {
 	public class ItemLevelRenderer : HUDPlugin
 	{
@@ -20,21 +21,21 @@ namespace ExileHUD.ExileHUD
 			{
 				return;
 			}
-			Poe_UIElement uIHover = this.poe.Internal.IngameState.UIHover;
-			Poe_Entity item = uIHover.AsObject<Poe_UI_InventoryItemIcon>().Item;
+			Element uIHover = this.poe.Internal.IngameState.UIHover;
+			Entity item = uIHover.AsObject<InventoryItemIcon>().Item;
 			if (item.address != 0 && item.IsValid)
 			{
-				Poe_UI_Tooltip tooltip = uIHover.AsObject<Poe_UI_InventoryItemIcon>().Tooltip;
+				Tooltip tooltip = uIHover.AsObject<InventoryItemIcon>().Tooltip;
 				if (tooltip == null)
 				{
 					return;
 				}
-				Poe_UIElement childAtIndex = tooltip.GetChildAtIndex(0);
+				Element childAtIndex = tooltip.GetChildAtIndex(0);
 				if (childAtIndex == null)
 				{
 					return;
 				}
-				Poe_UIElement childAtIndex2 = childAtIndex.GetChildAtIndex(1);
+				Element childAtIndex2 = childAtIndex.GetChildAtIndex(1);
 				if (childAtIndex2 == null)
 				{
 					return;

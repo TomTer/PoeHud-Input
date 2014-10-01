@@ -1,7 +1,7 @@
 using System;
-using System.Collections.Generic;
+using PoeHUD.Poe;
 
-namespace ExileHUD.ExileBot
+namespace PoeHUD.ExileBot
 {
 	public class AreaController
 	{
@@ -23,7 +23,7 @@ namespace ExileHUD.ExileBot
 		private void poe_OnUpdate()
 		{
 			var igsd = this.Poe.Internal.game.IngameState.Data;
-			Poe_Area clientsArea = igsd.CurrentArea;
+			AreaTemplate clientsArea = igsd.CurrentArea;
 			int curAreaHash = igsd.CurrentAreaHash;
 
 			if (CurrentArea != null && curAreaHash == CurrentArea.Hash)

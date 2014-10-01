@@ -1,11 +1,9 @@
 ﻿using System;
-using System.IO;
-using System.Drawing;
 using System.Collections.Generic;
-using System.Xml;
+using System.Drawing;
 using System.Xml.Linq;
 
-namespace ExileHUD
+namespace PoeHUD.ExileHUD
 {
     public static class MaxRolls
     {

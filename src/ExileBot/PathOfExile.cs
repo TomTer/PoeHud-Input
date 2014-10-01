@@ -1,17 +1,20 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using ExileHUD.EntityComponents;
-using ExileHUD.Framework;
+using PoeHUD.Framework;
+using PoeHUD.Poe;
+using PoeHUD.Poe.EntityComponents;
+using PoeHUD.Poe.UI;
 
-namespace ExileHUD.ExileBot
+namespace PoeHUD.ExileBot
 {
 	public class PathOfExile
 	{
 		public GameWindow Window;
-		public Poe_Game Internal;
+		public TheGame Internal;
 		public EntityList EntityList;
 		public AreaController Area;
-		public event UpdateEvent OnUpdate;
+		public event Action OnUpdate;
 		public Memory Memory
 		{
 			get;
@@ -49,7 +52,7 @@ namespace ExileHUD.ExileBot
 			this.Area = new AreaController(this);
 			this.EntityList = new EntityList(this);
 			this.Window = new GameWindow(memory.Process);
-			this.Internal = new Poe_Game(memory);
+			this.Internal = new TheGame(memory);
 			this.Files = new FileIndex(memory);
 		}
 		public void Update()
@@ -71,7 +74,7 @@ namespace ExileHUD.ExileBot
 			}
 			return list;
 		}
-		public Poe_UI_EntityLabel GetLabelFromEntity(Entity entity)
+		public EntityLabel GetLabelFromEntity(Entity entity)
 		{
 			HashSet<int> hashSet = new HashSet<int>();
 			int entityLabelMap = this.Internal.game.IngameState.EntityLabelMap;
@@ -89,7 +92,7 @@ namespace ExileHUD.ExileBot
 					return null;
 				}
 			}
-			return this.Internal.ReadObject<Poe_UI_EntityLabel>(num + 12);
+			return this.Internal.ReadObject<EntityLabel>(num + 12);
 		}
 	}
 }

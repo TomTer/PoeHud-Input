@@ -2,7 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace ExileHUD.Framework
+namespace PoeHUD.Framework
 {
 	public class Imports
 	{

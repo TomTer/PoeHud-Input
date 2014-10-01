@@ -1,4 +1,4 @@
-namespace ExileHUD
+namespace PoeHUD
 {
 	public struct Pattern
 	{

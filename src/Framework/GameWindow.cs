@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics;
 
-namespace ExileHUD.Framework
+namespace PoeHUD.Framework
 {
 	public class GameWindow
 	{

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using ExileHUD.Framework;
+using PoeHUD.Framework;
 using SlimDX.Direct3D9;
 
-namespace ExileHUD.ExileHUD
+namespace PoeHUD.ExileHUD
 {
 	public class TextureRenderer
 	{

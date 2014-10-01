@@ -2,10 +2,10 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
-using ExileHUD.ExileBot;
-using ExileHUD.Framework;
+using PoeHUD.ExileBot;
+using PoeHUD.Framework;
 
-namespace ExileHUD.ExileHUD
+namespace PoeHUD.ExileHUD
 {
 	public class Program
 	{

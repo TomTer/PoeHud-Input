@@ -2,13 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using ExileHUD.EntityComponents;
-using ExileHUD.ExileBot;
-using ExileHUD.Framework;
-using ExileHUD.Game;
+using PoeHUD.ExileBot;
+using PoeHUD.ExileHUD.MapIcon;
+using PoeHUD.Framework;
+using PoeHUD.Game;
+using PoeHUD.Poe.EntityComponents;
+using PoeHUD.Poe.UI;
 using SlimDX.Direct3D9;
+using Entity = PoeHUD.Poe.Entity;
 
-namespace ExileHUD.ExileHUD
+namespace PoeHUD.ExileHUD
 {
 
 	public class ItemUsefulProperties {
@@ -117,30 +120,30 @@ namespace ExileHUD.ExileHUD
 			public int MinQuality;
 		}
 		private HashSet<long> playedSoundsCache;
-		private Dictionary<Entity, AlertDrawStyle> currentAlerts;
+		private Dictionary<ExileBot.Entity, AlertDrawStyle> currentAlerts;
 		private Dictionary<string, ItemAlerter.CraftingBase> craftingBases;
 		private HashSet<string> currencyNames;
 		public override void OnEnable()
 		{
 			this.playedSoundsCache = new HashSet<long>();
-			this.currentAlerts = new Dictionary<Entity, AlertDrawStyle>();
+			this.currentAlerts = new Dictionary<ExileBot.Entity, AlertDrawStyle>();
 			this.currencyNames = this.LoadCurrency();
 			this.craftingBases = this.LoadCraftingBases();
 			this.poe.Area.OnAreaChange += this.CurrentArea_OnAreaChange;
-			this.poe.EntityList.OnEntityAdded += new EntityEvent(this.EntityList_OnEntityAdded);
-			this.poe.EntityList.OnEntityRemoved += new EntityEvent(this.EntityList_OnEntityRemoved);
+			this.poe.EntityList.OnEntityAdded += this.EntityList_OnEntityAdded;
+			this.poe.EntityList.OnEntityRemoved += this.EntityList_OnEntityRemoved;
 		}
 		public override void OnDisable()
 		{
 		}
-		private void EntityList_OnEntityRemoved(Entity entity)
+		private void EntityList_OnEntityRemoved(ExileBot.Entity entity)
 		{
 			if (this.currentAlerts.ContainsKey(entity))
 			{
 				this.currentAlerts.Remove(entity);
 			}
 		}
-		private void EntityList_OnEntityAdded(Entity entity)
+		private void EntityList_OnEntityAdded(ExileBot.Entity entity)
 		{
 			if (!Settings.GetBool("ItemAlert") || this.currentAlerts.ContainsKey(entity))
 			{
@@ -148,7 +151,7 @@ namespace ExileHUD.ExileHUD
 			}
 			if (entity.HasComponent<WorldItem>())
 			{
-				Entity item = new Entity(this.poe, entity.GetComponent<WorldItem>().ItemEntity);
+				ExileBot.Entity item = new ExileBot.Entity(this.poe, entity.GetComponent<WorldItem>().ItemEntity);
 				ItemUsefulProperties props = this.EvaluateItem(item);
 
 				if (props.IsWorthAlertingPlayer(currencyNames))
@@ -159,7 +162,7 @@ namespace ExileHUD.ExileHUD
 		}
 
 
-		private ItemUsefulProperties EvaluateItem(Entity item)
+		private ItemUsefulProperties EvaluateItem(ExileBot.Entity item)
 		{
 			ItemUsefulProperties ip = new ItemUsefulProperties();
 
@@ -187,7 +190,7 @@ namespace ExileHUD.ExileHUD
 			return ip;
 		}
 
-		private void DoAlert(Entity entity, ItemUsefulProperties ip)
+		private void DoAlert(ExileBot.Entity entity, ItemUsefulProperties ip)
 		{
 			AlertDrawStyle drawStyle = ip.GetDrawStyle();
 			this.currentAlerts.Add(entity, drawStyle);
@@ -213,15 +216,15 @@ namespace ExileHUD.ExileHUD
 			
 			int y = vec.Y;
 			int fontSize = Settings.GetInt("ItemAlert.ShowText.FontSize");
-			foreach (KeyValuePair<Entity, AlertDrawStyle> kv in this.currentAlerts)
+			foreach (KeyValuePair<ExileBot.Entity, AlertDrawStyle> kv in this.currentAlerts)
 			{
 				if (kv.Key.IsValid)
 				{
-					Poe_UI_EntityLabel labelFromEntity = this.poe.GetLabelFromEntity(kv.Key);
+					EntityLabel labelFromEntity = this.poe.GetLabelFromEntity(kv.Key);
 					string text;
 					if (labelFromEntity == null)
 					{
-						Poe_Entity itemEntity = kv.Key.GetComponent<WorldItem>().ItemEntity;
+						Entity itemEntity = kv.Key.GetComponent<WorldItem>().ItemEntity;
 						if (!itemEntity.IsValid)
 						{
 							continue;

@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using ExileHUD.EntityComponents;
-using ExileHUD.ExileBot;
-using ExileHUD.Framework;
-using ExileHUD.Game;
+using PoeHUD.ExileBot;
+using PoeHUD.Framework;
+using PoeHUD.Game;
+using PoeHUD.Poe.EntityComponents;
 
-namespace ExileHUD.ExileHUD
+namespace PoeHUD.ExileHUD
 {
 	public class HealthBarRenderer : HUDPlugin
 	{
@@ -40,7 +40,7 @@ namespace ExileHUD.ExileHUD
 			{
 				this.healthBars[i] = new List<HealthBarRenderer.Healthbar>();
 			}
-			this.poe.EntityList.OnEntityAdded += new EntityEvent(this.EntityList_OnEntityAdded);
+			this.poe.EntityList.OnEntityAdded += this.EntityList_OnEntityAdded;
 			foreach (Entity current in this.poe.Entities)
 			{
 				this.EntityList_OnEntityAdded(current);

@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
-using ExileHUD.ExileBot;
+using PoeHUD.ExileBot;
 
-namespace ExileHUD.ExileHUD
+namespace PoeHUD.ExileHUD
 {
 	public class OverlayRenderer
 	{

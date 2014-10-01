@@ -1,15 +1,16 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Collections.Generic;
-using ExileHUD.EntityComponents;
-using ExileHUD.ExileBot;
-using ExileHUD.Framework;
+using PoeHUD.Framework;
+using PoeHUD.Poe;
+using PoeHUD.Poe.EntityComponents;
+using PoeHUD.Poe.UI;
 using SlimDX.Direct3D9;
-namespace ExileHUD.ExileHUD
+
+namespace PoeHUD.ExileHUD
 {
     public class ItemRollsRenderer : HUDPlugin
     {
-        private Poe_Entity poeEntity;
+        private Entity poeEntity;
         private List<MaxRolls_Current> mods;
         public override void OnEnable()
         {
@@ -26,17 +27,17 @@ namespace ExileHUD.ExileHUD
         {
             if (!Settings.GetBool("Tooltip") || !Settings.GetBool("Tooltip.ShowItemMods"))
                 return;
-            Poe_UIElement uiHover = this.poe.Internal.IngameState.UIHover;
-            Poe_Entity poeEntity = uiHover.AsObject<Poe_UI_InventoryItemIcon>().Item;
+            Element uiHover = this.poe.Internal.IngameState.UIHover;
+            Entity poeEntity = uiHover.AsObject<InventoryItemIcon>().Item;
             if (poeEntity.address == 0 || !poeEntity.IsValid)
                 return;
-            Poe_UI_Tooltip tooltip = uiHover.AsObject<Poe_UI_InventoryItemIcon>().Tooltip;
+            Tooltip tooltip = uiHover.AsObject<InventoryItemIcon>().Tooltip;
             if (tooltip == null)
                 return;
-            Poe_UIElement childAtIndex1 = tooltip.GetChildAtIndex(0);
+            Element childAtIndex1 = tooltip.GetChildAtIndex(0);
             if (childAtIndex1 == null)
                 return;
-            Poe_UIElement childAtIndex2 = childAtIndex1.GetChildAtIndex(1);
+            Element childAtIndex2 = childAtIndex1.GetChildAtIndex(1);
             if (childAtIndex2 == null)
                 return;
             Rect clientRect = childAtIndex2.GetClientRect();
@@ -44,9 +45,9 @@ namespace ExileHUD.ExileHUD
             if (this.poeEntity == null || this.poeEntity.ID != poeEntity.ID) {
                 this.mods = new List<MaxRolls_Current>();
                 //List<Poe_ItemMod> impMods = poeEntity.GetComponent<Mods>().ImplicitMods;
-                List<Poe_ItemMod> expMods = poeEntity.GetComponent<Mods>().ItemMods;
+                List<ItemMod> expMods = poeEntity.GetComponent<Mods>().ItemMods;
                 int ilvl = poeEntity.GetComponent<Mods>().ItemLevel;
-                foreach (Poe_ItemMod item in expMods)
+                foreach (ItemMod item in expMods)
                 {
                     this.mods.Add(new MaxRolls_Current(item.Name, item.Level, ilvl));
                 }

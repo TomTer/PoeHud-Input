@@ -1,8 +1,7 @@
 using System;
-using ExileHUD.ExileBot;
-using ExileHUD.Framework;
+using PoeHUD.Framework;
 
-namespace ExileHUD.ExileHUD
+namespace PoeHUD.ExileHUD
 {
 	public class ClientHacks : HUDPlugin
 	{

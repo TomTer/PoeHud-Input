@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using ExileHUD.EntityComponents;
-using ExileHUD.ExileBot;
-using ExileHUD.Framework;
-using ExileHUD.Game;
+using PoeHUD.ExileBot;
+using PoeHUD.Framework;
+using PoeHUD.Game;
+using PoeHUD.Poe.EntityComponents;
 using SlimDX.Direct3D9;
 
-namespace ExileHUD.ExileHUD
+namespace PoeHUD.ExileHUD
 {
 	public class DangerAlert : HUDPlugin
 	{
@@ -21,8 +21,8 @@ namespace ExileHUD.ExileHUD
 			this.currentAlerts = new Dictionary<Entity, string>();
 			this.InitAlertStrings();
 			this.poe.Area.OnAreaChange += this.CurrentArea_OnAreaChange;
-			this.poe.EntityList.OnEntityAdded += new EntityEvent(this.EntityList_OnEntityAdded);
-			this.poe.EntityList.OnEntityRemoved += new EntityEvent(this.EntityList_OnEntityRemoved);
+			this.poe.EntityList.OnEntityAdded += this.EntityList_OnEntityAdded;
+			this.poe.EntityList.OnEntityRemoved += this.EntityList_OnEntityRemoved;
 			foreach (Entity current in this.poe.Entities)
 			{
 				this.EntityList_OnEntityAdded(current);

@@ -4,9 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using ExileHUD.ExileBot;
+using PoeHUD.ExileBot;
 
-namespace ExileHUD.Framework
+namespace PoeHUD.Framework
 {
 	public class Memory : IDisposable
 	{

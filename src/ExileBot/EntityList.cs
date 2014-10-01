@@ -1,7 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace ExileHUD.ExileBot
+namespace PoeHUD.ExileBot
 {
 	public class EntityList
 	{
@@ -9,8 +10,8 @@ namespace ExileHUD.ExileBot
 		private Dictionary<int, Entity> entities;
 		private HashSet<string> blackList;
 		private Stopwatch stopwatch = new Stopwatch();
-		public event EntityEvent OnEntityAdded;
-		public event EntityEvent OnEntityRemoved;
+		public event Action<Entity> OnEntityAdded;
+		public event Action<Entity> OnEntityRemoved;
 		public ICollection<Entity> Entities
 		{
 			get
@@ -36,7 +37,7 @@ namespace ExileHUD.ExileBot
 			this.entities = new Dictionary<int, Entity>();
 			this.blackList = new HashSet<string>();
 			poe.Area.OnAreaChange += this.AreaChanged;
-			poe.OnUpdate += new UpdateEvent(this.Update);
+			poe.OnUpdate += this.Update;
 		}
 		private void AreaChanged(AreaController area)
 		{
@@ -63,9 +64,9 @@ namespace ExileHUD.ExileBot
             {
                 this.Player = new Entity(this.Poe, address);
             }
-            Dictionary<int, Poe_Entity> entitiesAsDictionary = this.Poe.Internal.IngameState.Data.EntityList.EntitiesAsDictionary;
+            Dictionary<int, Poe.Entity> entitiesAsDictionary = this.Poe.Internal.IngameState.Data.EntityList.EntitiesAsDictionary;
             Dictionary<int, Entity> dictionary2 = new Dictionary<int, Entity>();
-            foreach (KeyValuePair<int, Poe_Entity> pair in entitiesAsDictionary)
+            foreach (KeyValuePair<int, Poe.Entity> pair in entitiesAsDictionary)
             {
                 int key = pair.Key;
                 string item = pair.Value.Path + key.ToString();

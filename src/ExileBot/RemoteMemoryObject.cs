@@ -1,13 +1,14 @@
 using System;
-using ExileHUD.Framework;
+using PoeHUD.Framework;
+using PoeHUD.Poe;
 
-namespace ExileHUD.ExileBot
+namespace PoeHUD.ExileBot
 {
 	public abstract class RemoteMemoryObject
 	{
 		public Memory m;
 		public int address;
-		public Poe_Game game;
+		public TheGame game;
 		public RemoteMemoryObject()
 		{
 		}

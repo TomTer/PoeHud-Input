@@ -1,6 +1,6 @@
-using ExileHUD.ExileBot;
+using PoeHUD.ExileBot;
 
-namespace ExileHUD.ExileHUD
+namespace PoeHUD.ExileHUD
 {
 	public abstract class HUDPlugin
 	{

@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
-using ExileHUD.EntityComponents;
-using ExileHUD.Framework;
+using PoeHUD.Framework;
+using PoeHUD.Poe.EntityComponents;
 
-namespace ExileHUD.ExileBot
+namespace PoeHUD.ExileBot
 {
 	public class Entity
 	{
-		private Poe_Entity InternalEntity;
+		private Poe.Entity InternalEntity;
 		private PathOfExile Poe;
 		private Dictionary<string, int> Components;
 		private int cachedId;
@@ -81,7 +81,7 @@ namespace ExileHUD.ExileBot
 				return list;
 			}
 		}
-		public Entity(PathOfExile Poe, Poe_Entity entity)
+		public Entity(PathOfExile Poe, Poe.Entity entity)
 		{
 			this.Poe = Poe;
 			this.InternalEntity = entity;
@@ -90,7 +90,7 @@ namespace ExileHUD.ExileBot
 			this.cachedId = this.InternalEntity.ID;
 			this.LongId = this.InternalEntity.LongId;
 		}
-		public Entity(PathOfExile Poe, int address) : this(Poe, Poe.Internal.GetObject<Poe_Entity>(address))
+		public Entity(PathOfExile Poe, int address) : this(Poe, Poe.Internal.GetObject<Poe.Entity>(address))
 		{
 		}
 		public T GetComponent<T>() where T : Component, new()

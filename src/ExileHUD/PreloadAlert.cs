@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using ExileHUD.ExileBot;
-using ExileHUD.Framework;
+using PoeHUD.ExileBot;
+using PoeHUD.Framework;
 using SlimDX.Direct3D9;
 
-namespace ExileHUD.ExileHUD
+namespace PoeHUD.ExileHUD
 {
 	public class PreloadAlert : HUDPlugin
 	{
