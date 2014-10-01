@@ -144,7 +144,7 @@
     <Compile Include="Hud\MouseHook.cs" />
     <Compile Include="Hud\OverlayRenderer.cs" />
     <Compile Include="Hud\Preload\PreloadAlert.cs" />
-    <Compile Include="Hud\Program.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Hud\RenderingContext.cs" />
     <Compile Include="Hud\Settings.cs" />
     <Compile Include="Hud\SettingsEditor.cs" />

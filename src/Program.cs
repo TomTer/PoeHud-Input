@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
@@ -12,16 +13,26 @@ namespace PoeHUD.Hud
 
 		private static int FindPoeProcess(out Offsets offs)
 		{
-			offs = Offsets.Regular;
-			Process process = Process.GetProcessesByName(offs.ExeName).FirstOrDefault<Process>();
-			if (process != null)
+			var clients = Process.GetProcessesByName(Offsets.Regular.ExeName).Select(p => Tuple.Create(p, Offsets.Regular)).ToList();
+			clients.AddRange(Process.GetProcessesByName(Offsets.Steam.ExeName).Select(p => Tuple.Create(p, Offsets.Steam)));
+			int ixChosen = clients.Count > 1 ? chooseSingleProcess(clients) : 0;
+			if (clients.Count > 0 && ixChosen >= 0)
 			{
-				return process.Id;
+				offs = clients[ixChosen].Item2;
+				return clients[ixChosen].Item1.Id;
+			} else {
+				offs = null;
+				return 0;
 			}
-	
-			offs = Offsets.Steam;
-			process = Process.GetProcessesByName(offs.ExeName).FirstOrDefault<Process>();
-			return process == null ? 0 : process.Id;
+		}
+
+		private static int chooseSingleProcess(List<Tuple<Process, Offsets>> clients)
+		{
+			String o1 = String.Format("Yes - process #{0}, started at {1}", clients[0].Item1.Id, clients[0].Item1.StartTime.ToLongTimeString());
+			String o2 = String.Format("No - process #{0}, started at {1}", clients[1].Item1.Id, clients[1].Item1.StartTime.ToLongTimeString());
+			const string o3 = "Cancel - quit this application";
+			var answer = MessageBox.Show(null, String.Join(Environment.NewLine, o1, o2, o3), "Choose a PoE instance to attach to", MessageBoxButtons.YesNoCancel);
+			return answer == DialogResult.Cancel ? -1 : answer == DialogResult.Yes ? 0 : 1;
 		}
 
 		[STAThread]
@@ -32,7 +43,7 @@ namespace PoeHUD.Hud
 
 			if (pid == 0)
 			{
-				MessageBox.Show("Path of Exile is not running!");
+				MessageBox.Show("Path of Exile is not running!"); 
 				return;
 			}
 
