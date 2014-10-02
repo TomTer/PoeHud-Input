@@ -27,21 +27,21 @@ namespace PoeHUD.Poe
 		{
 			get
 			{
-				return base.ReadObject<IngameData>(this.address + 316 + Offsets.IgsOffset);
+				return base.ReadObject<IngameData>(this.address + 0x138 + Offsets.IgsOffset);
 			}
 		}
 		public bool InGame
 		{
 			get
 			{
-				return this.m.ReadInt(this.address + 316 + Offsets.IgsOffset) != 0 && this.ServerData.IsInGame;
+				return this.m.ReadInt(this.address + 0x138 + Offsets.IgsOffset) != 0 && this.ServerData.IsInGame;
 			}
 		}
 		public ServerData ServerData
 		{
 			get
 			{
-				return base.ReadObject<ServerData>(this.address + 320 + Offsets.IgsOffset);
+				return base.ReadObject<ServerData>(this.address + 0x13C + Offsets.IgsOffset);
 			}
 		}
 		public IngameUIElements IngameUi
