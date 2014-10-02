@@ -2245,6 +2245,10 @@
       <min>5</min>
       <max>6</max>
     </level>
+    <level lvl="6" ilvl="78">
+      <min>6</min>
+      <max>7</max>
+    </level>
   </mod>
   <!-- Mana Gained of Enemy Death -->
   <mod name="ManaGainedFromEnemyDeath" readable="Mana Gained of Enemy Death" type="S">
@@ -2281,6 +2285,10 @@
     </level>
     <level lvl="5" ilvl="55">
       <min>50%</min>
+      <max>59%</max>
+    </level>
+    <level lvl="6" ilvl="79">
+      <min>60%</min>
       <max>59%</max>
     </level>
   </mod>
