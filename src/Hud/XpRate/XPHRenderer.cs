@@ -72,7 +72,7 @@ namespace PoeHUD.Hud.XpRate
 			int fontSize = Settings.GetInt("XphDisplay.FontSize");
 			int bgAlpha = Settings.GetInt("XphDisplay.BgAlpha");
 
-			Rect clientRect = poe.__getApproxMinimapRect(); // this.poe.Internal.IngameState.IngameUi.Minimap.SmallMinimap.GetClientRect());
+			Rect clientRect = this.poe.Internal.IngameState.IngameUi.Minimap.SmallMinimap.GetClientRect();
 			Vec2 mapWithOffset = new Vec2(clientRect.X - 10, clientRect.Y + 5);
 			int yCursor = 0;
 			Vec2 rateTextSize = rc.AddTextWithHeight(new Vec2(mapWithOffset.X, mapWithOffset.Y), this.curDisplayString, Color.White, fontSize, DrawTextFormat.Right);
