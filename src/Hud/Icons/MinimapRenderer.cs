@@ -46,9 +46,10 @@ namespace PoeHUD.Hud.Icons
 				return;
 			}
 			this.playerPos = this.poe.Player.GetComponent<Positioned>().GridPos;
-			Element smallMinimap = this.poe.Internal.IngameState.IngameUi.Minimap.SmallMinimap;
+			// Element smallMinimap = this.poe.Internal.IngameState.IngameUi.Minimap.SmallMinimap;
 			float scale = 240f;
-			Rect clientRect = smallMinimap.GetClientRect();
+			Rect clientRect = poe.__getApproxMinimapRect(); // this.poe.Internal.IngameState.IngameUi.Minimap.SmallMinimap.GetClientRect());
+			// Rect clientRect = smallMinimap.GetClientRect();
 			Vec2 minimapCenter = new Vec2(clientRect.X + clientRect.W / 2, clientRect.Y + clientRect.H / 2);
 			double diag = Math.Sqrt((double)(clientRect.W * clientRect.W + clientRect.H * clientRect.H)) / 2.0;
 			List<MinimapIcon>[] array = this.icons;

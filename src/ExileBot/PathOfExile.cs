@@ -94,5 +94,12 @@ namespace PoeHUD.ExileBot
 			}
 			return this.Internal.ReadObject<EntityLabel>(num + 12);
 		}
+
+
+		public Rect __getApproxMinimapRect()
+		{
+			int clientWidth = (int)(this.Window.ClientRect().W / 6f);
+			return new Rect(clientWidth * 5, 0, clientWidth, clientWidth);
+		}
 	}
 }

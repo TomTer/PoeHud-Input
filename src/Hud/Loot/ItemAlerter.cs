@@ -106,7 +106,7 @@ namespace PoeHUD.Hud.Loot
 			{
 				return;
 			}
-			Rect clientRect = this.poe.Internal.game.IngameState.IngameUi.Minimap.SmallMinimap.GetClientRect();
+			Rect clientRect = poe.__getApproxMinimapRect(); // this.poe.Internal.IngameState.IngameUi.Minimap.SmallMinimap.GetClientRect());
 			Vec2 rightTopAnchor = new Vec2(clientRect.X + clientRect.W, clientRect.Y + clientRect.H + 5);
 			
 			int y = rightTopAnchor.Y;
