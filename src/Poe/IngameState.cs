@@ -9,18 +9,18 @@ namespace PoeHUD.Poe
 		{
 			get
 			{
-				return base.GetObject<Camera>(this.address + 5556 + Offsets.IgsOffset - Offsets.IgsDelta);
+				return base.GetObject<Camera>(this.address + 0x15AC + Offsets.IgsOffset - Offsets.IgsDelta);
 			}
 		}
 		public float CurrentZoomLevel
 		{
 			get
 			{
-				return this.m.ReadFloat(this.address + 5784 + Offsets.IgsOffset - Offsets.IgsDelta);
+				return this.m.ReadFloat(this.address + 0x1694 + Offsets.IgsOffset - Offsets.IgsDelta);
 			}
 			set
 			{
-				this.m.WriteFloat(this.address + 5784 + Offsets.IgsOffset - Offsets.IgsDelta, value);
+				this.m.WriteFloat(this.address + 0x1694 + Offsets.IgsOffset - Offsets.IgsDelta, value);
 			}
 		}
 		public IngameData Data
@@ -48,21 +48,21 @@ namespace PoeHUD.Poe
 		{
 			get
 			{
-				return base.ReadObject<IngameUIElements>(this.address + 1516 + Offsets.IgsOffset);
+				return base.ReadObject<IngameUIElements>(this.address + 0x5E8 + Offsets.IgsOffset);
 			}
 		}
 		public Element UIRoot
 		{
 			get
 			{
-				return base.ReadObject<Element>(this.address + 3088 + Offsets.IgsOffset);
+				return base.ReadObject<Element>(this.address + 0xC0C + Offsets.IgsOffset);
 			}
 		}
 		public Element UIHover
 		{
 			get
 			{
-				return base.ReadObject<Element>(this.address + 3108 + Offsets.IgsOffset);
+				return base.ReadObject<Element>(this.address + 0xC1C + Offsets.IgsOffset);
 			}
 		}
 		public int EntityLabelMap
