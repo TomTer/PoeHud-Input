@@ -7,39 +7,22 @@ namespace PoeHUD.Poe.UI
 {
 	public class Element : RemoteMemoryObject
 	{
-		public float Width
-		{
-			get
-			{
-				return this.m.ReadFloat(this.address + 2296);
-			}
-		}
-		public float Height
-		{
-			get
-			{
-				return this.m.ReadFloat(this.address + 2300);
-			}
-		}
-		public float X
-		{
-			get
-			{
-				return this.m.ReadFloat(this.address + 2156);
-			}
-		}
-		public float Y
-		{
-			get
-			{
-				return this.m.ReadFloat(this.address + 2160);
-			}
-		}
+		public const int OffsetBuffers = 0x808;
+		// dd id
+		// dd (something zero)
+		// 16 dup <128-bytes structure>
+		// then the rest is
+
+		public float Width { get { return this.m.ReadFloat(this.address + 0xF0 + OffsetBuffers); } }
+		public float Height { get { return this.m.ReadFloat(this.address + 0xF4 + OffsetBuffers); } }
+		public float X { get { return this.m.ReadFloat(this.address + 0x64 + OffsetBuffers); } }
+		public float Y { get { return this.m.ReadFloat(this.address + 0x68 + OffsetBuffers); } }
+
 		public int ChildCount
 		{
 			get
 			{
-				return (this.m.ReadInt(this.address + 2076) - this.m.ReadInt(this.address + 2072)) / 4;
+				return (this.m.ReadInt(this.address + 20 + OffsetBuffers) - this.m.ReadInt(this.address + 16 + OffsetBuffers)) / 4;
 			}
 		}
 		public Element Root
