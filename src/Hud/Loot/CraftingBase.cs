@@ -1,3 +1,5 @@
+using PoeHUD.Game;
+
 namespace PoeHUD.Hud.Loot
 {
 	public struct CraftingBase
@@ -5,5 +7,6 @@ namespace PoeHUD.Hud.Loot
 		public string Name;
 		public int MinItemLevel;
 		public int MinQuality;
+		public ItemRarity[] Rarities;
 	}
 }

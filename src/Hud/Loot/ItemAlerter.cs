@@ -2,8 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
+using System.Windows.Forms;
 using PoeHUD.ExileBot;
 using PoeHUD.Framework;
+using PoeHUD.Game;
 using PoeHUD.Hud.Icons;
 using PoeHUD.Poe.EntityComponents;
 using PoeHUD.Poe.UI;
@@ -82,7 +85,9 @@ namespace PoeHUD.Hud.Loot
 
 			CraftingBase craftingBase;
 			if (craftingBases.TryGetValue(ip.Name, out craftingBase) && Settings.GetBool("ItemAlert.Crafting"))
-				ip.IsCraftingBase = ip.ItemLevel >= craftingBase.MinItemLevel && ip.Quality >= craftingBase.MinQuality;
+				ip.IsCraftingBase = ip.ItemLevel >= craftingBase.MinItemLevel 
+					&& ip.Quality >= craftingBase.MinQuality
+					&& (craftingBase.Rarities == null || craftingBase.Rarities.Contains(ip.Rarity));
 
 			return ip;
 		}
@@ -179,46 +184,47 @@ namespace PoeHUD.Hud.Loot
 				return new Dictionary<string, CraftingBase>();
 			}
 			Dictionary<string, CraftingBase> dictionary = new Dictionary<string, CraftingBase>(StringComparer.OrdinalIgnoreCase);
+			List<string> parseErrors = new List<string>();
 			string[] array = File.ReadAllLines("config/crafting_bases.txt");
-			for (int i = 0; i < array.Length; i++)
+			foreach (
+				string text2 in
+					array.Select(text => text.Trim()).Where(text2 => !string.IsNullOrWhiteSpace(text2) && !text2.StartsWith("#")))
 			{
-				string text = array[i];
-				try
+				string[] parts = text2.Split(new[]{','});
+				string itemName = parts[0].Trim();
+
+				CraftingBase item = new CraftingBase() {Name = itemName};
+
+				int tmpVal = 0;
+				if (parts.Length > 1 && int.TryParse(parts[1], out tmpVal))
+					item.MinItemLevel = tmpVal;
+
+				if (parts.Length > 2 && int.TryParse(parts[2], out tmpVal))
+					item.MinQuality = tmpVal;
+
+				const int RarityPosition = 3;
+				if (parts.Length > RarityPosition)
 				{
-					string text2 = text.Trim();
-					if (!string.IsNullOrWhiteSpace(text2) && !text2.StartsWith("#"))
+					item.Rarities = new ItemRarity[parts.Length - 3];
+					for (int i = RarityPosition; i < parts.Length; i++)
 					{
-						string[] array2 = text2.Split(new char[]
+						if (!Enum.TryParse(parts[i], true, out item.Rarities[i - RarityPosition]))
 						{
-							','
-						});
-						if (array2.Length != 0 && array2.Length <= 3)
-						{
-							string text3 = array2[0].Trim().ToLowerInvariant();
-							int minItemLevel = 0;
-							if (array2.Length >= 2)
-							{
-								minItemLevel = int.Parse(array2[1].Trim());
-							}
-							int minQuality = 0;
-							if (array2.Length >= 3)
-							{
-								minQuality = int.Parse(array2[2].Trim());
-							}
-							dictionary.Add(text3, new CraftingBase
-							{
-								Name = text3,
-								MinItemLevel = minItemLevel,
-								MinQuality = minQuality
-							});
+							parseErrors.Add("Incorrect rarity definition at line: " + text2);
+							item.Rarities = null;
 						}
 					}
 				}
-				catch (Exception)
-				{
-					throw new Exception("Error parsing config/whites.txt at line " + text);
-				}
+
+				if( !dictionary.ContainsKey(itemName))
+					dictionary.Add(itemName, item);
+				else
+					parseErrors.Add("Duplicate definition for item was ignored: " + text2);
 			}
+
+			if(parseErrors.Any())
+				throw new Exception("Error parsing config/crafting_bases.txt \r\n" + string.Join(Environment.NewLine, parseErrors) + Environment.NewLine + Environment.NewLine);
+
 			return dictionary;
 		}
 		private HashSet<string> LoadCurrency()
