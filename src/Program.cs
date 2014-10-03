@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using PoeHUD.ExileBot;
 using PoeHUD.Framework;
+using PoeHUD.Poe;
 
 namespace PoeHUD.Hud
 {

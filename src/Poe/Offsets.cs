@@ -1,6 +1,6 @@
 using PoeHUD.Framework;
 
-namespace PoeHUD.ExileBot
+namespace PoeHUD.Poe
 {
 	public class Offsets
 	{

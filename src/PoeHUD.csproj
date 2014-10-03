@@ -85,7 +85,7 @@
     <Compile Include="Poe\EntityComponents\Monster.cs" />
     <Compile Include="Game\MonsterRarity.cs" />
     <Compile Include="Poe\EntityComponents\ObjectMagicProperties.cs" />
-    <Compile Include="ExileBot\Offsets.cs" />
+    <Compile Include="Poe\Offsets.cs" />
     <Compile Include="ExileBot\PathOfExile.cs" />
     <Compile Include="Poe\EntityComponents\Player.cs" />
     <Compile Include="Poe\AreaTemplate.cs" />

@@ -78,6 +78,8 @@ namespace PoeHUD.Hud.Loot
 			ip.Quality = q == null ? 0 : q.ItemQuality;
 			ip.WorthChrome = socks != null && socks.IsRGB;
 
+			ip.IsVaalFragment = item.Path.Contains("VaalFragment");
+
 			CraftingBase craftingBase;
 			if (craftingBases.TryGetValue(ip.Name, out craftingBase) && Settings.GetBool("ItemAlert.Crafting"))
 				ip.IsCraftingBase = ip.ItemLevel >= craftingBase.MinItemLevel && ip.Quality >= craftingBase.MinQuality;
