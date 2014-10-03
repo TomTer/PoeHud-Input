@@ -132,6 +132,9 @@ namespace PoeHUD.Hud.Monster
 			this.modAlerts.Add("MonsterElementalThorns", "Elemental Reflect nearby");
 			this.modAlerts.Add("MonsterNemesisCorruptedBlood", "Corrupting Blood nearby");
 			this.modAlerts.Add("MonsterItems1", "Wealth monsters nearby");
+			this.modAlerts.Add("MonsterExplodesOnDeathFire1", "Volatile Flameblood nearby");
+			this.modAlerts.Add("MonsterExplodesOnDeathLightning1", "Volatile Stormblood nearby");
+			this.modAlerts.Add("MonsterExplodesOnDeathCold1", "Volatile Iceblood nearby");
 			this.typeAlerts = new Dictionary<string, string>();
 			this.typeAlerts.Add("Metadata/Monsters/Exiles/ExileRanger1", "Orra Greengate nearby");
 			this.typeAlerts.Add("Metadata/Monsters/Exiles/ExileRanger2", "Thena Moga nearby");
@@ -237,6 +240,13 @@ namespace PoeHUD.Hud.Monster
 			this.typeAlerts.Add("Metadata/Monsters/Skeletons/SkeletonLargeBossInvasion", "Grath nearby");
 			this.typeAlerts.Add("Metadata/Monsters/Skeletons/ConstructBossInvasion", "The Spiritless nearby");
 			this.typeAlerts.Add("Metadata/Monsters/GhostPirates/GhostPirateBossInvasion", "Droolscar nearby");
+
+			this.typeAlerts.Add("Metadata/Monsters/BeyondDemons/BeyondDemon3-1", "Tzteosh, Hungering Flame Nearby");
+			this.typeAlerts.Add("Metadata/Monsters/BeyondDemons/BeyondDemon3-2", "Ephij, Crackling Sky nearby");
+			this.typeAlerts.Add("Metadata/Monsters/BeyondDemons/BeyondDemon3-3", "Haast, Unrelenting Frost nearby");
+			this.typeAlerts.Add("Metadata/Monsters/BeyondDemons/BeyondDemon3-4", "Bameth, Shifting Darkness nearby");
+			this.typeAlerts.Add("Metadata/Monsters/BeyondDemons/BeyondDemon3-5", "Na'em, Bending Stone nearby");
+			this.typeAlerts.Add("Metadata/Monsters/BeyondDemons/BeyondDemon3-6", "Abaxoth, The End of All That Is nearby");
 		}
 	}
 }

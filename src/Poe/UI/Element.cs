@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using PoeHUD.ExileBot;
 using PoeHUD.Framework;
 
@@ -55,22 +56,19 @@ namespace PoeHUD.Poe.UI
 				return base.ReadObject<Element>(this.address + 2152);
 			}
 		}
+
+		public bool IsVisibleLocal
+		{
+			get {
+				return (this.m.ReadInt(this.address + 2144) & 1) == 1;
+			}
+		}
+
 		public bool IsVisible
 		{
 			get
 			{
-				if ((this.m.ReadInt(this.address + 2144) & 1) != 1)
-				{
-					return false;
-				}
-				foreach (Element current in this.GetParentChain())
-				{
-					if ((this.m.ReadInt(current.address + 2144) & 1) != 1)
-					{
-						return false;
-					}
-				}
-				return true;
+				return IsVisibleLocal && this.GetParentChain().All(current => current.IsVisibleLocal);
 			}
 		}
 		public List<Element> Children

@@ -9,7 +9,7 @@ namespace PoeHUD.Poe
 		{
 			get
 			{
-				return base.ReadObject<IngameState>(this.address + 156);
+				return base.ReadObject<IngameState>(this.address + 0x9C);
 			}
 		}
 		public int AreaChangeCount
@@ -22,11 +22,7 @@ namespace PoeHUD.Poe
 		public TheGame(Memory m)
 		{
 			this.m = m;
-			this.address = m.ReadInt(m.BaseAddress + Offsets.Base, new int[]
-			{
-				4,
-				124
-			});
+			this.address = m.ReadInt(m.BaseAddress + Offsets.Base, new[]{ 4, 124 });
 			this.game = this;
 		}
 	}
