@@ -62,7 +62,7 @@ namespace PoeHUD.Poe
 		{
 			get
 			{
-				return base.ReadObject<Element>(this.address + 0xC1C + Offsets.IgsOffset);
+				return base.ReadObject<Element>(this.address + 0xC20 + Offsets.IgsOffset);
 			}
 		}
 		public int EntityLabelMap
