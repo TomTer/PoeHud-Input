@@ -117,7 +117,8 @@ namespace PoeHUD.Hud.Loot
 			
 			int y = rightTopAnchor.Y;
 			int fontSize = Settings.GetInt("ItemAlert.ShowText.FontSize");
-
+			
+			const int vMargin = 2;
 			foreach (KeyValuePair<ExileBot.Entity, AlertDrawStyle> kv in this.currentAlerts)
 			{
 				if (!kv.Key.IsValid) continue;
@@ -125,36 +126,44 @@ namespace PoeHUD.Hud.Loot
 				string text = GetItemName(kv);
 				if( null == text ) continue;
 
-				AlertDrawStyle drawStyle = kv.Value;
-				int frameWidth = drawStyle.FrameWidth;
-				Vec2 vPadding = new Vec2(frameWidth + 5, frameWidth);
-				int frameMargin = frameWidth + 2;
-
-				Vec2 textPos = new Vec2(rightTopAnchor.X - vPadding.X, y + vPadding.Y);
-
-				var vTextFrame = rc.AddTextWithHeight(textPos, text, drawStyle.color, fontSize, DrawTextFormat.Right);
-				int iconSize = vTextFrame.Y;
-				bool hasIcon = drawStyle.IconIndex >= 0;
-
-				int maxHeight = vTextFrame.Y + 2*vPadding.Y + frameMargin;
-				int maxWidth = vTextFrame.X + 2 * vPadding.X + (hasIcon ? iconSize : 0);
-				rc.AddBox(new Rect(rightTopAnchor.X - maxWidth, y, maxWidth, maxHeight), Color.FromArgb(180, 0, 0, 0));
-
-				if (hasIcon)
-				{
-					const float iconsInSprite = 4;
-
-					Rect iconPos = new Rect(textPos.X - iconSize - vTextFrame.X, textPos.Y, iconSize, iconSize);
-					RectUV uv = new RectUV(drawStyle.IconIndex / iconsInSprite, 0, (drawStyle.IconIndex + 1) / iconsInSprite, 1);
-					rc.AddSprite("item_icons.png", iconPos, uv);
-				}
-				if( frameWidth > 0) {
-					Rect frame = new Rect(rightTopAnchor.X - vTextFrame.X - 2*vPadding.X, y, vTextFrame.X + 2*vPadding.X, vTextFrame.Y + 2*vPadding.Y);
-					rc.AddFrame(frame, kv.Value.color, frameWidth);
-				}
-				y += vTextFrame.Y + 2 * vPadding.Y + frameMargin;
+				Vec2 vPadding = new Vec2(5, 2);
+				Vec2 itemDrawnSize = drawItem(rc, kv.Value, rightTopAnchor.X, y, vPadding, text, fontSize);
+				y += itemDrawnSize.Y + vMargin;
 			}
 			
+		}
+
+		private static Vec2 drawItem(RenderingContext rc, AlertDrawStyle drawStyle, int x, int y, Vec2 vPadding, string text,
+			int fontSize)
+		{
+			// collapse padding when there's a frame
+			vPadding.X -= drawStyle.FrameWidth;
+			vPadding.Y -= drawStyle.FrameWidth;
+			// item will appear to have equal size
+
+			Vec2 textPos = new Vec2(x - vPadding.X, y + vPadding.Y);
+			Vec2 vTextSize = rc.AddTextWithHeight(textPos, text, drawStyle.color, fontSize, DrawTextFormat.Right);
+
+			int iconSize =  drawStyle.IconIndex >= 0 ? vTextSize.Y : 0;
+
+			int fullHeight = vTextSize.Y + 2 * vPadding.Y + 2 * drawStyle.FrameWidth;
+			int fullWidth = vTextSize.X + 2 * vPadding.X + iconSize + 2 * drawStyle.FrameWidth;
+			rc.AddBox(new Rect(x - fullWidth, y, fullWidth, fullHeight), Color.FromArgb(180, 0, 0, 0));
+
+			if (iconSize > 0)
+			{
+				const float iconsInSprite = 4;
+
+				Rect iconPos = new Rect(textPos.X - iconSize - vTextSize.X, textPos.Y, iconSize, iconSize);
+				RectUV uv = new RectUV(drawStyle.IconIndex/iconsInSprite, 0, (drawStyle.IconIndex + 1)/iconsInSprite, 1);
+				rc.AddSprite("item_icons.png", iconPos, uv);
+			}
+			if (drawStyle.FrameWidth > 0)
+			{
+				Rect frame = new Rect(x - fullWidth, y, fullWidth, fullHeight);
+				rc.AddFrame(frame, drawStyle.color, drawStyle.FrameWidth);
+			}
+			return new Vec2(fullWidth, fullHeight);
 		}
 
 		private string GetItemName(KeyValuePair<ExileBot.Entity, AlertDrawStyle> kv)
