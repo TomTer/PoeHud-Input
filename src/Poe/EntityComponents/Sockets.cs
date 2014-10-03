@@ -77,7 +77,7 @@ namespace PoeHUD.Poe.EntityComponents
 				for (int i = 0; i < 6; i++)
 				{
 					int num2 = this.m.ReadInt(num);
-					if (num2 >= 1 && num2 <= 3)
+					if (num2 >= 1 && num2 <= 4)
 					{
 						list.Add(this.m.ReadInt(num));
 					}
