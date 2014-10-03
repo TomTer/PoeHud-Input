@@ -26,9 +26,10 @@ namespace PoeHUD.Hud.Menu
         }
         public override void Render(RenderingContext rc)
         {
-            int alpha = this.menuVisible ? 200 : 50;
+            int alpha = this.menuVisible ? 255 : 100;
             rc.AddBox(this.bounds, Color.FromArgb(alpha, Color.Gray));
-            rc.AddTextWithHeight(new Vec2(Settings.GetInt("Menu.PositionWidth") + 25, Settings.GetInt("Menu.PositionHeight") + 12), "Menu", Color.Gray, 10, DrawTextFormat.VerticalCenter | DrawTextFormat.Center);
+            rc.AddTextWithHeight(new Vec2(Settings.GetInt("Menu.PositionWidth") + 29, Settings.GetInt("Menu.PositionHeight") + 12),
+                Settings.GetString("Menu.Title"), Settings.GetColor("Menu.TitleColor"), Settings.GetInt("Menu.TitleSize"), DrawTextFormat.VerticalCenter | DrawTextFormat.Center);
             foreach (BooleanButton current in this.buttons)
             {
                 current.Render(rc);
