@@ -255,9 +255,6 @@ namespace PoeHUD.Hud.Monster
 				result.Add("MonsterElementalThorns", "Elemental Reflect nearby");
 				result.Add("MonsterNemesisCorruptedBlood", "Corrupting Blood nearby");
 				result.Add("MonsterItems1", "Wealth monsters nearby");
-				result.Add("MonsterExplodesOnDeathFire1", "Volatile Flameblood nearby");
-				result.Add("MonsterExplodesOnDeathLightning1", "Volatile Stormblood nearby");
-				result.Add("MonsterExplodesOnDeathCold1", "Volatile Iceblood nearby");
 			}
 			else
 			{
