@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExileBot\AreaInstance.cs" />
+    <Compile Include="Hud\Debug\ShowUiHierarchy.cs" />
     <Compile Include="Hud\Health\Healthbar.cs" />
     <Compile Include="Hud\Health\RenderPrio.cs" />
     <Compile Include="Hud\Loot\AlertDrawStyle.cs" />

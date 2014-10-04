@@ -13,6 +13,8 @@ namespace PoeHUD.Poe.UI
 		// 16 dup <128-bytes structure>
 		// then the rest is
 
+		public int Id { get { return m.ReadInt(this.address + 0); } }
+
 		public float Width { get { return this.m.ReadFloat(this.address + 0xF0 + OffsetBuffers); } }
 		public float Height { get { return this.m.ReadFloat(this.address + 0xF4 + OffsetBuffers); } }
 		public float X { get { return this.m.ReadFloat(this.address + 0x64 + OffsetBuffers); } }

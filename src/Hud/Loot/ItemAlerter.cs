@@ -112,7 +112,17 @@ namespace PoeHUD.Hud.Loot
 			{
 				return;
 			}
-			Rect clientRect = this.poe.Internal.game.IngameState.IngameUi.Minimap.SmallMinimap.GetClientRect();
+			var mm = this.poe.Internal.game.IngameState.IngameUi.Minimap.SmallMinimap;
+			var qt = this.poe.Internal.game.IngameState.IngameUi.QuestTracker;
+			Rect miniMapRect = mm.GetClientRect();
+			Rect qtRect = qt.GetClientRect();
+
+			Rect clientRect;
+			if (qt.IsVisible && qtRect.X < miniMapRect.X)
+				clientRect = qtRect;
+			else
+				clientRect = miniMapRect;
+
 			Vec2 rightTopAnchor = new Vec2(clientRect.X + clientRect.W, clientRect.Y + clientRect.H + 5);
 			
 			int y = rightTopAnchor.Y;

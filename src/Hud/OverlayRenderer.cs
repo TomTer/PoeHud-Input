@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using PoeHUD.ExileBot;
+using PoeHUD.Hud.Debug;
 using PoeHUD.Hud.Health;
 using PoeHUD.Hud.Icons;
 using PoeHUD.Hud.Loot;
@@ -35,6 +36,7 @@ namespace PoeHUD.Hud
 				new DangerAlert(),
 				this.XphRenderer,
 				new ClientHacks(),
+				// new ShowUiHierarchy(),
 				this.PreloadAlert
 			};
 			if (Settings.GetBool("Window.ShowIngameMenu"))
