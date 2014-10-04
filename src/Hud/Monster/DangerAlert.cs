@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using PoeHUD.ExileBot;
 using PoeHUD.Framework;
@@ -11,13 +12,13 @@ namespace PoeHUD.Hud.Monster
 {
 	public class DangerAlert : HUDPlugin
 	{
-		private HashSet<int> alertBlacklist;
+		private HashSet<int> alreadyAlertedOf;
 		private Dictionary<Entity, string> currentAlerts;
 		private Dictionary<string, string> modAlerts;
 		private Dictionary<string, string> typeAlerts;
 		public override void OnEnable()
 		{
-			this.alertBlacklist = new HashSet<int>();
+			this.alreadyAlertedOf = new HashSet<int>();
 			this.currentAlerts = new Dictionary<Entity, string>();
 			this.InitAlertStrings();
 			this.poe.Area.OnAreaChange += this.CurrentArea_OnAreaChange;
@@ -74,15 +75,15 @@ namespace PoeHUD.Hud.Monster
 			{
 				return;
 			}
-			if (!this.alertBlacklist.Contains(entity.Id))
+			if (!this.alreadyAlertedOf.Contains(entity.Id))
 			{
 				Sounds.DangerSound.Play();
-				this.alertBlacklist.Add(entity.Id);
+				this.alreadyAlertedOf.Add(entity.Id);
 			}
 		}
 		private void CurrentArea_OnAreaChange(AreaController area)
 		{
-			this.alertBlacklist.Clear();
+			this.alreadyAlertedOf.Clear();
 			this.currentAlerts.Clear();
 		}
 		public override void Render(RenderingContext rc)
@@ -123,18 +124,8 @@ namespace PoeHUD.Hud.Monster
 		}
 		private void InitAlertStrings()
 		{
-			this.modAlerts = new Dictionary<string, string>();
-			this.modAlerts.Add("MonsterNemesisUniqueDrop", "Inner Treasure nearby");
-			this.modAlerts.Add("MonsterImplicitNemesisUniqueDrop", "Inner Treasure nearby");
-			this.modAlerts.Add("MonsterAuraPhysicalThorns1", "Physical Reflect nearby");
-			this.modAlerts.Add("MonsterPhysicalThorns", "Physical Reflect nearby");
-			this.modAlerts.Add("MonsterAuraElementalThorns1", "Elemental Reflect nearby");
-			this.modAlerts.Add("MonsterElementalThorns", "Elemental Reflect nearby");
-			this.modAlerts.Add("MonsterNemesisCorruptedBlood", "Corrupting Blood nearby");
-			this.modAlerts.Add("MonsterItems1", "Wealth monsters nearby");
-			this.modAlerts.Add("MonsterExplodesOnDeathFire1", "Volatile Flameblood nearby");
-			this.modAlerts.Add("MonsterExplodesOnDeathLightning1", "Volatile Stormblood nearby");
-			this.modAlerts.Add("MonsterExplodesOnDeathCold1", "Volatile Iceblood nearby");
+			this.modAlerts = LoadMonsterModAlerts();
+
 			this.typeAlerts = new Dictionary<string, string>();
 			this.typeAlerts.Add("Metadata/Monsters/Exiles/ExileRanger1", "Orra Greengate nearby");
 			this.typeAlerts.Add("Metadata/Monsters/Exiles/ExileRanger2", "Thena Moga nearby");
@@ -247,6 +238,40 @@ namespace PoeHUD.Hud.Monster
 			this.typeAlerts.Add("Metadata/Monsters/BeyondDemons/BeyondDemon3-4", "Bameth, Shifting Darkness nearby");
 			this.typeAlerts.Add("Metadata/Monsters/BeyondDemons/BeyondDemon3-5", "Na'em, Bending Stone nearby");
 			this.typeAlerts.Add("Metadata/Monsters/BeyondDemons/BeyondDemon3-6", "Abaxoth, The End of All That Is nearby");
+		}
+
+		private static Dictionary<string, string> LoadMonsterModAlerts()
+		{
+			var result = new Dictionary<string, string>();
+
+			if (!File.Exists("config/monster_mod_alerts.txt"))
+			{
+				// use the what is haredcoded
+				result.Add("MonsterNemesisUniqueDrop", "Inner Treasure nearby");
+				result.Add("MonsterImplicitNemesisUniqueDrop", "Inner Treasure nearby");
+				result.Add("MonsterAuraPhysicalThorns1", "Physical Reflect nearby");
+				result.Add("MonsterPhysicalThorns", "Physical Reflect nearby");
+				result.Add("MonsterAuraElementalThorns1", "Elemental Reflect nearby");
+				result.Add("MonsterElementalThorns", "Elemental Reflect nearby");
+				result.Add("MonsterNemesisCorruptedBlood", "Corrupting Blood nearby");
+				result.Add("MonsterItems1", "Wealth monsters nearby");
+				result.Add("MonsterExplodesOnDeathFire1", "Volatile Flameblood nearby");
+				result.Add("MonsterExplodesOnDeathLightning1", "Volatile Stormblood nearby");
+				result.Add("MonsterExplodesOnDeathCold1", "Volatile Iceblood nearby");
+			}
+			else
+			{
+				string[] lines = File.ReadAllLines("config/monster_mod_alerts.txt");
+				foreach (string line in lines.Select(a => a.Trim()))
+				{
+					if (string.IsNullOrWhiteSpace(line) || line.IndexOf(',') < 0)
+						continue;
+
+					var parts = line.Split(new[] {','}, 2);
+					result[parts[0].Trim()] = parts[1].Trim();
+				}
+			}
+			return result;
 		}
 	}
 }

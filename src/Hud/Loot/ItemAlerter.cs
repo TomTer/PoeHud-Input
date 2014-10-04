@@ -248,9 +248,7 @@ namespace PoeHUD.Hud.Loot
 		private HashSet<string> LoadCurrency()
 		{
 			if (!File.Exists("config/currency.txt"))
-			{
 				return null;
-			}
 			HashSet<string> hashSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 			string[] array = File.ReadAllLines("config/currency.txt");
 			for (int i = 0; i < array.Length; i++)
