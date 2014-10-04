@@ -118,7 +118,7 @@ namespace PoeHUD.Hud.Loot
 			Rect qtRect = qt.GetClientRect();
 
 			Rect clientRect;
-			if (qt.IsVisible && qtRect.X < miniMapRect.X)
+			if (qt.IsVisible && qtRect.X + qt.Width < miniMapRect.X + miniMapRect.X + 50)
 				clientRect = qtRect;
 			else
 				clientRect = miniMapRect;
