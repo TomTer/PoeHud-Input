@@ -68,10 +68,14 @@ namespace PoeHUD.Hud.Icons
 		}
 		private Vec2 WorldToMinimap(Vec2 world, Vec2 minimapCenter, double diag, float scale)
 		{
-			float num = (float)((double)((float)(world.X - this.playerPos.X) / scale) * diag * 0.7071067811);
-			float num2 = (float)((double)((float)(world.Y - this.playerPos.Y) / scale) * diag * 0.7071067811);
-			int x = (int)((float)minimapCenter.X - num2 + num);
-			int y = (int)((float)minimapCenter.Y - num2 - num);
+            // Values according to 40 degree rotation of cartesian coordiantes, still doesn't seem right but closer
+            float cosX = (float)((double)((float)(world.X - this.playerPos.X) / scale) * diag * Math.Cos((Math.PI / 180) * 40));
+            float cosY = (float)((double)((float)(world.Y - this.playerPos.Y) / scale) * diag * Math.Cos((Math.PI / 180) * 40));
+            float sinX = (float)((double)((float)(world.X - this.playerPos.X) / scale) * diag * Math.Sin((Math.PI / 180) * 40));
+            float sinY = (float)((double)((float)(world.Y - this.playerPos.Y) / scale) * diag * Math.Sin((Math.PI / 180) * 40));
+            // 2D rotation formulas not correct, but it's what appears to work?
+            int x = (int)((float)minimapCenter.X + cosX - cosY);
+            int y = (int)((float)minimapCenter.Y - (sinX + sinY));
 			return new Vec2(x, y);
 		}
 		private MinimapIcon GetIcon(Entity e)
