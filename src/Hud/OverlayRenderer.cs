@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using PoeHUD.ExileBot;
-using PoeHUD.Hud.Debug;
+//using PoeHUD.Hud.Debug;
 using PoeHUD.Hud.Health;
 using PoeHUD.Hud.Icons;
 using PoeHUD.Hud.Loot;
