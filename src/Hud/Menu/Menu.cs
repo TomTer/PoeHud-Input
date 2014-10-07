@@ -113,6 +113,7 @@ namespace PoeHUD.Hud.Menu
 			this.AddButton(parent3, "Strongboxes", "MinimapIcons.Strongboxes");
 			this.AddButton(parent3, "Chests", "MinimapIcons.Chests");
 			this.AddButton(parent3, "Alert items", "MinimapIcons.AlertedItems");
+            this.AddButton(parent3, "Masters", "MinimapIcons.Masters");
 			BooleanButton parent4 = this.CreateRootMenu("Item alert", 2, "ItemAlert");
 			this.AddButton(parent4, "Rares", "ItemAlert.Rares");
 			this.AddButton(parent4, "Uniques", "ItemAlert.Uniques");

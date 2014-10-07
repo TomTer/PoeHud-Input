@@ -76,6 +76,19 @@ namespace PoeHUD.Hud.Icons
 		}
 		private MinimapIcon GetIcon(Entity e)
 		{
+			List<string> masters = new List<string> {
+				"Metadata/NPC/Missions/Wild/Dex",
+				"Metadata/NPC/Missions/Wild/DexInt",
+				"Metadata/NPC/Missions/Wild/Int",
+				"Metadata/NPC/Missions/Wild/Str",
+				"Metadata/NPC/Missions/Wild/StrDex",
+				"Metadata/NPC/Missions/Wild/StrDexInt",
+				"Metadata/NPC/Missions/Wild/StrInt"
+			};
+			if (e.HasComponent<Poe.EntityComponents.NPC>() && masters.Contains(e.Path))
+			{
+				return new MasterMinimapIcon(e, "monster_ally.png", 10, MinimapRenderPriority.Strongbox);
+			}
 			if (e.HasComponent<Poe.EntityComponents.Monster>())
 			{
 				if (!e.IsHostile)
