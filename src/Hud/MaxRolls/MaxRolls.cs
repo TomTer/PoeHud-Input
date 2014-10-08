@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Xml.Linq;
+using System.Linq;
 
 namespace PoeHUD.Hud.MaxRolls
 {
@@ -60,6 +61,19 @@ namespace PoeHUD.Hud.MaxRolls
                         break;
 
                 }
+				// Master Color override
+				string[] masterMods =
+				{
+					"StrMaster",
+					"StrDexMaster",
+					"DexMaster",
+					"DexIntMaster",
+					"IntMaster",
+					"StrIntMaster",
+					"StrDexIntMaster"
+				};
+				if (masterMods.Any(a => modName.StartsWith(a)))
+					this.color = Color.SkyBlue;
                 // Current
                 if (currentLvl.min == currentLvl.max)
                     curr = currentLvl.max;
