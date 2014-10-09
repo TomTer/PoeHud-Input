@@ -57,13 +57,13 @@ namespace PoeHUD.Poe
 			int[] offsets = new int[1];
 			this.name = arg_29_0.ReadStringU(arg_1E_0.ReadInt(arg_1E_1, offsets), 256, true);
 			this.name = this.name.Replace("_", ""); // Master Crafted mod can have underscore on the end, need to ignore
-			if (!int.TryParse(this.name.Substring(this.name.Length - 1), out this.level))
+			if (this.name.IndexOfAny("0123456789".ToCharArray()) < 0 || !int.TryParse(this.name.Substring(this.name.IndexOfAny("0123456789".ToCharArray())), out this.level))
 			{
 				this.level = 1;
 			}
 			else
 			{
-				this.name = this.name.Substring(0, this.name.Length - 1);
+				this.name = this.name.Substring(0, this.name.IndexOfAny("0123456789".ToCharArray()));
 			}
 		}
 	}

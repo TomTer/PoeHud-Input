@@ -989,7 +989,7 @@
     </level>
   </mod>
   <!-- Hybrid Defences and Stun Recovery -->
-  <mod name="LocalIncreasedArmourAndEnergyShieldAndStunRecovery" readable="Local Armour'n'ES Stun Recovery" type="P">
+  <mod name="LocalIncreasedArmourAndEnergyShieldAndStunRecovery" readable="Local Armour'n'ES | Stun Recovery" type="P">
     <level lvl="1" ilvl="2">
       <min>6%</min>
       <max>14%</max>
@@ -1019,9 +1019,15 @@
       <max>50%</max>
       <min2>14%</min2>
       <max2>15%</max2>
+    </level>
+	<level lvl="6" ilvl="78">
+      <min>51%</min>
+      <max>56%</max>
+      <min2>16%</min2>
+      <max2>17%</max2>
     </level>
   </mod>
-  <mod name="LocalIncreasedArmourAndEvasionAndStunRecovery" readable="Armour'n'Evasion | Stun Recovery" type="P">
+  <mod name="LocalIncreasedArmourAndEvasionAndStunRecovery" readable="Local Armour'n'Evasion | Stun Recovery" type="P">
     <level lvl="1" ilvl="2">
       <min>6%</min>
       <max>14%</max>
@@ -1051,9 +1057,15 @@
       <max>50%</max>
       <min2>14%</min2>
       <max2>15%</max2>
+    </level>
+	<level lvl="6" ilvl="78">
+      <min>51%</min>
+      <max>56%</max>
+      <min2>16%</min2>
+      <max2>17%</max2>
     </level>
   </mod>
-  <mod name="LocalIncreasedEvasionAndEnergyShieldAndStunRecovery" readable="Local Evasion'n'ES Stun Recovery" type="P">
+  <mod name="LocalIncreasedEvasionAndEnergyShieldAndStunRecovery" readable="Local Evasion'n'ES | Stun Recovery" type="P">
     <level lvl="1" ilvl="2">
       <min>6%</min>
       <max>14%</max>
@@ -1083,6 +1095,12 @@
       <max>50%</max>
       <min2>14%</min2>
       <max2>15%</max2>
+    </level>
+	<level lvl="6" ilvl="78">
+      <min>51%</min>
+      <max>56%</max>
+      <min2>16%</min2>
+      <max2>17%</max2>
     </level>
   </mod>
   <!-- Item Acquisition -->
@@ -1698,24 +1716,44 @@
       <max>320</max>
     </level>
   </mod>
-  <mod name="LocalLightRadiusAndAccuracy" readable="Light Radius | Accuracy" type="S">
+  <mod name="LightRadiusAndAccuracy" readable="Light Radius | Accuracy" type="S">
     <level lvl="1" ilvl="8">
-      <min>5</min>
-      <max>5</max>
+      <min>5%</min>
+      <max>5%</max>
       <min2>10</min2>
       <max2>20</max2>
     </level>
     <level lvl="2" ilvl="15">
-      <min>21</min>
-      <max>40</max>
-      <min2>8%</min2>
-      <max2>9%</max2>
+      <min>10%</min>
+      <max>10%</max>
+      <min2>21</min2>
+      <max2>40</max2>
     </level>
     <level lvl="3" ilvl="30">
-      <min>15</min>
-      <max>15</max>
-      <min2>5</min2>
+      <min>15%</min>
+      <max>15%</max>
+      <min2>5%</min2>
+      <max2>10%</max2>
+    </level>
+  </mod>
+  <mod name="LocalLightRadiusAndAccuracy" readable="Local Light Radius | Accuracy" type="S">
+    <level lvl="1" ilvl="8">
+      <min>5%</min>
+      <max>5%</max>
+      <min2>10</min2>
+      <max2>20</max2>
+    </level>
+    <level lvl="2" ilvl="15">
+      <min>10%</min>
+      <max>10%</max>
+      <min2>21</min2>
       <max2>40</max2>
+    </level>
+    <level lvl="3" ilvl="30">
+      <min>15%</min>
+      <max>15%</max>
+      <min2>5%</min2>
+      <max2>10%</max2>
     </level>
   </mod>
   <!-- Attack Speed -->
@@ -2644,8 +2682,12 @@
   </mod>
   <mod name="StrMasterEvasionPercentCrafted" readable="Crafted Evasion %" type="P">
 	<level lvl="1" ilvl="20">
-		<min>(3-5)</min>
-		<max>(7-9)</max>
+		<min>40%</min>
+		<max>52%</max>
+	</level>
+	<level lvl="2" ilvl="30">
+		<min>55%</min>
+		<max>68%</max>
 	</level>
   </mod>
   <mod name="ProjectileSpeed" readable="Projectile Speed" type="S">
@@ -2668,6 +2710,12 @@
 	<level lvl="5" ilvl="55">
 		<min>34</min>
 		<max>41</max>
+	</level>
+  </mod>
+  <mod name="LocalIncreaseSocketedGemLevel" readable="+ to Level of Gems" type="P">
+	<level lvl="1" ilvl="50">
+		<min>1</min>
+		<max>1</max>
 	</level>
   </mod>
 </rolls>
