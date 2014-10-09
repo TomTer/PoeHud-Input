@@ -2516,4 +2516,158 @@
       <max>25%</max>
     </level>
   </mod>
+  <mod name="StrIntMasterItemGenerationCanHaveMultipleCraftedMods" readable="Can Have Multiple Crafted Mods" type="S">
+	<level lvl="1" ilvl="1">
+		<min>1</min>
+		<max>1</max>
+	</level>
+  </mod>
+  <mod name="DexMasterAddedPhysicalDamageCrafted" readable="Crafted Phys Dmg" type="P">
+	<level lvl="1" ilvl="20">
+		<min>(10-13)</min>
+		<max>(20-25)</max>
+	</level>
+	<level lvl="2" ilvl="30">
+		<min>(14-18)</min>
+		<max>(26-31)</max>
+	</level>
+  </mod>
+  <mod name="DexMasterLocalCritChanceCrafted" readable="Crafted Local Crit Chance" type="S">
+	<level lvl="1" ilvl="20">
+		<min>17%</min>
+		<max>21%</max>
+	</level>
+	<level lvl="2" ilvl="30">
+		<min>22%</min>
+		<max>27%</max>
+	</level>
+  </mod>
+  <mod name="DexMasterFireResistanceCrafted" readable="Crafted Fire Res" type="S">
+	<level lvl="1" ilvl="20">
+		<min>16%</min>
+		<max>20%</max>
+	</level>
+	<level lvl="2" ilvl="30">
+		<min>21%</min>
+		<max>25%</max>
+	</level>
+  </mod>
+  <mod name="DexMasterColdResistanceCrafted" readable="Crafted Cold Res" type="S">
+	<level lvl="1" ilvl="20">
+		<min>16%</min>
+		<max>20%</max>
+	</level>
+	<level lvl="2" ilvl="30">
+		<min>21%</min>
+		<max>25%</max>
+	</level>
+  </mod>
+  <mod name="DexMasterLightningResistanceCrafted" readable="Crafted Lightning Res" type="S">
+	<level lvl="1" ilvl="20">
+		<min>16%</min>
+		<max>20%</max>
+	</level>
+	<level lvl="2" ilvl="30">
+		<min>21%</min>
+		<max>25%</max>
+	</level>
+  </mod>
+  <mod name="StrMasterFireResistanceCrafted" readable="Crafted Fire Res" type="S">
+	<level lvl="1" ilvl="20">
+		<min>21%</min>
+		<max>25%</max>
+	</level>
+	<level lvl="2" ilvl="30">
+		<min>26%</min>
+		<max>30%</max>
+	</level>
+  </mod>
+  <mod name="StrMasterColdResistanceCrafted" readable="Crafted Cold Res" type="S">
+	<level lvl="1" ilvl="20">
+		<min>21%</min>
+		<max>25%</max>
+	</level>
+	<level lvl="2" ilvl="30">
+		<min>26%</min>
+		<max>30%</max>
+	</level>
+  </mod>
+  <mod name="StrMasterLightningResistanceCrafted" readable="Crafted Lightning Res" type="S">
+	<level lvl="1" ilvl="20">
+		<min>21%</min>
+		<max>25%</max>
+	</level>
+	<level lvl="2" ilvl="30">
+		<min>26%</min>
+		<max>30%</max>
+	</level>
+  </mod>
+  <mod name="StrIntMasterStrengthCrafted" readable="Crafted Strength+" type="S">
+	<level lvl="1" ilvl="15">
+		<min>16</min>
+		<max>20</max>
+	</level>
+	<level lvl="2" ilvl="25">
+		<min>21</min>
+		<max>25</max>
+	</level>
+  </mod>
+  <mod name="StrIntMasterDexterityCrafted" readable="Crafted Dexterity+" type="S">
+	<level lvl="1" ilvl="15">
+		<min>16</min>
+		<max>20</max>
+	</level>
+	<level lvl="2" ilvl="25">
+		<min>21</min>
+		<max>25</max>
+	</level>
+  </mod>
+  <mod name="StrIntMasterIntellectCrafted" readable="Crafted Intellect+" type="S">
+	<level lvl="1" ilvl="15">
+		<min>16</min>
+		<max>20</max>
+	</level>
+	<level lvl="2" ilvl="25">
+		<min>21</min>
+		<max>25</max>
+	</level>
+  </mod>
+  <mod name="StrIntMasterPhysicalDamageCrafted" readable="Crafted Phys Dmg" type="P">
+	<level lvl="1" ilvl="15">
+		<min>16</min>
+		<max>20</max>
+	</level>
+	<level lvl="2" ilvl="25">
+		<min>21</min>
+		<max>25</max>
+	</level>
+  </mod>
+  <mod name="StrMasterEvasionPercentCrafted" readable="Crafted Evasion %" type="P">
+	<level lvl="1" ilvl="20">
+		<min>(3-5)</min>
+		<max>(7-9)</max>
+	</level>
+  </mod>
+  <mod name="ProjectileSpeed" readable="Projectile Speed" type="S">
+	<level lvl="1" ilvl="14">
+		<min>10</min>
+		<max>17</max>
+	</level>
+	<level lvl="2" ilvl="25">
+		<min>10</min>
+		<max>30</max>
+	</level>
+	<level lvl="3" ilvl="27">
+		<min>18</min>
+		<max>25</max>
+	</level>
+	<level lvl="4" ilvl="41">
+		<min>26</min>
+		<max>33</max>
+	</level>
+	<level lvl="5" ilvl="55">
+		<min>34</min>
+		<max>41</max>
+	</level>
+  </mod>
 </rolls>

@@ -56,6 +56,7 @@ namespace PoeHUD.Poe
 			int arg_1E_1 = this.address + 20;
 			int[] offsets = new int[1];
 			this.name = arg_29_0.ReadStringU(arg_1E_0.ReadInt(arg_1E_1, offsets), 256, true);
+			this.name = this.name.Replace("_", ""); // Master Crafted mod can have underscore on the end, need to ignore
 			if (!int.TryParse(this.name.Substring(this.name.Length - 1), out this.level))
 			{
 				this.level = 1;
@@ -63,25 +64,6 @@ namespace PoeHUD.Poe
 			else
 			{
 				this.name = this.name.Substring(0, this.name.Length - 1);
-			}
-			if (this.name.EndsWith("AndStunRecovery"))
-			{
-				this.name = this.name.Replace("AndStunRecovery", "");
-				return;
-			}
-			if (this.name.EndsWith("AndAccuracyRating"))
-			{
-				this.name = this.name.Replace("AndAccuracyRating", "");
-				return;
-			}
-			if (this.name.EndsWith("OnWeapon"))
-			{
-				this.name = this.name.Replace("OnWeapon", "");
-				return;
-			}
-			if (this.name.EndsWith("Prefix"))
-			{
-				this.name = this.name.Replace("Prefix", "");
 			}
 		}
 	}
