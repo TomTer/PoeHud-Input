@@ -72,7 +72,7 @@ namespace PoeHUD.Hud.MaxRolls
 					"StrIntMaster",
 					"StrDexIntMaster"
 				};
-				if (masterMods.Any(a => modName.StartsWith(a)))
+				if (masterMods.Any(a => modName.Contains(a)))
 					this.color = Color.SkyBlue;
                 // Current
                 if (currentLvl.min == currentLvl.max)
