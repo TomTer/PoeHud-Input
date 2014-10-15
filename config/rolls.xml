@@ -2553,6 +2553,10 @@
       <min>23%</min>
       <max>25%</max>
     </level>
+    <level lvl="6" ilvl="79">
+      <min>26%</min>
+      <max>28%</max>
+    </level>
   </mod>
   <mod name="StrIntMasterItemGenerationCanHaveMultipleCraftedMods" readable="Can Have Multiple Crafted Mods" type="S">
 	<level lvl="1" ilvl="1">
