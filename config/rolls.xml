@@ -164,6 +164,12 @@
       <min2>14%</min2>
       <max2>15%</max2>
     </level>
+    <level lvl="6" ilvl="78">
+      <min>51%</min>
+      <max>56%</max>
+      <min2>16%</min2>
+      <max2>17%</max2>
+    </level>
   </mod>
   <!-- Damage -->
   <mod name="AddedColdDamage" readable="Cold Dmg" type="P">
