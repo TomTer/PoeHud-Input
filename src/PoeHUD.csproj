@@ -49,7 +49,7 @@
     <Compile Include="Hud\Debug\ShowUiHierarchy.cs" />
     <Compile Include="Hud\Health\Healthbar.cs" />
     <Compile Include="Hud\Health\RenderPrio.cs" />
-	<Compile Include="Hud\Icons\MasterMinimapIcon.cs" />
+    <Compile Include="Hud\Icons\MasterMinimapIcon.cs" />
     <Compile Include="Hud\Loot\AlertDrawStyle.cs" />
     <Compile Include="Hud\Loot\CraftingBase.cs" />
     <Compile Include="Hud\Loot\ItemUsefulProperties.cs" />
@@ -86,7 +86,7 @@
     <Compile Include="Poe\EntityComponents\Mods.cs" />
     <Compile Include="Poe\EntityComponents\Monster.cs" />
     <Compile Include="Game\MonsterRarity.cs" />
-	<Compile Include="Poe\EntityComponents\NPC.cs" />
+    <Compile Include="Poe\EntityComponents\NPC.cs" />
     <Compile Include="Poe\EntityComponents\ObjectMagicProperties.cs" />
     <Compile Include="Poe\Offsets.cs" />
     <Compile Include="ExileBot\PathOfExile.cs" />
@@ -171,7 +171,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if "$(ConfigurationName)" == "Release" (
+    <PostBuildEvent>if "$(ConfigurationName)"=="Release" (
 copy $(TargetPath) $(ProjectDir)\..
 )</PostBuildEvent>
   </PropertyGroup>
