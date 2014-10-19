@@ -171,6 +171,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy $(TargetPath) $(ProjectDir)\..</PostBuildEvent>
+    <PostBuildEvent>if "$(ConfigurationName)" == "Release" (
+copy $(TargetPath) $(ProjectDir)\..
+)</PostBuildEvent>
   </PropertyGroup>
 </Project>
