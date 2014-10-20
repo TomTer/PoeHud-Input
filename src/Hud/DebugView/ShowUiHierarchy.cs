@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using PoeHUD.Framework;
 using PoeHUD.Poe.UI;
 using SlimDX.Direct3D9;
 
-namespace PoeHUD.Hud.Debug
+namespace PoeHUD.Hud.DebugView
 {
 	class ShowUiHierarchy : HUDPlugin
 	{
@@ -19,30 +17,41 @@ namespace PoeHUD.Hud.Debug
 		}
 		public override void Render(RenderingContext rc)
 		{
-			var root = this.poe.Internal.IngameState.UIRoot;
+			Element root = this.poe.Internal.IngameState.UIRoot;
+
 
 			int yPos = 80;
-			int x = 20;
+			int x = 320;
+			int[] path = new int[12];
+			for (path[0] = 0x80; path[0] <= 0x210 ; path[0] += 4 ) {
 
-			drawElt(rc, root, Vec2.Empty, ref x, ref yPos);
+				if (path[0] == 0x120 || path[0] == 0xd8 || path[0] == 0xa0 || path[0] == 0x154 || path[0] == 0x158 )
+					continue;
+				
+				Element starting_it = this.poe.Internal.IngameState.IngameUi.ReadObjectAt<Element>(path[0]);
+				var v2 = starting_it.GetParentPos();
+				drawElt(rc, starting_it, new Vec2((int)(v2.X*.75), (int)(v2.Y*.75)), ref x, ref yPos, path, 1);
+			}
 		}
 
-		private static void drawElt(RenderingContext rc, Element root, Vec2 parent, ref int x, ref int yPos, int ix = 0, int depth = 0)
+		private static void drawElt(RenderingContext rc, Element root, Vec2 parent, ref int x, ref int yPos, int[] path, int depth = 0)
 		{
 			if (!root.IsVisibleLocal || depth > 3)
 			{
 				return;
 			}
-			var c = Color.FromArgb(255, 255 - 25 * (ix % 10), 255 - 25 * ((ix % 100) / 10), 255);
 			Rect rC = new Rect(parent.X + (int)(root.X * 0.75), parent.Y + (int)(root.Y * 0.75), (int)(root.Width * 0.75), (int)(root.Height * 0.75));
 
-			if (rC.W < 200)
+			if (rC.W < 20)
 				return;
+			string sPath = path[0].ToString("X3") + "-" + String.Join("-", path.Skip(1).Take(depth-1));
+			int ix = depth > 0 ? path[depth - 1] : 0;
+			var c = Color.FromArgb(255, 255 - 25 * (ix % 10), 255 - 25 * ((ix % 100) / 10), 255);
 
-			string msg = string.Format("{2}{1:X8} [{3}] {4:X8} : {0}", rC, root.address, new String('-', depth), ix, root.Id);
+			string msg = string.Format("[{2}] {1:X8} : {0}", rC, root.address, sPath);
 
 			var v = rc.AddTextWithHeight(new Vec2(x, yPos), msg, c, 9, DrawTextFormat.Left);
-			rc.AddTextWithHeight(new Vec2(rC.X, rC.Y + depth * 10 - 10), ix.ToString(), c, 8, DrawTextFormat.Left);
+			rc.AddTextWithHeight(new Vec2(rC.X, rC.Y + depth * 10 - 10), sPath, c, 8, DrawTextFormat.Left);
 
 			rc.AddFrame(rC, c);
 			yPos += v.Y;
@@ -56,8 +65,9 @@ namespace PoeHUD.Hud.Debug
 			for (int i = 0; i < root.Children.Count; i++)
 			{
 				var elt = root.Children[i];
-				if (depth < 4)
-					drawElt(rc, elt, pp, ref x, ref yPos, i, depth + 1);
+				path[depth] = i;
+				if (depth < 8)
+					drawElt(rc, elt, pp, ref x, ref yPos, path, depth + 1);
 			}
 		}
 	}

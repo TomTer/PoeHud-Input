@@ -6,7 +6,7 @@ namespace PoeHUD.Poe.UI
 		{
 			get
 			{
-				return base.ReadObject<Element>(this.address + 2412);
+				return base.ReadObject<Element>(this.address + 0x164 + OffsetBuffers);
 			}
 		}
 	}

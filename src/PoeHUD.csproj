@@ -46,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExileBot\AreaInstance.cs" />
-    <Compile Include="Hud\Debug\ShowUiHierarchy.cs" />
+    <Compile Include="Hud\DebugView\ShowUiHierarchy.cs" />
     <Compile Include="Hud\Health\Healthbar.cs" />
     <Compile Include="Hud\Health\RenderPrio.cs" />
     <Compile Include="Hud\Icons\MasterMinimapIcon.cs" />
@@ -122,7 +122,7 @@
     <Compile Include="Game\Stat.cs" />
     <Compile Include="ExileBot\Stats.cs" />
     <Compile Include="Poe\EntityComponents\Targetable.cs" />
-    <Compile Include="ExileBot\Vec2f.cs" />
+    <Compile Include="Framework\Vec2f.cs" />
     <Compile Include="Poe\EntityComponents\Weapon.cs" />
     <Compile Include="Poe\EntityComponents\WorldItem.cs" />
     <Compile Include="Hud\Menu\BooleanButton.cs" />
