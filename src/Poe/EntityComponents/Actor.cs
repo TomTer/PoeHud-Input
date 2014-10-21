@@ -4,6 +4,31 @@ namespace PoeHUD.Poe.EntityComponents
 {
 	public class Actor : Component
 	{
+        /// <summary>
+        /// Standing still = 2048 =bit 11 set
+        /// running = 2178 = bit 11 & 7
+        /// Maybe Bit-field : Bit 7 set = running 
+        /// </summary>
+        public int ActionId
+        {
+            get
+            {
+                if (this.address != 0)
+                {
+                    return this.m.ReadInt(this.address + 0x9C);
+                }
+                return 1;
+            }
+        }
+
+        public bool isMoving
+        {
+            get
+            {
+                return (ActionId & 128) > 0;
+            }
+        }
+
 		public List<int> Minions
 		{
 			get
