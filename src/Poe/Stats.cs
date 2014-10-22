@@ -1,4 +1,4 @@
-namespace PoeHUD.ExileBot
+namespace PoeHUD.Poe
 {
 	public class Stats : RemoteMemoryObject
 	{

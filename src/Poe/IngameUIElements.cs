@@ -1,4 +1,3 @@
-using PoeHUD.ExileBot;
 using PoeHUD.Poe.UI;
 
 namespace PoeHUD.Poe
@@ -55,6 +54,9 @@ namespace PoeHUD.Poe
 		public Element OpenRightPanel { get { return ReadObjectAt<Element>(0x158); } }
 
 		public Element OpenNpcDialogPanel { get { return ReadObjectAt<Element>(0x160); } }
+
+		public Element InstanceManagerPanel { get { return ReadObjectAt<Element>(0x198); } }
+		public Element InstanceManagerPanel2 { get { return ReadObjectAt<Element>(0x19C); } }
 
 		public Element GemLvlUpPanel { get { return ReadObjectAt<Element>(0x1F8); } }
 

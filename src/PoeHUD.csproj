@@ -113,14 +113,14 @@
     <Compile Include="Poe\UI\Tooltip.cs" />
     <Compile Include="Poe\EntityComponents\Positioned.cs" />
     <Compile Include="Poe\EntityComponents\Quality.cs" />
-    <Compile Include="ExileBot\RemoteMemoryObject.cs" />
+    <Compile Include="Poe\RemoteMemoryObject.cs" />
     <Compile Include="Poe\EntityComponents\Render.cs" />
     <Compile Include="Game\SelectionState.cs" />
     <Compile Include="Poe\EntityComponents\SkillGem.cs" />
     <Compile Include="Game\Socket.cs" />
     <Compile Include="Poe\EntityComponents\Sockets.cs" />
     <Compile Include="Game\Stat.cs" />
-    <Compile Include="ExileBot\Stats.cs" />
+    <Compile Include="Poe\Stats.cs" />
     <Compile Include="Poe\EntityComponents\Targetable.cs" />
     <Compile Include="Framework\Vec2f.cs" />
     <Compile Include="Poe\EntityComponents\Weapon.cs" />
