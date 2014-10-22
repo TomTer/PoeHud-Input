@@ -1,5 +1,4 @@
 using System;
-using PoeHUD.ExileBot;
 using PoeHUD.Framework;
 
 namespace PoeHUD.Poe

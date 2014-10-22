@@ -38,7 +38,7 @@ namespace PoeHUD.Hud
 				this.XphRenderer,
 				new ClientHacks(),
 	#if DEBUG
-				new ShowUiHierarchy(),
+				//new ShowUiHierarchy(),
 	#endif
 				this.PreloadAlert
 			};

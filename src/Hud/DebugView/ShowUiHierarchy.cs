@@ -21,11 +21,11 @@ namespace PoeHUD.Hud.DebugView
 
 
 			int yPos = 80;
-			int x = 320;
+			int x = 620;
 			int[] path = new int[12];
 			for (path[0] = 0x80; path[0] <= 0x210 ; path[0] += 4 ) {
 
-				if (path[0] == 0x120 || path[0] == 0xd8 || path[0] == 0xa0 || path[0] == 0x154 || path[0] == 0x158 )
+				if (path[0] == 0x120 || path[0] == 0xd8 || path[0] == 0xa0 || path[0] == 0x154 || path[0] == 0x158 || path[0] == 0x198 )
 					continue;
 				
 				Element starting_it = this.poe.Internal.IngameState.IngameUi.ReadObjectAt<Element>(path[0]);

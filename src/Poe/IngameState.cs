@@ -1,4 +1,3 @@
-using PoeHUD.ExileBot;
 using PoeHUD.Poe.UI;
 
 namespace PoeHUD.Poe

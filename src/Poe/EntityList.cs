@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using PoeHUD.ExileBot;
 
 namespace PoeHUD.Poe
 {
