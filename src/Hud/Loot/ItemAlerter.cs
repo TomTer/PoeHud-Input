@@ -123,7 +123,9 @@ namespace PoeHUD.Hud.Loot
 			else
 				clientRect = miniMapRect;
 
-			Vec2 rightTopAnchor = new Vec2(clientRect.X + clientRect.W, clientRect.Y + clientRect.H + 5);
+			var playerPos = this.poe.Player.GetComponent<Positioned>().GridPos;
+
+			Vec2 rightTopAnchor = new Vec2(miniMapRect.X + miniMapRect.W, clientRect.Y + clientRect.H + 5);
 			
 			int y = rightTopAnchor.Y;
 			int fontSize = Settings.GetInt("ItemAlert.ShowText.FontSize");
@@ -136,14 +138,17 @@ namespace PoeHUD.Hud.Loot
 				string text = GetItemName(kv);
 				if( null == text ) continue;
 
+				Vec2 itemPos = kv.Key.GetComponent<Positioned>().GridPos;
+				var delta = itemPos - playerPos;
+
 				Vec2 vPadding = new Vec2(5, 2);
-				Vec2 itemDrawnSize = drawItem(rc, kv.Value, rightTopAnchor.X, y, vPadding, text, fontSize);
+				Vec2 itemDrawnSize = drawItem(rc, kv.Value, delta, rightTopAnchor.X, y, vPadding, text, fontSize);
 				y += itemDrawnSize.Y + vMargin;
 			}
 			
 		}
 
-		private static Vec2 drawItem(RenderingContext rc, AlertDrawStyle drawStyle, int x, int y, Vec2 vPadding, string text,
+		private static Vec2 drawItem(RenderingContext rc, AlertDrawStyle drawStyle, Vec2 delta, int x, int y, Vec2 vPadding, string text,
 			int fontSize)
 		{
 			// collapse padding when there's a frame
@@ -151,14 +156,31 @@ namespace PoeHUD.Hud.Loot
 			vPadding.Y -= drawStyle.FrameWidth;
 			// item will appear to have equal size
 
-			Vec2 textPos = new Vec2(x - vPadding.X, y + vPadding.Y);
+			double distance = Math.Sqrt(delta.X * delta.X + delta.Y * delta.Y);
+			double phi = Math.Acos(delta.X / distance);
+			if (delta.Y < 0) 
+				phi = 2 * Math.PI - phi;
+			phi += Math.PI * 0.25; // fix roration due to projection
+			if (phi > 2 * Math.PI) 
+				phi -= 2*Math.PI;
+
+			//text = text + " @ " + (int)distance + " : " + (int)(phi / Math.PI * 180)  + " : " + xSprite;
+
+			int compassOffset = fontSize + 8;
+			Vec2 textPos = new Vec2(x - vPadding.X - compassOffset, y + vPadding.Y);
 			Vec2 vTextSize = rc.AddTextWithHeight(textPos, text, drawStyle.color, fontSize, DrawTextFormat.Right);
 
 			int iconSize =  drawStyle.IconIndex >= 0 ? vTextSize.Y : 0;
 
 			int fullHeight = vTextSize.Y + 2 * vPadding.Y + 2 * drawStyle.FrameWidth;
-			int fullWidth = vTextSize.X + 2 * vPadding.X + iconSize + 2 * drawStyle.FrameWidth;
+			int fullWidth = vTextSize.X + 2 * vPadding.X + iconSize + 2 * drawStyle.FrameWidth + compassOffset;
 			rc.AddBox(new Rect(x - fullWidth, y, fullWidth, fullHeight), Color.FromArgb(180, 0, 0, 0));
+
+			float xSprite = (float)Math.Round(phi / Math.PI * 4);
+			if (xSprite >= 8) xSprite = 0;
+			float ySprite = distance > 60 ? distance > 120 ? 2 : 1 : 0;
+			rc.AddSprite("directions.png", new Rect(x - vPadding.X - compassOffset + 6, y + vPadding.Y, vTextSize.Y, vTextSize.Y),
+				new RectUV(xSprite / 8, ySprite / 3, (xSprite + 1) / 8, (ySprite + 1) / 3));
 
 			if (iconSize > 0)
 			{
@@ -170,7 +192,7 @@ namespace PoeHUD.Hud.Loot
 			}
 			if (drawStyle.FrameWidth > 0)
 			{
-				Rect frame = new Rect(x - fullWidth, y, fullWidth, fullHeight);
+				Rect frame = new Rect(x - fullWidth, y, fullWidth - compassOffset , fullHeight);
 				rc.AddFrame(frame, drawStyle.color, drawStyle.FrameWidth);
 			}
 			return new Vec2(fullWidth, fullHeight);

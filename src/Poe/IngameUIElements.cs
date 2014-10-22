@@ -45,7 +45,9 @@ namespace PoeHUD.Poe
 
 		public BigMinimap Minimap { get { return ReadObjectAt<BigMinimap>(0x11C); } }
 
-		public Element OnGroundLabels { get { return ReadObjectAt<Element>(0x120); } }
+		public Element ItemsOnGroundLabels { get { return ReadObjectAt<Element>(0x120); } }
+
+		public Element MonsterHpLabels { get { return ReadObjectAt<Element>(0x124); } }
 
 		public Element Buffs { get { return ReadObjectAt<Element>(0x130); } }
 		public Element Buffs2 { get { return ReadObjectAt<Element>(0x18c); } }
@@ -55,11 +57,13 @@ namespace PoeHUD.Poe
 
 		public Element OpenNpcDialogPanel { get { return ReadObjectAt<Element>(0x160); } }
 
+		public Element CreatureInfoPanel { get { return ReadObjectAt<Element>(0x184); } } // above, it shows name and hp
+
 		public Element InstanceManagerPanel { get { return ReadObjectAt<Element>(0x198); } }
 		public Element InstanceManagerPanel2 { get { return ReadObjectAt<Element>(0x19C); } }
 
 		public Element GemLvlUpPanel { get { return ReadObjectAt<Element>(0x1F8); } }
 
-		public Element OnGroundTooltipPanel { get { return ReadObjectAt<Element>(0x208); } }
+		public Element ItemOnGroundTooltip { get { return ReadObjectAt<Element>(0x208); } }
 	}
 }
