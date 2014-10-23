@@ -106,7 +106,7 @@ namespace PoeHUD.Hud.XpRate
 				: ((double) expRate > 1000.0 ? (expRate/1000.0).ToString("0.00") + "K XP/h"
 					: expRate.ToString("0.00") + " XP/h");
 			int level = this.poe.Player.GetComponent<Player>().Level;
-			if (level + 1 >= Constants.PlayerXpLevels.Length)
+			if (level < 0 || level + 1 >= Constants.PlayerXpLevels.Length)
 			{
 				return;
 			}
