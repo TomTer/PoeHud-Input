@@ -48,11 +48,28 @@ namespace PoeHUD.Poe
 			0, 0, 0, 80, 100, 137, 37, 0, 0, 0, 0, 129, 236, 160, 0, 0,
 			0, 83, 139, 93, 16, 199, 68, 36, 68, 0, 0, 0, 0, 139
 		}, "xxxxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+
+		/* 
+			64 A1 00 00 00 00          mov     eax, large fs:0
+			6A FF                      push    0FFFFFFFFh
+			68 90 51 4D 01             push    offset SEH_10D6970
+			50                         push    eax
+			64 89 25 00 00 00 00       mov     large fs:0, esp
+			A1 EC 6A 70 01             mov     eax, off_1706AEC ; <--- BP IS HERE
+			81 EC C8 00 00 00          sub     esp, 0C8h
+			53                         push    ebx
+			55                         push    ebp
+			33 DB                      xor     ebx, ebx
+			56                         push    esi
+			57                         push    edi
+			3B C3                      cmp     eax, ebx
+		 */
+
 		private static Pattern basePtrPattern = new Pattern(new byte[]
 		{
 			100, 161, 0, 0, 0, 0, 106, 255, 104, 0, 0, 0, 0, 80, 100, 137,
-			37, 0, 0, 0, 0, 161, 0, 0, 0, 0, 129, 236, 144, 0, 0, 0,
-			83, 85, 86, 87, 51, 255, 59, 199
+			37, 0, 0, 0, 0, 161, 0, 0, 0, 0, 129, 236, 0xC8, 0, 0, 0,
+			0x53, 0x55, 0x33, 0xDB, 0x56, 0x57, 0x3B, 0xC3
 		}, "xxxxxxxxx????xxxxxxxxx????xxxxxxxxxxxxxx");
 		private static Pattern fileRootPattern = new Pattern(new byte[]
 		{
