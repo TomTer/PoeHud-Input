@@ -8,7 +8,7 @@ namespace PoeHUD.Poe
 		{
 			get
 			{
-				return base.GetObject<Camera>(this.address + 0x15AC + Offsets.IgsOffset - Offsets.IgsDelta);
+				return base.GetObject<Camera>(this.address + 0x15B4 + Offsets.IgsOffset - Offsets.IgsDelta);
 			}
 		}
 		public float CurrentZoomLevel
