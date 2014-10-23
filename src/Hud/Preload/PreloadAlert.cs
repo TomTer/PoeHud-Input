@@ -104,7 +104,7 @@ namespace PoeHUD.Hud.Preload
 			}
 			if (this.disp.Count > 0)
 			{
-				Rect clientRect = poe.__getApproxMinimapRect(); // this.poe.Internal.IngameState.IngameUi.Minimap.SmallMinimap.GetClientRect());
+				Rect clientRect = this.poe.Internal.IngameState.IngameUi.Minimap.SmallMinimap.GetClientRect();
 				Rect rect = this.overlay.XphRenderer.Bounds;
 				Vec2 vec = new Vec2(clientRect.X - 10, rect.Y + rect.H + 10);
 				int num2 = vec.Y;

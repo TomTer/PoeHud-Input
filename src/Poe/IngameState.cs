@@ -1,4 +1,3 @@
-using PoeHUD.ExileBot;
 using PoeHUD.Poe.UI;
 
 namespace PoeHUD.Poe
@@ -9,7 +8,7 @@ namespace PoeHUD.Poe
 		{
 			get
 			{
-				return base.GetObject<Camera>(this.address + 0x15AC + Offsets.IgsOffset - Offsets.IgsDelta);
+				return base.GetObject<Camera>(this.address + 0x15B4 + Offsets.IgsOffset - Offsets.IgsDelta);
 			}
 		}
 		public float CurrentZoomLevel
@@ -41,38 +40,35 @@ namespace PoeHUD.Poe
 		{
 			get
 			{
-				return base.ReadObject<ServerData>(this.address + 0x13C + Offsets.IgsOffset);
+				return base.ReadObjectAt<ServerData>(0x13C + Offsets.IgsOffset);
 			}
 		}
 		public IngameUIElements IngameUi
 		{
 			get
 			{
-				return base.ReadObject<IngameUIElements>(this.address + 0x5E8 + Offsets.IgsOffset);
+				return base.ReadObjectAt<IngameUIElements>(0x5E8 + Offsets.IgsOffset);
 			}
 		}
 		public Element UIRoot
 		{
 			get
 			{
-				return base.ReadObject<Element>(this.address + 0xC0C + Offsets.IgsOffset);
+				return base.ReadObjectAt<Element>(0xC0C + Offsets.IgsOffset);
 			}
 		}
 		public Element UIHover
 		{
 			get
 			{
-				return base.ReadObject<Element>(this.address + 0xC1C + Offsets.IgsOffset);
+				return base.ReadObjectAt<Element>(0xC20 + Offsets.IgsOffset);
 			}
 		}
 		public int EntityLabelMap
 		{
 			get
 			{
-				return this.m.ReadInt(this.address + 68, new int[]
-				{
-					2528
-				});
+				return this.m.ReadInt(this.address + 68, 2528);
 			}
 		}
 	}

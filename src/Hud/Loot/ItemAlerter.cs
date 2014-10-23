@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using PoeHUD.ExileBot;
 using PoeHUD.Framework;
+using PoeHUD.Game;
 using PoeHUD.Hud.Icons;
 using PoeHUD.Poe.EntityComponents;
 using PoeHUD.Poe.UI;
@@ -78,9 +80,13 @@ namespace PoeHUD.Hud.Loot
 			ip.Quality = q == null ? 0 : q.ItemQuality;
 			ip.WorthChrome = socks != null && socks.IsRGB;
 
+			ip.IsVaalFragment = item.Path.Contains("VaalFragment");
+
 			CraftingBase craftingBase;
 			if (craftingBases.TryGetValue(ip.Name, out craftingBase) && Settings.GetBool("ItemAlert.Crafting"))
-				ip.IsCraftingBase = ip.ItemLevel >= craftingBase.MinItemLevel && ip.Quality >= craftingBase.MinQuality;
+				ip.IsCraftingBase = ip.ItemLevel >= craftingBase.MinItemLevel 
+					&& ip.Quality >= craftingBase.MinQuality
+					&& (craftingBase.Rarities == null || craftingBase.Rarities.Contains(ip.Rarity));
 
 			return ip;
 		}
@@ -106,12 +112,25 @@ namespace PoeHUD.Hud.Loot
 			{
 				return;
 			}
-			Rect clientRect = poe.__getApproxMinimapRect(); // this.poe.Internal.IngameState.IngameUi.Minimap.SmallMinimap.GetClientRect());
-			Vec2 rightTopAnchor = new Vec2(clientRect.X + clientRect.W, clientRect.Y + clientRect.H + 5);
+			var mm = this.poe.Internal.game.IngameState.IngameUi.Minimap.SmallMinimap;
+			var qt = this.poe.Internal.game.IngameState.IngameUi.QuestTracker;
+			Rect miniMapRect = mm.GetClientRect();
+			Rect qtRect = qt.GetClientRect();
+
+			Rect clientRect;
+			if (qt.IsVisible && qtRect.X + qt.Width < miniMapRect.X + miniMapRect.X + 50)
+				clientRect = qtRect;
+			else
+				clientRect = miniMapRect;
+
+			var playerPos = this.poe.Player.GetComponent<Positioned>().GridPos;
+
+			Vec2 rightTopAnchor = new Vec2(miniMapRect.X + miniMapRect.W, clientRect.Y + clientRect.H + 5);
 			
 			int y = rightTopAnchor.Y;
 			int fontSize = Settings.GetInt("ItemAlert.ShowText.FontSize");
-
+			
+			const int vMargin = 2;
 			foreach (KeyValuePair<ExileBot.Entity, AlertDrawStyle> kv in this.currentAlerts)
 			{
 				if (!kv.Key.IsValid) continue;
@@ -119,36 +138,64 @@ namespace PoeHUD.Hud.Loot
 				string text = GetItemName(kv);
 				if( null == text ) continue;
 
-				AlertDrawStyle drawStyle = kv.Value;
-				int frameWidth = drawStyle.FrameWidth;
-				Vec2 vPadding = new Vec2(frameWidth + 5, frameWidth);
-				int frameMargin = frameWidth + 2;
+				Vec2 itemPos = kv.Key.GetComponent<Positioned>().GridPos;
+				var delta = itemPos - playerPos;
 
-				Vec2 textPos = new Vec2(rightTopAnchor.X - vPadding.X, y + vPadding.Y);
-
-				var vTextFrame = rc.AddTextWithHeight(textPos, text, drawStyle.color, fontSize, DrawTextFormat.Right);
-				int iconSize = vTextFrame.Y;
-				bool hasIcon = drawStyle.IconIndex >= 0;
-
-				int maxHeight = vTextFrame.Y + 2*vPadding.Y + frameMargin;
-				int maxWidth = vTextFrame.X + 2 * vPadding.X + (hasIcon ? iconSize : 0);
-				rc.AddBox(new Rect(rightTopAnchor.X - maxWidth, y, maxWidth, maxHeight), Color.FromArgb(180, 0, 0, 0));
-
-				if (hasIcon)
-				{
-					const float iconsInSprite = 4;
-
-					Rect iconPos = new Rect(textPos.X - iconSize - vTextFrame.X, textPos.Y, iconSize, iconSize);
-					RectUV uv = new RectUV(drawStyle.IconIndex / iconsInSprite, 0, (drawStyle.IconIndex + 1) / iconsInSprite, 1);
-					rc.AddSprite("item_icons.png", iconPos, uv);
-				}
-				if( frameWidth > 0) {
-					Rect frame = new Rect(rightTopAnchor.X - vTextFrame.X - 2*vPadding.X, y, vTextFrame.X + 2*vPadding.X, vTextFrame.Y + 2*vPadding.Y);
-					rc.AddFrame(frame, kv.Value.color, frameWidth);
-				}
-				y += vTextFrame.Y + 2 * vPadding.Y + frameMargin;
+				Vec2 vPadding = new Vec2(5, 2);
+				Vec2 itemDrawnSize = drawItem(rc, kv.Value, delta, rightTopAnchor.X, y, vPadding, text, fontSize);
+				y += itemDrawnSize.Y + vMargin;
 			}
 			
+		}
+
+		private static Vec2 drawItem(RenderingContext rc, AlertDrawStyle drawStyle, Vec2 delta, int x, int y, Vec2 vPadding, string text,
+			int fontSize)
+		{
+			// collapse padding when there's a frame
+			vPadding.X -= drawStyle.FrameWidth;
+			vPadding.Y -= drawStyle.FrameWidth;
+			// item will appear to have equal size
+
+			double distance = Math.Sqrt(delta.X * delta.X + delta.Y * delta.Y);
+			double phi = Math.Acos(delta.X / distance);
+			if (delta.Y < 0) 
+				phi = 2 * Math.PI - phi;
+			phi += Math.PI * 0.25; // fix roration due to projection
+			if (phi > 2 * Math.PI) 
+				phi -= 2*Math.PI;
+
+			//text = text + " @ " + (int)distance + " : " + (int)(phi / Math.PI * 180)  + " : " + xSprite;
+
+			int compassOffset = fontSize + 8;
+			Vec2 textPos = new Vec2(x - vPadding.X - compassOffset, y + vPadding.Y);
+			Vec2 vTextSize = rc.AddTextWithHeight(textPos, text, drawStyle.color, fontSize, DrawTextFormat.Right);
+
+			int iconSize =  drawStyle.IconIndex >= 0 ? vTextSize.Y : 0;
+
+			int fullHeight = vTextSize.Y + 2 * vPadding.Y + 2 * drawStyle.FrameWidth;
+			int fullWidth = vTextSize.X + 2 * vPadding.X + iconSize + 2 * drawStyle.FrameWidth + compassOffset;
+			rc.AddBox(new Rect(x - fullWidth, y, fullWidth, fullHeight), Color.FromArgb(180, 0, 0, 0));
+
+			float xSprite = (float)Math.Round(phi / Math.PI * 4);
+			if (xSprite >= 8) xSprite = 0;
+			float ySprite = distance > 60 ? distance > 120 ? 2 : 1 : 0;
+			rc.AddSprite("directions.png", new Rect(x - vPadding.X - compassOffset + 6, y + vPadding.Y, vTextSize.Y, vTextSize.Y),
+				new RectUV(xSprite / 8, ySprite / 3, (xSprite + 1) / 8, (ySprite + 1) / 3));
+
+			if (iconSize > 0)
+			{
+				const float iconsInSprite = 4;
+
+				Rect iconPos = new Rect(textPos.X - iconSize - vTextSize.X, textPos.Y, iconSize, iconSize);
+				RectUV uv = new RectUV(drawStyle.IconIndex/iconsInSprite, 0, (drawStyle.IconIndex + 1)/iconsInSprite, 1);
+				rc.AddSprite("item_icons.png", iconPos, uv);
+			}
+			if (drawStyle.FrameWidth > 0)
+			{
+				Rect frame = new Rect(x - fullWidth, y, fullWidth - compassOffset , fullHeight);
+				rc.AddFrame(frame, drawStyle.color, drawStyle.FrameWidth);
+			}
+			return new Vec2(fullWidth, fullHeight);
 		}
 
 		private string GetItemName(KeyValuePair<ExileBot.Entity, AlertDrawStyle> kv)
@@ -177,54 +224,53 @@ namespace PoeHUD.Hud.Loot
 				return new Dictionary<string, CraftingBase>();
 			}
 			Dictionary<string, CraftingBase> dictionary = new Dictionary<string, CraftingBase>(StringComparer.OrdinalIgnoreCase);
+			List<string> parseErrors = new List<string>();
 			string[] array = File.ReadAllLines("config/crafting_bases.txt");
-			for (int i = 0; i < array.Length; i++)
+			foreach (
+				string text2 in
+					array.Select(text => text.Trim()).Where(text2 => !string.IsNullOrWhiteSpace(text2) && !text2.StartsWith("#")))
 			{
-				string text = array[i];
-				try
+				string[] parts = text2.Split(new[]{','});
+				string itemName = parts[0].Trim();
+
+				CraftingBase item = new CraftingBase() {Name = itemName};
+
+				int tmpVal = 0;
+				if (parts.Length > 1 && int.TryParse(parts[1], out tmpVal))
+					item.MinItemLevel = tmpVal;
+
+				if (parts.Length > 2 && int.TryParse(parts[2], out tmpVal))
+					item.MinQuality = tmpVal;
+
+				const int RarityPosition = 3;
+				if (parts.Length > RarityPosition)
 				{
-					string text2 = text.Trim();
-					if (!string.IsNullOrWhiteSpace(text2) && !text2.StartsWith("#"))
+					item.Rarities = new ItemRarity[parts.Length - 3];
+					for (int i = RarityPosition; i < parts.Length; i++)
 					{
-						string[] array2 = text2.Split(new char[]
+						if (!Enum.TryParse(parts[i], true, out item.Rarities[i - RarityPosition]))
 						{
-							','
-						});
-						if (array2.Length != 0 && array2.Length <= 3)
-						{
-							string text3 = array2[0].Trim().ToLowerInvariant();
-							int minItemLevel = 0;
-							if (array2.Length >= 2)
-							{
-								minItemLevel = int.Parse(array2[1].Trim());
-							}
-							int minQuality = 0;
-							if (array2.Length >= 3)
-							{
-								minQuality = int.Parse(array2[2].Trim());
-							}
-							dictionary.Add(text3, new CraftingBase
-							{
-								Name = text3,
-								MinItemLevel = minItemLevel,
-								MinQuality = minQuality
-							});
+							parseErrors.Add("Incorrect rarity definition at line: " + text2);
+							item.Rarities = null;
 						}
 					}
 				}
-				catch (Exception)
-				{
-					throw new Exception("Error parsing config/whites.txt at line " + text);
-				}
+
+				if( !dictionary.ContainsKey(itemName))
+					dictionary.Add(itemName, item);
+				else
+					parseErrors.Add("Duplicate definition for item was ignored: " + text2);
 			}
+
+			if(parseErrors.Any())
+				throw new Exception("Error parsing config/crafting_bases.txt \r\n" + string.Join(Environment.NewLine, parseErrors) + Environment.NewLine + Environment.NewLine);
+
 			return dictionary;
 		}
 		private HashSet<string> LoadCurrency()
 		{
 			if (!File.Exists("config/currency.txt"))
-			{
 				return null;
-			}
 			HashSet<string> hashSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 			string[] array = File.ReadAllLines("config/currency.txt");
 			for (int i = 0; i < array.Length; i++)

@@ -1,99 +1,65 @@
 using System.Collections.Generic;
-using PoeHUD.ExileBot;
+using System.Linq;
 using PoeHUD.Framework;
 
 namespace PoeHUD.Poe.UI
 {
 	public class Element : RemoteMemoryObject
 	{
-		public float Width
-		{
-			get
-			{
-				return this.m.ReadFloat(this.address + 2296);
-			}
-		}
-		public float Height
-		{
-			get
-			{
-				return this.m.ReadFloat(this.address + 2300);
-			}
-		}
-		public float X
-		{
-			get
-			{
-				return this.m.ReadFloat(this.address + 2156);
-			}
-		}
-		public float Y
-		{
-			get
-			{
-				return this.m.ReadFloat(this.address + 2160);
-			}
-		}
+		public const int OffsetBuffers = 0x808;
+		// dd id
+		// dd (something zero)
+		// 16 dup <128-bytes structure>
+		// then the rest is
+
+		public int vTable { get { return m.ReadInt(this.address + 0); } }
+
+		public Element Root { get { return base.ReadObject<Element>(this.address + 0x5c + OffsetBuffers); } }
+		public Element Parent { get { return base.ReadObject<Element>(this.address + 0x60 + OffsetBuffers); } }
+		public float X { get { return this.m.ReadFloat(this.address + 0x64 + OffsetBuffers); } }
+		public float Y { get { return this.m.ReadFloat(this.address + 0x68 + OffsetBuffers); } }
+		public float Width { get { return this.m.ReadFloat(this.address + 0xF0 + OffsetBuffers); } }
+		public float Height { get { return this.m.ReadFloat(this.address + 0xF4 + OffsetBuffers); } }
+
 		public int ChildCount
 		{
 			get
 			{
-				return (this.m.ReadInt(this.address + 2076) - this.m.ReadInt(this.address + 2072)) / 4;
+				return (this.m.ReadInt(this.address + 20 + OffsetBuffers) - this.m.ReadInt(this.address + 16 + OffsetBuffers)) / 4;
 			}
 		}
-		public Element Root
+		public bool IsVisibleLocal
 		{
-			get
-			{
-				return base.ReadObject<Element>(this.address + 2148);
+			get {
+				return (this.m.ReadInt(this.address + 2144) & 1) == 1;
 			}
 		}
-		public Element Parent
-		{
-			get
-			{
-				return base.ReadObject<Element>(this.address + 2152);
-			}
-		}
+
 		public bool IsVisible
 		{
 			get
 			{
-				if ((this.m.ReadInt(this.address + 2144) & 1) != 1)
-				{
-					return false;
-				}
-				foreach (Element current in this.GetParentChain())
-				{
-					if ((this.m.ReadInt(current.address + 2144) & 1) != 1)
-					{
-						return false;
-					}
-				}
-				return true;
+				return IsVisibleLocal && this.GetParentChain().All(current => current.IsVisibleLocal);
 			}
 		}
 		public List<Element> Children
 		{
 			get
 			{
+				const int listOffset = 0x10 + OffsetBuffers;
 				List<Element> list = new List<Element>();
-				if (this.m.ReadInt(this.address + 2076) == 0 || this.m.ReadInt(this.address + 2072) == 0 || this.ChildCount > 1000)
+				if (this.m.ReadInt(this.address + listOffset + 4) == 0 || this.m.ReadInt(this.address + listOffset) == 0 || this.ChildCount > 1000)
 				{
 					return list;
 				}
 				for (int i = 0; i < this.ChildCount; i++)
 				{
-					int address = this.m.ReadInt(this.address + 2072, new int[]
-					{
-						i * 4
-					});
-					list.Add(base.GetObject<Element>(address));
+					list.Add(base.GetObject<Element>(this.m.ReadInt(this.address + listOffset, i * 4)));
 				}
 				return list;
 			}
 		}
-		private List<Element> GetParentChain()
+		private IEnumerable<Element> GetParentChain()
 		{
 			List<Element> list = new List<Element>();
 			HashSet<Element> hashSet = new HashSet<Element>();
@@ -107,25 +73,31 @@ namespace PoeHUD.Poe.UI
 			}
 			return list;
 		}
-		public Rect GetClientRect()
+
+		public Vec2f GetParentPos()
 		{
-			float num = this.X;
-			float num2 = this.Y;
+			float num = 0;
+			float num2 = 0;
 			foreach (Element current in this.GetParentChain())
 			{
 				num += current.X;
 				num2 += current.Y;
 			}
+			return new Vec2f(num, num2);
+		}
+
+		public Rect GetClientRect()
+		{
+			Vec2f vPos = GetParentPos();
 			float width = this.game.IngameState.Camera.Width;
 			float height = this.game.IngameState.Camera.Height;
-			float num3 = width / 2560f;
-			float num4 = height / 1600f;
-			float num5 = width / height / 1.6f;
-			num = num * num3 / num5;
-			num2 *= num4;
-			float num6 = num3 * this.Width / num5;
-			float num7 = num4 * this.Height;
-			return new Rect((int)num, (int)num2, (int)num6, (int)num7);
+			float ratioFixMult = width / height / 1.6f;
+			float xScale = width / 2560f / ratioFixMult;
+			float yScale = height / 1600f;
+			
+			float num = (vPos.X + this.X) * xScale;
+			float num2 = (vPos.Y + this.Y) * yScale;
+			return new Rect((int)num, (int)num2, (int)(xScale * this.Width), (int)(yScale * this.Height));
 		}
 		public Element GetChildFromIndices(params int[] indices)
 		{

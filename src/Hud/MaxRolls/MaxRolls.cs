@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Xml.Linq;
+using System.Linq;
 
 namespace PoeHUD.Hud.MaxRolls
 {
@@ -34,21 +35,45 @@ namespace PoeHUD.Hud.MaxRolls
         public string max;
         public string curr2;
         public string max2;
+        public int tier;
 
         public MaxRolls_Current(string modName, int modLevel, int ilvl)
         {
             if (MaxRolls.data.ContainsKey(modName))
             {
-                this.name = '[' + MaxRolls.data[modName].type + "] " + MaxRolls.data[modName].name;
                 var current = MaxRolls.data[modName];
                 var currentMod = current.modLevel;
+                tier = (current.modLevel.Count - modLevel + 1);
+                this.name = '[' + MaxRolls.data[modName].type + "] " +"[T" + tier.ToString() + "] "+ MaxRolls.data[modName].name;
                 var currentLvl = currentMod[modLevel-1];
                 int count = currentMod.Count - 1;
                 // Color
-                if (currentLvl.max == currentMod[count].max)
-                    this.color = Color.Green;
-                else
-                    this.color = Color.White;
+                switch (tier)
+                {                
+                    case 1:
+                        this.color = Color.Green;
+                        break;
+                    case 2:
+                        this.color = Color.Yellow;
+                        break;
+                    default:
+                        this.color = Color.White;
+                        break;
+
+                }
+				// Master Color override
+				string[] masterMods =
+				{
+					"StrMaster",
+					"StrDexMaster",
+					"DexMaster",
+					"DexIntMaster",
+					"IntMaster",
+					"StrIntMaster",
+					"StrDexIntMaster"
+				};
+				if (masterMods.Any(a => modName.Contains(a)))
+					this.color = Color.SkyBlue;
                 // Current
                 if (currentLvl.min == currentLvl.max)
                     curr = currentLvl.max;

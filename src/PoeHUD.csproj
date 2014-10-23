@@ -46,8 +46,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExileBot\AreaInstance.cs" />
+    <Compile Include="Hud\DebugView\ShowUiHierarchy.cs" />
     <Compile Include="Hud\Health\Healthbar.cs" />
     <Compile Include="Hud\Health\RenderPrio.cs" />
+    <Compile Include="Hud\Icons\MasterMinimapIcon.cs" />
     <Compile Include="Hud\Loot\AlertDrawStyle.cs" />
     <Compile Include="Hud\Loot\CraftingBase.cs" />
     <Compile Include="Hud\Loot\ItemUsefulProperties.cs" />
@@ -84,8 +86,9 @@
     <Compile Include="Poe\EntityComponents\Mods.cs" />
     <Compile Include="Poe\EntityComponents\Monster.cs" />
     <Compile Include="Game\MonsterRarity.cs" />
+    <Compile Include="Poe\EntityComponents\NPC.cs" />
     <Compile Include="Poe\EntityComponents\ObjectMagicProperties.cs" />
-    <Compile Include="ExileBot\Offsets.cs" />
+    <Compile Include="Poe\Offsets.cs" />
     <Compile Include="ExileBot\PathOfExile.cs" />
     <Compile Include="Poe\EntityComponents\Player.cs" />
     <Compile Include="Poe\AreaTemplate.cs" />
@@ -110,16 +113,16 @@
     <Compile Include="Poe\UI\Tooltip.cs" />
     <Compile Include="Poe\EntityComponents\Positioned.cs" />
     <Compile Include="Poe\EntityComponents\Quality.cs" />
-    <Compile Include="ExileBot\RemoteMemoryObject.cs" />
+    <Compile Include="Poe\RemoteMemoryObject.cs" />
     <Compile Include="Poe\EntityComponents\Render.cs" />
     <Compile Include="Game\SelectionState.cs" />
     <Compile Include="Poe\EntityComponents\SkillGem.cs" />
     <Compile Include="Game\Socket.cs" />
     <Compile Include="Poe\EntityComponents\Sockets.cs" />
     <Compile Include="Game\Stat.cs" />
-    <Compile Include="ExileBot\Stats.cs" />
+    <Compile Include="Poe\Stats.cs" />
     <Compile Include="Poe\EntityComponents\Targetable.cs" />
-    <Compile Include="ExileBot\Vec2f.cs" />
+    <Compile Include="Framework\Vec2f.cs" />
     <Compile Include="Poe\EntityComponents\Weapon.cs" />
     <Compile Include="Poe\EntityComponents\WorldItem.cs" />
     <Compile Include="Hud\Menu\BooleanButton.cs" />
@@ -168,6 +171,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy $(TargetPath) $(ProjectDir)\..</PostBuildEvent>
+    <PostBuildEvent>if "$(ConfigurationName)"=="Release" (
+copy $(TargetPath) $(ProjectDir)\..
+)</PostBuildEvent>
   </PropertyGroup>
 </Project>

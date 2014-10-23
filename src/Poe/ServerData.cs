@@ -1,5 +1,3 @@
-using PoeHUD.ExileBot;
-
 namespace PoeHUD.Poe
 {
 	public class ServerData : RemoteMemoryObject

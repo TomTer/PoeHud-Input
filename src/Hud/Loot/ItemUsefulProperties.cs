@@ -22,6 +22,7 @@ namespace PoeHUD.Hud.Loot
 		public int ItemLevel;
 		public int Quality;
 		public int MapLevel;
+		public bool IsVaalFragment;
 
 		public bool IsWorthAlertingPlayer(HashSet<string> currencyNames)
 		{			
@@ -29,7 +30,7 @@ namespace PoeHUD.Hud.Loot
 				return true;
 			if( Rarity == ItemRarity.Unique && Settings.GetBool("ItemAlert.Uniques"))
 				return true;
-			if( MapLevel > 0 && Settings.GetBool("ItemAlert.Maps"))
+			if(( MapLevel > 0  || IsVaalFragment ) && Settings.GetBool("ItemAlert.Maps"))
 				return true;
 			if( NumLinks >= Settings.GetInt("ItemAlert.MinLinks"))
 				return true;
@@ -79,7 +80,7 @@ namespace PoeHUD.Hud.Loot
 			return new AlertDrawStyle()
 			{
 				color = color,
-				FrameWidth = MapLevel > 0 ? 1 : 0,
+				FrameWidth = MapLevel > 0 || IsVaalFragment ? 1 : 0,
 				Text = DisplayName,
 				IconIndex = iconIndex
 			};

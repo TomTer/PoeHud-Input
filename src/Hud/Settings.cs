@@ -214,6 +214,7 @@ namespace PoeHUD.Hud
 			bools.Add("MinimapIcons.Chests", true);
 			bools.Add("MinimapIcons.Minions", true);
 			bools.Add("MinimapIcons.AlertedItems", true);
+            bools.Add("MinimapIcons.Masters", true);
 			bools.Add("ItemAlert", true);
 			bools.Add("ItemAlert.Rares", true);
 			bools.Add("ItemAlert.Uniques", true);

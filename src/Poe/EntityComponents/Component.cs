@@ -1,5 +1,3 @@
-using PoeHUD.ExileBot;
-
 namespace PoeHUD.Poe.EntityComponents
 {
 	public abstract class Component : RemoteMemoryObject

@@ -164,6 +164,12 @@
       <min2>14%</min2>
       <max2>15%</max2>
     </level>
+    <level lvl="6" ilvl="78">
+      <min>51%</min>
+      <max>56%</max>
+      <min2>16%</min2>
+      <max2>17%</max2>
+    </level>
   </mod>
   <!-- Damage -->
   <mod name="AddedColdDamage" readable="Cold Dmg" type="P">
@@ -989,7 +995,7 @@
     </level>
   </mod>
   <!-- Hybrid Defences and Stun Recovery -->
-  <mod name="LocalIncreasedArmourAndEnergyShieldAndStunRecovery" readable="Local Armour'n'ES Stun Recovery" type="P">
+  <mod name="LocalIncreasedArmourAndEnergyShieldAndStunRecovery" readable="Local Armour'n'ES | Stun Recovery" type="P">
     <level lvl="1" ilvl="2">
       <min>6%</min>
       <max>14%</max>
@@ -1019,9 +1025,15 @@
       <max>50%</max>
       <min2>14%</min2>
       <max2>15%</max2>
+    </level>
+	<level lvl="6" ilvl="78">
+      <min>51%</min>
+      <max>56%</max>
+      <min2>16%</min2>
+      <max2>17%</max2>
     </level>
   </mod>
-  <mod name="LocalIncreasedArmourAndEvasionAndStunRecovery" readable="Armour'n'Evasion | Stun Recovery" type="P">
+  <mod name="LocalIncreasedArmourAndEvasionAndStunRecovery" readable="Local Armour'n'Evasion | Stun Recovery" type="P">
     <level lvl="1" ilvl="2">
       <min>6%</min>
       <max>14%</max>
@@ -1051,9 +1063,15 @@
       <max>50%</max>
       <min2>14%</min2>
       <max2>15%</max2>
+    </level>
+	<level lvl="6" ilvl="78">
+      <min>51%</min>
+      <max>56%</max>
+      <min2>16%</min2>
+      <max2>17%</max2>
     </level>
   </mod>
-  <mod name="LocalIncreasedEvasionAndEnergyShieldAndStunRecovery" readable="Local Evasion'n'ES Stun Recovery" type="P">
+  <mod name="LocalIncreasedEvasionAndEnergyShieldAndStunRecovery" readable="Local Evasion'n'ES | Stun Recovery" type="P">
     <level lvl="1" ilvl="2">
       <min>6%</min>
       <max>14%</max>
@@ -1083,6 +1101,12 @@
       <max>50%</max>
       <min2>14%</min2>
       <max2>15%</max2>
+    </level>
+	<level lvl="6" ilvl="78">
+      <min>51%</min>
+      <max>56%</max>
+      <min2>16%</min2>
+      <max2>17%</max2>
     </level>
   </mod>
   <!-- Item Acquisition -->
@@ -1698,24 +1722,44 @@
       <max>320</max>
     </level>
   </mod>
-  <mod name="LocalLightRadiusAndAccuracy" readable="Light Radius | Accuracy" type="S">
+  <mod name="LightRadiusAndAccuracy" readable="Light Radius | Accuracy" type="S">
     <level lvl="1" ilvl="8">
-      <min>5</min>
-      <max>5</max>
+      <min>5%</min>
+      <max>5%</max>
       <min2>10</min2>
       <max2>20</max2>
     </level>
     <level lvl="2" ilvl="15">
-      <min>21</min>
-      <max>40</max>
-      <min2>8%</min2>
-      <max2>9%</max2>
+      <min>10%</min>
+      <max>10%</max>
+      <min2>21</min2>
+      <max2>40</max2>
     </level>
     <level lvl="3" ilvl="30">
-      <min>15</min>
-      <max>15</max>
-      <min2>5</min2>
+      <min>15%</min>
+      <max>15%</max>
+      <min2>5%</min2>
+      <max2>10%</max2>
+    </level>
+  </mod>
+  <mod name="LocalLightRadiusAndAccuracy" readable="Local Light Radius | Accuracy" type="S">
+    <level lvl="1" ilvl="8">
+      <min>5%</min>
+      <max>5%</max>
+      <min2>10</min2>
+      <max2>20</max2>
+    </level>
+    <level lvl="2" ilvl="15">
+      <min>10%</min>
+      <max>10%</max>
+      <min2>21</min2>
       <max2>40</max2>
+    </level>
+    <level lvl="3" ilvl="30">
+      <min>15%</min>
+      <max>15%</max>
+      <min2>5%</min2>
+      <max2>10%</max2>
     </level>
   </mod>
   <!-- Attack Speed -->
@@ -2515,5 +2559,173 @@
       <min>23%</min>
       <max>25%</max>
     </level>
+    <level lvl="6" ilvl="79">
+      <min>26%</min>
+      <max>28%</max>
+    </level>
+  </mod>
+  <mod name="StrIntMasterItemGenerationCanHaveMultipleCraftedMods" readable="Can Have Multiple Crafted Mods" type="S">
+	<level lvl="1" ilvl="1">
+		<min>1</min>
+		<max>1</max>
+	</level>
+  </mod>
+  <mod name="DexMasterAddedPhysicalDamageCrafted" readable="Crafted Phys Dmg" type="P">
+	<level lvl="1" ilvl="20">
+		<min>(10-13)</min>
+		<max>(20-25)</max>
+	</level>
+	<level lvl="2" ilvl="30">
+		<min>(14-18)</min>
+		<max>(26-31)</max>
+	</level>
+  </mod>
+  <mod name="DexMasterLocalCritChanceCrafted" readable="Crafted Local Crit Chance" type="S">
+	<level lvl="1" ilvl="20">
+		<min>17%</min>
+		<max>21%</max>
+	</level>
+	<level lvl="2" ilvl="30">
+		<min>22%</min>
+		<max>27%</max>
+	</level>
+  </mod>
+  <mod name="DexMasterFireResistanceCrafted" readable="Crafted Fire Res" type="S">
+	<level lvl="1" ilvl="20">
+		<min>16%</min>
+		<max>20%</max>
+	</level>
+	<level lvl="2" ilvl="30">
+		<min>21%</min>
+		<max>25%</max>
+	</level>
+  </mod>
+  <mod name="DexMasterColdResistanceCrafted" readable="Crafted Cold Res" type="S">
+	<level lvl="1" ilvl="20">
+		<min>16%</min>
+		<max>20%</max>
+	</level>
+	<level lvl="2" ilvl="30">
+		<min>21%</min>
+		<max>25%</max>
+	</level>
+  </mod>
+  <mod name="DexMasterLightningResistanceCrafted" readable="Crafted Lightning Res" type="S">
+	<level lvl="1" ilvl="20">
+		<min>16%</min>
+		<max>20%</max>
+	</level>
+	<level lvl="2" ilvl="30">
+		<min>21%</min>
+		<max>25%</max>
+	</level>
+  </mod>
+  <mod name="StrMasterFireResistanceCrafted" readable="Crafted Fire Res" type="S">
+	<level lvl="1" ilvl="20">
+		<min>21%</min>
+		<max>25%</max>
+	</level>
+	<level lvl="2" ilvl="30">
+		<min>26%</min>
+		<max>30%</max>
+	</level>
+  </mod>
+  <mod name="StrMasterColdResistanceCrafted" readable="Crafted Cold Res" type="S">
+	<level lvl="1" ilvl="20">
+		<min>21%</min>
+		<max>25%</max>
+	</level>
+	<level lvl="2" ilvl="30">
+		<min>26%</min>
+		<max>30%</max>
+	</level>
+  </mod>
+  <mod name="StrMasterLightningResistanceCrafted" readable="Crafted Lightning Res" type="S">
+	<level lvl="1" ilvl="20">
+		<min>21%</min>
+		<max>25%</max>
+	</level>
+	<level lvl="2" ilvl="30">
+		<min>26%</min>
+		<max>30%</max>
+	</level>
+  </mod>
+  <mod name="StrIntMasterStrengthCrafted" readable="Crafted Strength+" type="S">
+	<level lvl="1" ilvl="15">
+		<min>16</min>
+		<max>20</max>
+	</level>
+	<level lvl="2" ilvl="25">
+		<min>21</min>
+		<max>25</max>
+	</level>
+  </mod>
+  <mod name="StrIntMasterDexterityCrafted" readable="Crafted Dexterity+" type="S">
+	<level lvl="1" ilvl="15">
+		<min>16</min>
+		<max>20</max>
+	</level>
+	<level lvl="2" ilvl="25">
+		<min>21</min>
+		<max>25</max>
+	</level>
+  </mod>
+  <mod name="StrIntMasterIntellectCrafted" readable="Crafted Intellect+" type="S">
+	<level lvl="1" ilvl="15">
+		<min>16</min>
+		<max>20</max>
+	</level>
+	<level lvl="2" ilvl="25">
+		<min>21</min>
+		<max>25</max>
+	</level>
+  </mod>
+  <mod name="StrIntMasterPhysicalDamageCrafted" readable="Crafted Phys Dmg" type="P">
+	<level lvl="1" ilvl="15">
+		<min>16</min>
+		<max>20</max>
+	</level>
+	<level lvl="2" ilvl="25">
+		<min>21</min>
+		<max>25</max>
+	</level>
+  </mod>
+  <mod name="StrMasterEvasionPercentCrafted" readable="Crafted Evasion %" type="P">
+	<level lvl="1" ilvl="20">
+		<min>40%</min>
+		<max>52%</max>
+	</level>
+	<level lvl="2" ilvl="30">
+		<min>55%</min>
+		<max>68%</max>
+	</level>
+  </mod>
+  <mod name="ProjectileSpeed" readable="Projectile Speed" type="S">
+	<level lvl="1" ilvl="14">
+		<min>10</min>
+		<max>17</max>
+	</level>
+	<level lvl="2" ilvl="25">
+		<min>10</min>
+		<max>30</max>
+	</level>
+	<level lvl="3" ilvl="27">
+		<min>18</min>
+		<max>25</max>
+	</level>
+	<level lvl="4" ilvl="41">
+		<min>26</min>
+		<max>33</max>
+	</level>
+	<level lvl="5" ilvl="55">
+		<min>34</min>
+		<max>41</max>
+	</level>
+  </mod>
+  <mod name="LocalIncreaseSocketedGemLevel" readable="+ to Level of Gems" type="P">
+	<level lvl="1" ilvl="50">
+		<min>1</min>
+		<max>1</max>
+	</level>
   </mod>
 </rolls>

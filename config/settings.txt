@@ -15,6 +15,7 @@ bool MinimapIcons.Strongboxes=True
 bool MinimapIcons.Chests=True
 bool MinimapIcons.Minions=True
 bool MinimapIcons.AlertedItems=True
+bool MinimapIcons.Masters=True
 bool ItemAlert=True
 bool ItemAlert.Rares=True
 bool ItemAlert.Uniques=True

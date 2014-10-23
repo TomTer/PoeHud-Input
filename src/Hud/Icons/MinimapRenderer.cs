@@ -46,10 +46,9 @@ namespace PoeHUD.Hud.Icons
 				return;
 			}
 			this.playerPos = this.poe.Player.GetComponent<Positioned>().GridPos;
-			// Element smallMinimap = this.poe.Internal.IngameState.IngameUi.Minimap.SmallMinimap;
+			Element smallMinimap = this.poe.Internal.IngameState.IngameUi.Minimap.SmallMinimap;
 			float scale = 240f;
-			Rect clientRect = poe.__getApproxMinimapRect(); // this.poe.Internal.IngameState.IngameUi.Minimap.SmallMinimap.GetClientRect());
-			// Rect clientRect = smallMinimap.GetClientRect();
+			Rect clientRect = smallMinimap.GetClientRect();
 			Vec2 minimapCenter = new Vec2(clientRect.X + clientRect.W / 2, clientRect.Y + clientRect.H / 2);
 			double diag = Math.Sqrt((double)(clientRect.W * clientRect.W + clientRect.H * clientRect.H)) / 2.0;
 			List<MinimapIcon>[] array = this.icons;
@@ -69,14 +68,31 @@ namespace PoeHUD.Hud.Icons
 		}
 		private Vec2 WorldToMinimap(Vec2 world, Vec2 minimapCenter, double diag, float scale)
 		{
-			float num = (float)((double)((float)(world.X - this.playerPos.X) / scale) * diag * 0.7071067811);
-			float num2 = (float)((double)((float)(world.Y - this.playerPos.Y) / scale) * diag * 0.7071067811);
-			int x = (int)((float)minimapCenter.X - num2 + num);
-			int y = (int)((float)minimapCenter.Y - num2 - num);
+            // Values according to 40 degree rotation of cartesian coordiantes, still doesn't seem right but closer
+            float cosX = (float)((double)((float)(world.X - this.playerPos.X) / scale) * diag * Math.Cos((Math.PI / 180) * 40));
+            float cosY = (float)((double)((float)(world.Y - this.playerPos.Y) / scale) * diag * Math.Cos((Math.PI / 180) * 40));
+            float sinX = (float)((double)((float)(world.X - this.playerPos.X) / scale) * diag * Math.Sin((Math.PI / 180) * 40));
+            float sinY = (float)((double)((float)(world.Y - this.playerPos.Y) / scale) * diag * Math.Sin((Math.PI / 180) * 40));
+            // 2D rotation formulas not correct, but it's what appears to work?
+            int x = (int)((float)minimapCenter.X + cosX - cosY);
+            int y = (int)((float)minimapCenter.Y - (sinX + sinY));
 			return new Vec2(x, y);
 		}
 		private MinimapIcon GetIcon(Entity e)
 		{
+			List<string> masters = new List<string> {
+				"Metadata/NPC/Missions/Wild/Dex",
+				"Metadata/NPC/Missions/Wild/DexInt",
+				"Metadata/NPC/Missions/Wild/Int",
+				"Metadata/NPC/Missions/Wild/Str",
+				"Metadata/NPC/Missions/Wild/StrDex",
+				"Metadata/NPC/Missions/Wild/StrDexInt",
+				"Metadata/NPC/Missions/Wild/StrInt"
+			};
+			if (e.HasComponent<Poe.EntityComponents.NPC>() && masters.Contains(e.Path))
+			{
+				return new MasterMinimapIcon(e, "monster_ally.png", 10, MinimapRenderPriority.Strongbox);
+			}
 			if (e.HasComponent<Poe.EntityComponents.Monster>())
 			{
 				if (!e.IsHostile)

@@ -1,6 +1,3 @@
-using PoeHUD.ExileBot;
-using PoeHUD.Framework;
-
 namespace PoeHUD.Poe
 {
 	public class Buff : RemoteMemoryObject
@@ -9,11 +6,7 @@ namespace PoeHUD.Poe
 		{
 			get
 			{
-				Memory arg_27_0 = this.m;
-				Memory arg_1C_0 = this.m;
-				int arg_1C_1 = this.address + 4;
-				int[] offsets = new int[1];
-				return arg_27_0.ReadStringU(arg_1C_0.ReadInt(arg_1C_1, offsets), 256, true);
+				return this.m.ReadStringU(this.m.ReadInt(this.address + 4, 0), 256);
 			}
 		}
 		public int Charges
@@ -28,6 +21,14 @@ namespace PoeHUD.Poe
 			get
 			{
 				return this.m.ReadInt(this.address + 36);
+			}
+		}
+
+		public float Timer
+		{
+			get
+			{
+				return this.m.ReadFloat(this.address + 12);
 			}
 		}
 	}

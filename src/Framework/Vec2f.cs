@@ -1,4 +1,4 @@
-namespace PoeHUD.ExileBot
+namespace PoeHUD.Framework
 {
 	public struct Vec2f
 	{
