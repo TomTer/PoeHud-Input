@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -93,34 +94,48 @@ namespace PoeHUD.Hud.Monster
 				return;
 			}
 			Rect rect = this.poe.Window.ClientRect();
-			int num = rect.W / 2 + rect.X;
-			int num2 = (int)((float)rect.H * 0.2f) + rect.Y;
-			int num3 = 0;
-			int num4 = 0;
-			HashSet<string> hashSet = new HashSet<string>();
-			foreach (KeyValuePair<Entity, string> current in this.currentAlerts)
+			int xScreenCenter = rect.W / 2 + rect.X;
+			int yPos = rect.H / 5 + rect.Y;
+
+			var playerPos = this.poe.Player.GetComponent<Positioned>().GridPos;
+			int fontSize = Settings.GetInt("DangerAlert.ShowText.FontSize");
+			bool first = true;
+			Rect rectBackground = new Rect();
+			foreach (var alert in this.currentAlerts)
 			{
-				if (current.Key.IsAlive && !hashSet.Contains(current.Value))
+				if( !alert.Key.IsAlive )
+					continue;
+
+				Vec2 delta = alert.Key.GetComponent<Positioned>().GridPos - playerPos;
+				double phi;
+				var distance = delta.GetPolarCoordinates(out phi);
+				RectUV uv = GetDirectionsUv(phi, distance);
+
+				Vec2 textSize = rc.AddTextWithHeight(new Vec2(xScreenCenter, yPos), alert.Value, Color.Red, fontSize, DrawTextFormat.Center);
+
+				rectBackground = new Rect(xScreenCenter - textSize.X / 2 - 6, yPos, textSize.X + 12, textSize.Y);
+				rectBackground.X -= textSize.Y + 3;
+				rectBackground.W += textSize.Y;
+
+				Rect rectDirection = new Rect(rectBackground.X + 3, rectBackground.Y, rectBackground.H, rectBackground.H);
+
+				if (first) // vertical padding above
 				{
-					hashSet.Add(current.Value);
+					rectBackground.Y -= 5;
+					rectBackground.H += 5;
+					first = false;
 				}
+				rc.AddBox(rectBackground, Color.FromArgb(Settings.GetInt("DangerAlert.ShowText.BgAlpha"), 1, 1, 1));
+				rc.AddSprite("directions.png", rectDirection, uv, Color.Red);
+				yPos += textSize.Y;
 			}
-			int @int = Settings.GetInt("DangerAlert.ShowText.FontSize");
-			foreach (string current2 in hashSet)
+			if (!first)  // vertical padding below
 			{
-				Vec2 vec = rc.AddTextWithHeight(new Vec2(num, num2), current2, Color.Red, @int, DrawTextFormat.Center);
-				if (vec.X > num3)
-				{
-					num3 = vec.X;
-				}
-				num2 += vec.Y;
-				num4 += vec.Y;
+				rectBackground.Y = rectBackground.Y + rectBackground.H;
+				rectBackground.H = 5;
+				rc.AddBox(rectBackground, Color.FromArgb(Settings.GetInt("DangerAlert.ShowText.BgAlpha"), 1, 1, 1));
 			}
-			if (num3 > 0)
-			{
-				Rect rect2 = new Rect(num - num3 / 2 - 5, (int)((float)rect.H * 0.2f) + rect.Y - 5, num3 + 10, num4 + 10);
-				rc.AddBox(rect2, Color.FromArgb(Settings.GetInt("DangerAlert.ShowText.BgAlpha"), 1, 1, 1));
-			}
+
 		}
 		private void InitAlertStrings()
 		{

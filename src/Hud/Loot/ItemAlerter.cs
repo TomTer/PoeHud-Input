@@ -156,13 +156,9 @@ namespace PoeHUD.Hud.Loot
 			vPadding.Y -= drawStyle.FrameWidth;
 			// item will appear to have equal size
 
-			double distance = Math.Sqrt(delta.X * delta.X + delta.Y * delta.Y);
-			double phi = Math.Acos(delta.X / distance);
-			if (delta.Y < 0) 
-				phi = 2 * Math.PI - phi;
-			phi += Math.PI * 0.25; // fix roration due to projection
-			if (phi > 2 * Math.PI) 
-				phi -= 2*Math.PI;
+			double phi;
+			var distance = delta.GetPolarCoordinates(out phi);
+
 
 			//text = text + " @ " + (int)distance + " : " + (int)(phi / Math.PI * 180)  + " : " + xSprite;
 
@@ -176,11 +172,8 @@ namespace PoeHUD.Hud.Loot
 			int fullWidth = vTextSize.X + 2 * vPadding.X + iconSize + 2 * drawStyle.FrameWidth + compassOffset;
 			rc.AddBox(new Rect(x - fullWidth, y, fullWidth, fullHeight), Color.FromArgb(180, 0, 0, 0));
 
-			float xSprite = (float)Math.Round(phi / Math.PI * 4);
-			if (xSprite >= 8) xSprite = 0;
-			float ySprite = distance > 60 ? distance > 120 ? 2 : 1 : 0;
-			rc.AddSprite("directions.png", new Rect(x - vPadding.X - compassOffset + 6, y + vPadding.Y, vTextSize.Y, vTextSize.Y),
-				new RectUV(xSprite / 8, ySprite / 3, (xSprite + 1) / 8, (ySprite + 1) / 3));
+			var rectUV = GetDirectionsUv(phi, distance);
+			rc.AddSprite("directions.png", new Rect(x - vPadding.X - compassOffset + 6, y + vPadding.Y, vTextSize.Y, vTextSize.Y), rectUV);
 
 			if (iconSize > 0)
 			{

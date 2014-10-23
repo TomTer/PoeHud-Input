@@ -58,5 +58,14 @@ namespace PoeHUD.Framework
 		{
 			return new Vec2(left.X - right.X, left.Y - right.Y);
 		}
+
+		public double GetPolarCoordinates(out double phi)
+		{
+			double distance = Math.Sqrt(this.X*this.X + this.Y*this.Y);
+			phi = Math.Acos(this.X/distance);
+			if (this.Y < 0)
+				phi = 2*Math.PI - phi;
+			return distance;
+		}
 	}
 }
