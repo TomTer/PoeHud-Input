@@ -17,7 +17,13 @@ namespace PoeHUD.Poe
 
 		public Element ShopButton { get { return ReadObjectAt<Element>(4+0x7C); } }
 
-		public Element ActionButtons { get { return ReadObjectAt<Element>(4+0xA0); } }
+		public Element HideoutEditButton { get { return ReadObjectAt<Element>(0x84); } }
+
+		public Element HideoutStashButton { get { return ReadObjectAt<Element>(0x88); } }
+
+		public Element Mouseposition { get { return ReadObjectAt<Element>(0xA0); } }
+
+		public Element ActionButtons { get { return ReadObjectAt<Element>(0xA4); } }
 
 		public Element Chat { get { return ReadObjectAt<Element>(4+0xD8); } }
 
@@ -61,6 +67,9 @@ namespace PoeHUD.Poe
 
 		public Element InstanceManagerPanel { get { return ReadObjectAt<Element>(4+0x198); } }
 		public Element InstanceManagerPanel2 { get { return ReadObjectAt<Element>(4+0x19C); } }
+
+		// dunno what it is
+		public Element SwitchingZoneInfo { get { return ReadObjectAt<Element>(0x1C8); } }
 
 		public Element GemLvlUpPanel { get { return ReadObjectAt<Element>(4+0x1F8); } }
 

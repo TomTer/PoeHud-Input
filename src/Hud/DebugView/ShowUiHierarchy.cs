@@ -21,16 +21,28 @@ namespace PoeHUD.Hud.DebugView
 
 
 			int yPos = 80;
-			int x = 620;
+			int x = 320;
 			int[] path = new int[12];
-			for (path[0] = 0x80; path[0] <= 0x210 ; path[0] += 4 ) {
+			//var tt = this.poe.Internal.IngameState.IngameUi;
+			//for (path[0] = 0x0; path[0] <= 0x0 ; path[0] += 4 )
+			//{
 
-				if (path[0] == 0x120 || path[0] == 0xd8 || path[0] == 0xa0 || path[0] == 0x154 || path[0] == 0x158 || path[0] == 0x198 )
-					continue;
-				
+			//	var starting_it = tt;
+			//	//	.ReadObjectAt<Element>(path[0]);
+			//	var v2 = starting_it.GetParentPos();
+			//	drawElt(rc, starting_it, new Vec2((int)(v2.X*.75), (int)(v2.Y*.75)), ref x, ref yPos, path, 1);
+			//}
+
+
+			for (path[0] = 0x40; path[0] <= 0x210; path[0] += 4)
+			{
+
+				//if (path[0] == 0x120 || path[0] == 0xd8 || path[0] == 0xa0 || path[0] == 0x154 || path[0] == 0x158)
+				//	continue;
+
 				Element starting_it = this.poe.Internal.IngameState.IngameUi.ReadObjectAt<Element>(path[0]);
 				var v2 = starting_it.GetParentPos();
-				drawElt(rc, starting_it, new Vec2((int)(v2.X*.75), (int)(v2.Y*.75)), ref x, ref yPos, path, 1);
+				drawElt(rc, starting_it, new Vec2((int)(v2.X * .75), (int)(v2.Y * .75)), ref x, ref yPos, path, 1);
 			}
 		}
 
