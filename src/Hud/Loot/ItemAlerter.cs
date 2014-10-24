@@ -113,19 +113,19 @@ namespace PoeHUD.Hud.Loot
 				return;
 			}
 			var mm = this.poe.Internal.game.IngameState.IngameUi.Minimap.SmallMinimap;
-			var qt = this.poe.Internal.game.IngameState.IngameUi.QuestTracker;
-			Rect miniMapRect = mm.GetClientRect();
-			Rect qtRect = qt.GetClientRect();
+			var gl = this.poe.Internal.game.IngameState.IngameUi.GemLvlUpPanel;
+			Rect mmRect = mm.GetClientRect();
+			Rect glRect = gl.GetClientRect();
 
 			Rect clientRect;
-			if (qt.IsVisible && qtRect.X + qt.Width < miniMapRect.X + miniMapRect.X + 50)
-				clientRect = qtRect;
+			if (gl.IsVisible && glRect.X + gl.Width < mmRect.X + mmRect.X + 50)
+				clientRect = glRect;
 			else
-				clientRect = miniMapRect;
+				clientRect = mmRect;
 
 			var playerPos = this.poe.Player.GetComponent<Positioned>().GridPos;
 
-			Vec2 rightTopAnchor = new Vec2(miniMapRect.X + miniMapRect.W, clientRect.Y + clientRect.H + 5);
+			Vec2 rightTopAnchor = new Vec2(mmRect.X + mmRect.W, clientRect.Y + clientRect.H + 10);
 			
 			int y = rightTopAnchor.Y;
 			int fontSize = Settings.GetInt("ItemAlert.ShowText.FontSize");
