@@ -118,7 +118,7 @@ namespace PoeHUD.Hud.Loot
 			Rect glRect = gl.GetClientRect();
 
 			Rect clientRect;
-			if (gl.IsVisible && glRect.X + gl.Width < mmRect.X + mmRect.X + 50)
+			if (gl.IsVisible && glRect.X + gl.Width < mmRect.X + mmRect.X + 50) // also this +50 value doesn't seems to have any impact
 				clientRect = glRect;
 			else
 				clientRect = mmRect;
