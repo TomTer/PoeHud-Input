@@ -122,6 +122,7 @@ namespace PoeHUD.Hud.Menu
 			this.AddButton(parent4, "RGB", "ItemAlert.RGB");
 			this.AddButton(parent4, "Crafting bases", "ItemAlert.Crafting");
 			this.AddButton(parent4, "Skill gems", "ItemAlert.SkillGems");
+			this.AddButton(parent4, "Only quality gems", "ItemAlert.QualitySkillGems");
 			this.AddButton(parent4, "Play sound", "ItemAlert.PlaySound");
 			BooleanButton booleanButton7 = this.AddButton(parent4, "Show text", "ItemAlert.ShowText");
 			booleanButton7.AddChild(new IntPicker("Font size", 6, 30, "ItemAlert.ShowText.FontSize"));
