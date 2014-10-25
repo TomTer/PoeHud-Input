@@ -221,6 +221,7 @@ namespace PoeHUD.Hud
 			bools.Add("ItemAlert.Maps", true);
 			bools.Add("ItemAlert.Currency", true);
 			bools.Add("ItemAlert.SkillGems", true);
+			bools.Add("ItemAlert.QualitySkillGems", true);
 			bools.Add("ItemAlert.RGB", false);
 			bools.Add("ItemAlert.PlaySound", true);
 			bools.Add("ItemAlert.ShowText", true);
