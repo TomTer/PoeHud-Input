@@ -43,12 +43,10 @@ namespace PoeHUD.Hud.Loot
 					return true;
 			}
 
-			if (IsSkillGem && Settings.GetBool("ItemAlert.SkillGems"))
-				return true;
-			if (WorthChrome && Settings.GetBool("ItemAlert.RGB"))
-				return true;
-			if (NumSockets >= Settings.GetInt("ItemAlert.MinSockets"))
-				return true;
+			if (IsSkillGem && Settings.GetBool("ItemAlert.SkillGems")) return true;
+			if (IsSkillGem && Settings.GetBool("ItemAlert.QualitySkillGems") && Quality >= Settings.GetInt("ItemAlert.QualitySkillGemsLevel")) return true;
+			if (WorthChrome && Settings.GetBool("ItemAlert.RGB")) return true;
+			if (NumSockets >= Settings.GetInt("ItemAlert.MinSockets")) return true;
 
 			return IsCraftingBase;
 		}
