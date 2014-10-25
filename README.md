@@ -22,13 +22,6 @@ Corsair Sword,78,10
 Gold Ring,75,,White,Rare
 Ironscale Gauntlets,,10,White,Magic
 Quicksilver Flask,1,5
-Portal Scroll,1
-Iron Ring, 1
+Portal Scroll
+Iron Ring
 ```
-
-### Features to-do
-* Doing manually something instead of a player. Ex: call /remaining or change zones until it finds desired Strongboxes, Corrupted Zones or Masters. Configurable in settings
-* "x monsters left" in xph display.
-* Icons to the large map.
-* Aura reminder. Ex: reminds that aura is turned off after relog.
-* Outlines around the name of an item on the ground (for 6l, RBG linked etc.). Configurable in settings
