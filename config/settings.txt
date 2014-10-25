@@ -22,6 +22,7 @@ bool ItemAlert.Uniques=True
 bool ItemAlert.Maps=True
 bool ItemAlert.Currency=True
 bool ItemAlert.SkillGems=True
+int ItemAlert.QualitySkillGemsLevel=1
 bool ItemAlert.RGB=True
 bool ItemAlert.PlaySound=True
 bool ItemAlert.ShowText=True
