@@ -36,7 +36,7 @@ namespace PoeHUD.Hud.Monster
 			}
 			var icon = GetMapIcon(entity);
 			if ( null != icon )
-				currentIcons.Add(entity, icon);
+				currentIcons[entity] = icon;
 
 		}
 		private void CurrentArea_OnAreaChange(AreaController area)
