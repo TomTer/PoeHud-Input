@@ -34,12 +34,14 @@ namespace PoeHUD.Hud.Icons
 				return;
 
 			var camera = model.Internal.game.IngameState.Camera;
+			BigMinimap mapWindow = model.Internal.game.IngameState.IngameUi.Minimap;
+			Rect rcMap = mapWindow.GetClientRect();
 
 			playerPos = model.Player.GetComponent<Positioned>().GridPos;
-			Vec2 screenCenter = new Vec2(camera.Width/2, camera.Height/2);
-			float diag = (float) Math.Sqrt(screenCenter.X*screenCenter.X + screenCenter.Y*screenCenter.Y);
+			Vec2 screenCenter = new Vec2(rcMap.W / 2, rcMap.H / 2) + new Vec2(rcMap.X, rcMap.Y);
+			float diag = (float)Math.Sqrt(camera.Width * camera.Width + camera.Height * camera.Height);
 
-			const float scale = 640f;
+			const float scale = 1280f;
 
 			foreach(MapIcon icon in getIcons())
 			{
