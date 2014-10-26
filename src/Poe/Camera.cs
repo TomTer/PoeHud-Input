@@ -5,39 +5,27 @@ namespace PoeHUD.Poe
 {
 	public class Camera : RemoteMemoryObject
 	{
-		public float Width
-		{
-			get
-			{
-				return (float)this.m.ReadInt(this.address + 4);
-			}
-		}
-		public float Height
-		{
-			get
-			{
-				return (float)this.m.ReadInt(this.address + 8);
-			}
-		}
+		public int Width { get { return m.ReadInt(address + 4); } }
+		public int Height { get { return m.ReadInt(address + 8); } }
 		public float ZFar
 		{
 			get
 			{
-				return this.m.ReadFloat(this.address + 392);
+				return m.ReadFloat(address + 392);
 			}
 			set
 			{
-				this.m.WriteFloat(this.address + 392, value);
+				m.WriteFloat(address + 392, value);
 			}
 		}
 		public Vec3 Position
 		{
 			get
 			{
-				return new Vec3(this.m.ReadFloat(this.address + 256), this.m.ReadFloat(this.address + 260), this.m.ReadFloat(this.address + 264));
+				return new Vec3(m.ReadFloat(address + 256), m.ReadFloat(address + 260), m.ReadFloat(address + 264));
 			}
 		}
-        public unsafe Vec2 WorldToScreen(Vec3 vec3)
+        public unsafe Vec2 WorldToScreen(Vec3 vec3, bool allowOffscreen = false)
         {
             double num2;
             double num3;
@@ -47,16 +35,16 @@ namespace PoeHUD.Poe
             {
                 float* numPtr = (float*)numRef;
                 double num5 = (((numPtr[3] * vec3.x) + (numPtr[7] * vec3.y)) + (numPtr[11] * vec3.z)) + numPtr[15];
-                num2 = ((double)((((numPtr[0] * vec3.x) + (numPtr[4] * vec3.y)) + (numPtr[8] * vec3.z)) + numPtr[12])) / num5;
-                num3 = ((double)((((numPtr[1] * vec3.x) + (numPtr[5] * vec3.y)) + (numPtr[9] * vec3.z)) + numPtr[13])) / num5;
-                num4 = ((double)((((numPtr[2] * vec3.x) + (numPtr[6] * vec3.y)) + (numPtr[10] * vec3.z)) + numPtr[14])) / num5;
+                num2 = ((((numPtr[0] * vec3.x) + (numPtr[4] * vec3.y)) + (numPtr[8] * vec3.z)) + numPtr[12]) / num5;
+                num3 = ((((numPtr[1] * vec3.x) + (numPtr[5] * vec3.y)) + (numPtr[9] * vec3.z)) + numPtr[13]) / num5;
+                num4 = ((((numPtr[2] * vec3.x) + (numPtr[6] * vec3.y)) + (numPtr[10] * vec3.z)) + numPtr[14]) / num5;
             }
-            if (((num4 < 0.0) || (Math.Abs(num2) > 1.0)) || (Math.Abs(num3) > 1.0))
+            if (!allowOffscreen && (num4 < 0.0 || Math.Abs(num2) > 1.0 || Math.Abs(num3) > 1.0))
             {
                 return Vec2.Empty;
             }
-            num2 = ((num2 + 1.0) * 0.5) * this.Width;
-            num3 = ((1.0 - num3) * 0.5) * this.Height;
+            num2 = ((num2 + 1.0) * 0.5) * Width;
+            num3 = ((1.0 - num3) * 0.5) * Height;
             return new Vec2((int)Math.Round(num2), (int)Math.Round(num3));
         }
 

@@ -74,5 +74,10 @@ namespace PoeHUD.Controllers
 		{
 			return this.LongId.GetHashCode();
 		}
+
+		public override string ToString()
+		{
+			return "EntityWrapper: " + Path;
+		}
 	}
 }

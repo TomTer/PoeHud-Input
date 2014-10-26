@@ -27,6 +27,7 @@ namespace PoeHUD.Hud
 				new HealthBarRenderer(),
 				new ItemAlerter(),
 				new MinimapRenderer(gatherMapIcons),
+				new LargeMapRenderer(gatherMapIcons),
 				new ItemLevelRenderer(),
 				new ItemRollsRenderer(),
 				new MonsterTracker(),

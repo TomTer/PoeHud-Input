@@ -51,6 +51,7 @@
     <Compile Include="Hud\Health\RenderPrio.cs" />
     <Compile Include="Hud\HudSkin.cs" />
     <Compile Include="Hud\HudTexture.cs" />
+    <Compile Include="Hud\Icons\MinimapRenderer.cs" />
     <Compile Include="Hud\Loot\AlertDrawStyle.cs" />
     <Compile Include="Hud\Loot\CraftingBase.cs" />
     <Compile Include="Hud\Loot\ItemUsefulProperties.cs" />
@@ -138,7 +139,7 @@
     <Compile Include="Hud\Menu\Menu.cs" />
     <Compile Include="Hud\Menu\MenuItem.cs" />
     <Compile Include="Hud\MapIcon.cs" />
-    <Compile Include="Hud\Icons\MinimapRenderer.cs" />
+    <Compile Include="Hud\Icons\LargeMapRenderer.cs" />
     <Compile Include="Hud\MouseEventID.cs" />
     <Compile Include="Hud\MouseHook.cs" />
     <Compile Include="Hud\OverlayRenderer.cs" />
