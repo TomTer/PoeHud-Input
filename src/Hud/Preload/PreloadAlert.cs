@@ -2,39 +2,24 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using PoeHUD.ExileBot;
+using PoeHUD.Controllers;
 using PoeHUD.Framework;
 using SlimDX.Direct3D9;
 
 namespace PoeHUD.Hud.Preload
 {
-	public class PreloadAlert : HUDPlugin
+	public class PreloadAlert : HUDPluginBase
 	{
 		private HashSet<string> disp;
 		private Dictionary<string, string> alertStrings;
 		private int lastCount;
-		private Rect bounds = new Rect(0, 0, 0, 0);
-		public Rect Bounds
-		{
-			get
-			{
-				if (!Settings.GetBool("PreloadAlert"))
-				{
-					return new Rect(0, 0, 0, 0);
-				}
-				return this.bounds;
-			}
-			private set
-			{
-				this.bounds = value;
-			}
-		}
+
 		public override void OnEnable()
 		{
 			this.disp = new HashSet<string>();
 			this.InitAlertStrings();
-			this.poe.Area.OnAreaChange += this.CurrentArea_OnAreaChange;
-			this.CurrentArea_OnAreaChange(this.poe.Area);
+			this.model.Area.OnAreaChange += this.CurrentArea_OnAreaChange;
+			this.CurrentArea_OnAreaChange(this.model.Area);
 		}
 		public override void OnDisable()
 		{
@@ -49,16 +34,16 @@ namespace PoeHUD.Hud.Preload
 		private void Parse()
 		{
 			this.disp.Clear();
-			int pFileRoot = this.poe.Memory.ReadInt(this.poe.Memory.BaseAddress + poe.Memory.offsets.FileRoot);
-			int num2 = this.poe.Memory.ReadInt(pFileRoot + 12);
-			int listIterator = this.poe.Memory.ReadInt(pFileRoot + 20);
-			int areaChangeCount = this.poe.Internal.AreaChangeCount;
+			int pFileRoot = this.model.Memory.ReadInt(this.model.Memory.BaseAddress + model.Memory.offsets.FileRoot);
+			int num2 = this.model.Memory.ReadInt(pFileRoot + 12);
+			int listIterator = this.model.Memory.ReadInt(pFileRoot + 20);
+			int areaChangeCount = this.model.Internal.AreaChangeCount;
 			for (int i = 0; i < num2; i++)
 			{
-				listIterator = this.poe.Memory.ReadInt(listIterator);
-				if (this.poe.Memory.ReadInt(listIterator + 8) != 0 && this.poe.Memory.ReadInt(listIterator + 12, 36) == areaChangeCount)
+				listIterator = this.model.Memory.ReadInt(listIterator);
+				if (this.model.Memory.ReadInt(listIterator + 8) != 0 && this.model.Memory.ReadInt(listIterator + 12, 36) == areaChangeCount)
 				{
-					string text = this.poe.Memory.ReadStringU(this.poe.Memory.ReadInt(listIterator + 8), 256, true);
+					string text = this.model.Memory.ReadStringU(this.model.Memory.ReadInt(listIterator + 8), 256, true);
 					if (text.Contains("vaal_sidearea"))
 					{
 						this.disp.Add("Area contains Corrupted Area");
@@ -93,7 +78,7 @@ namespace PoeHUD.Hud.Preload
 			{
 				return;
 			}
-			int num = this.poe.Memory.ReadInt(this.poe.Memory.BaseAddress + poe.Memory.offsets.FileRoot, new int[]
+			int num = this.model.Memory.ReadInt(this.model.Memory.BaseAddress + model.Memory.offsets.FileRoot, new int[]
 			{
 				12
 			});
@@ -104,11 +89,11 @@ namespace PoeHUD.Hud.Preload
 			}
 			if (this.disp.Count > 0)
 			{
-				Rect clientRect = this.poe.Internal.IngameState.IngameUi.Minimap.SmallMinimap.GetClientRect();
-				Rect rect = this.overlay.XphRenderer.Bounds;
-				Vec2 vec = new Vec2(clientRect.X - 10, rect.Y + rect.H + 10);
+				Rect minimapRect = this.model.Internal.IngameState.IngameUi.Minimap.SmallMinimap.GetClientRect();
+				Rect rect = /*this.overlay.XphRenderer.Bounds; */ new Rect(400, 200, 100, 100);
+				Vec2 vec = new Vec2(minimapRect.X - 10, minimapRect.Y + rect.H + 10);
 				int num2 = vec.Y;
-				int num3 = clientRect.W;
+				int num3 = minimapRect.W;
 				int @int = Settings.GetInt("PreloadAlert.FontSize");
 				int int2 = Settings.GetInt("PreloadAlert.BgAlpha");
 				foreach (string current in this.disp)
@@ -122,8 +107,8 @@ namespace PoeHUD.Hud.Preload
 				}
 				if (num3 > 0 && int2 > 0)
 				{
-					this.bounds = new Rect(vec.X - num3 + 5, vec.Y - 5, num3, num2 - vec.Y + 10);
-					rc.AddBox(this.bounds, Color.FromArgb(int2, 1, 1, 1));
+					Rect bounds = new Rect(vec.X - num3 + 5, vec.Y - 5, num3, num2 - vec.Y + 10);
+					rc.AddBox(bounds, Color.FromArgb(int2, 1, 1, 1));
 				}
 			}
 		}

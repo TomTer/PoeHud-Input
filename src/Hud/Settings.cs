@@ -228,9 +228,9 @@ namespace PoeHUD.Hud
 			bools.Add("ItemAlert.Crafting", true);
 			bools.Add("Tooltip", true);
 			bools.Add("Tooltip.ShowItemLevel", true);
-			bools.Add("DangerAlert", true);
-			bools.Add("DangerAlert.ShowText", true);
-			bools.Add("DangerAlert.PlaySound", true);
+			bools.Add("MonsterTracker", true);
+			bools.Add("MonsterTracker.ShowText", true);
+			bools.Add("MonsterTracker.PlaySound", true);
 			bools.Add("Healthbars.Players", true);
 			bools.Add("Healthbars.Minions", true);
 			bools.Add("Healthbars.Enemies", true);
@@ -249,8 +249,8 @@ namespace PoeHUD.Hud
 			ints.Add("ItemAlert.ShowText.FontSize", 16);
 			ints.Add("ItemAlert.PositionHeight", 200);
 			ints.Add("ItemAlert.PositionWidth", 0);
-			ints.Add("DangerAlert.ShowText.FontSize", 16);
-			ints.Add("DangerAlert.ShowText.BgAlpha", 128);
+			ints.Add("MonsterTracker.ShowText.FontSize", 16);
+			ints.Add("MonsterTracker.ShowText.BgAlpha", 128);
 			ints.Add("Healthbars.Players.Width", 105);
 			ints.Add("Healthbars.Players.Height", 25);
 			ints.Add("Healthbars.Minions.Width", 105);

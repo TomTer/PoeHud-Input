@@ -2,16 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using PoeHUD.ExileBot;
+using PoeHUD.Controllers;
 using PoeHUD.Framework;
 using PoeHUD.Game;
 using PoeHUD.Poe.EntityComponents;
 
 namespace PoeHUD.Hud.Health
 {
-	public class HealthBarRenderer : HUDPlugin
+	public class HealthBarRenderer : HUDPluginBase, EntityListObserver
 	{
-
 		private List<Healthbar>[] healthBars;
 		public override void OnEnable()
 		{
@@ -20,16 +19,17 @@ namespace PoeHUD.Hud.Health
 			{
 				this.healthBars[i] = new List<Healthbar>();
 			}
-			this.poe.EntityList.OnEntityAdded += this.EntityList_OnEntityAdded;
-			foreach (Entity current in this.poe.Entities)
+
+			foreach (EntityWrapper current in this.model.Entities)
 			{
-				this.EntityList_OnEntityAdded(current);
+				this.EntityAdded(current);
 			}
 		}
 		public override void OnDisable()
 		{
 		}
-		private void EntityList_OnEntityAdded(Entity entity)
+
+		public void EntityAdded(EntityWrapper entity)
 		{
 			Healthbar healthbarSettings = this.GetHealthbarSettings(entity);
 			if (healthbarSettings != null)
@@ -37,18 +37,25 @@ namespace PoeHUD.Hud.Health
 				this.healthBars[(int)healthbarSettings.prio].Add(healthbarSettings);
 			}
 		}
+
+		public void EntityRemoved(EntityWrapper entity)
+		{
+			
+		}
+
+
 		public override void Render(RenderingContext rc)
 		{
-			if (!this.poe.InGame || !Settings.GetBool("Healthbars"))
+			if (!this.model.InGame || !Settings.GetBool("Healthbars"))
 			{
 				return;
 			}
-			if (!Settings.GetBool("Healthbars.ShowInTown") && this.poe.Area.CurrentArea.IsTown)
+			if (!Settings.GetBool("Healthbars.ShowInTown") && this.model.Area.CurrentArea.IsTown)
 			{
 				return;
 			}
-			float clientWidth = (float)this.poe.Window.ClientRect().W / 2560f;
-			float clientHeight = (float)this.poe.Window.ClientRect().H / 1600f;
+			float clientWidth = (float)this.model.Window.ClientRect().W / 2560f;
+			float clientHeight = (float)this.model.Window.ClientRect().H / 1600f;
 			List<Healthbar>[] array = this.healthBars;
 			for (int i = 0; i < array.Length; i++)
 			{
@@ -56,7 +63,7 @@ namespace PoeHUD.Hud.Health
 				foreach (Healthbar current in array[i].Where(x => x.entity.IsAlive && Settings.GetBool(x.settings)))
 				{
 					Vec3 worldCoords = current.entity.Pos;
-					Vec2 mobScreenCoords = this.poe.Internal.IngameState.Camera.WorldToScreen(worldCoords.Translate(0f, 0f, -170f));
+					Vec2 mobScreenCoords = this.model.Internal.IngameState.Camera.WorldToScreen(worldCoords.Translate(0f, 0f, -170f));
 					// System.Diagnostics.Debug.WriteLine("{0} is at {1} => {2} on screen", current.entity.Path, worldCoords, mobScreenCoords);
 					if (mobScreenCoords != Vec2.Empty)
 					{
@@ -94,7 +101,7 @@ namespace PoeHUD.Hud.Health
 				rc.AddTexture("esbar.png", bg, Color.White);
 			}
 		}
-		private Healthbar GetHealthbarSettings(Entity e)
+		private Healthbar GetHealthbarSettings(EntityWrapper e)
 		{
 			if (e.HasComponent<Player>())
 			{

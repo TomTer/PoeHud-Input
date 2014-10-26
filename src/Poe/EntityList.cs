@@ -32,22 +32,22 @@ namespace PoeHUD.Poe
 			queue.Enqueue(addr);
 			while (queue.Count > 0)
 			{
-				int num2 = queue.Dequeue();
-				if (!hashSet.Contains(num2))
+				int nextAddr = queue.Dequeue();
+				if (hashSet.Contains(nextAddr)) 
+					continue;
+
+				hashSet.Add(nextAddr);
+				if (this.m.ReadByte(nextAddr + 21) == 0 && nextAddr != num && nextAddr != 0)
 				{
-					hashSet.Add(num2);
-					if (this.m.ReadByte(num2 + 21) == 0 && num2 != num && num2 != 0)
+					int key = this.m.ReadInt(nextAddr + 12);
+					if (!list.ContainsKey(key))
 					{
-						int key = this.m.ReadInt(num2 + 12);
-						if (!list.ContainsKey(key))
-						{
-							int address = this.m.ReadInt(num2 + 16);
-							Entity @object = base.GetObject<Entity>(address);
-							list.Add(key, @object);
-						}
-						queue.Enqueue(this.m.ReadInt(num2));
-						queue.Enqueue(this.m.ReadInt(num2 + 8));
+						int address = this.m.ReadInt(nextAddr + 16);
+						Entity @object = base.GetObject<Entity>(address);
+						list.Add(key, @object);
 					}
+					queue.Enqueue(this.m.ReadInt(nextAddr));
+					queue.Enqueue(this.m.ReadInt(nextAddr + 8));
 				}
 			}
 		}

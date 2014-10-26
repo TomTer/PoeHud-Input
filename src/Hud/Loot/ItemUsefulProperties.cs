@@ -56,14 +56,14 @@ namespace PoeHUD.Hud.Loot
 			System.Drawing.Color color = Color.White;
 			switch(this.Rarity) {
 				case ItemRarity.White : color = Color.White; break;
-				case ItemRarity.Magic: color = AlertDrawStyle.MagicColor; break;
-				case ItemRarity.Rare : color = AlertDrawStyle.RareColor; break;
-				case ItemRarity.Unique : color = AlertDrawStyle.UniqueColor; break;
+				case ItemRarity.Magic: color = HudSkin.MagicColor; break;
+				case ItemRarity.Rare: color = HudSkin.RareColor; break;
+				case ItemRarity.Unique: color = HudSkin.UniqueColor; break;
 			}
 			if( IsSkillGem )
-				color = AlertDrawStyle.SkillGemColor;
+				color = HudSkin.SkillGemColor;
 			if (IsCurrency)
-				color = AlertDrawStyle.CurrencyColor;
+				color = HudSkin.CurrencyColor;
 
 			int iconIndex = -1;
 			if (WorthChrome)

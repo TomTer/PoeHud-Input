@@ -8,7 +8,7 @@ using SlimDX.Direct3D9;
 
 namespace PoeHUD.Hud.MaxRolls
 {
-    public class ItemRollsRenderer : HUDPlugin
+    public class ItemRollsRenderer : HUDPluginBase
     {
         private Entity poeEntity;
         private List<MaxRolls_Current> mods;
@@ -27,7 +27,7 @@ namespace PoeHUD.Hud.MaxRolls
         {
             if (!Settings.GetBool("Tooltip") || !Settings.GetBool("Tooltip.ShowItemMods"))
                 return;
-            Element uiHover = this.poe.Internal.IngameState.UIHover;
+            Element uiHover = this.model.Internal.IngameState.UIHover;
             Entity poeEntity = uiHover.AsObject<InventoryItemIcon>().Item;
             if (poeEntity.address == 0 || !poeEntity.IsValid)
                 return;

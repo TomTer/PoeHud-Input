@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using PoeHUD.ExileBot;
 //using PoeHUD.Hud.Debug;
-using PoeHUD.Hud.DebugView;
+using System.Linq;
+using PoeHUD.Controllers;
 using PoeHUD.Hud.Health;
 using PoeHUD.Hud.Icons;
 using PoeHUD.Hud.Loot;
@@ -12,74 +12,88 @@ using PoeHUD.Hud.XpRate;
 
 namespace PoeHUD.Hud
 {
+
 	public class OverlayRenderer
 	{
-		private readonly List<HUDPlugin> hudRenderers;
-		private PathOfExile poe;
-		public XPHRenderer XphRenderer;
-		public PreloadAlert PreloadAlert;
-		public MinimapRenderer MinimapRenderer;
-		private int modelUpdatePeriod;
-		public OverlayRenderer(PathOfExile poe, RenderingContext rc)
+		private readonly List<HUDPlugin> plugins;
+		private readonly GameController gameController;
+		private int _modelUpdatePeriod;
+		public OverlayRenderer(GameController gameController, RenderingContext rc)
 		{
-			this.poe = poe;
-			poe.Area.OnAreaChange += area => modelUpdatePeriod = 6;
+			this.gameController = gameController;
+			gameController.Area.OnAreaChange += area => _modelUpdatePeriod = 6;
 
-			this.MinimapRenderer = new MinimapRenderer();
-			this.XphRenderer = new XPHRenderer();
-			this.PreloadAlert = new PreloadAlert();
-			this.hudRenderers = new List<HUDPlugin>{
+			this.plugins = new List<HUDPlugin>{
 				new HealthBarRenderer(),
 				new ItemAlerter(),
-				this.MinimapRenderer,
+				new MinimapRenderer(gatherMapIcons),
 				new ItemLevelRenderer(),
 				new ItemRollsRenderer(),
-				new DangerAlert(),
-				this.XphRenderer,
+				new MonsterTracker(),
+				new PoiTracker(),
+				new XPHRenderer(),
 				new ClientHacks(),
 	#if DEBUG
-				//new ShowUiHierarchy(),
+			//	new ShowUiHierarchy(),
 	#endif
-				this.PreloadAlert
+				new PreloadAlert()
 			};
 			if (Settings.GetBool("Window.ShowIngameMenu"))
 			{
 	#if !DEBUG
-				this.hudRenderers.Add(new Menu.Menu());
+				this.plugins.Add(new Menu.Menu());
 	#endif
 			}
+			UpdateObserverLists();
 			rc.OnRender += this.rc_OnRender;
 
-			this.hudRenderers.ForEach(x => x.Init(poe, this));
+			this.plugins.ForEach(x => x.Init(gameController));
+		}
+
+		private void UpdateObserverLists()
+		{
+			EntityListObserverComposite observer = new EntityListObserverComposite();
+			observer.Observers.AddRange(plugins.OfType<EntityListObserver>());
+			gameController.EntityListObserver = observer;
+		}
+
+		private IEnumerable<MapIcon> gatherMapIcons()
+		{
+			foreach (HUDPlugin plugin in plugins)
+			{
+				HUDPluginWithMapIcons iconSource = plugin as HUDPluginWithMapIcons;
+				if (iconSource != null)
+				{
+					// kvPair.Value.RemoveAll(x => !x.IsEntityStillValid());
+					foreach (MapIcon icon in iconSource.GetIcons())
+						yield return icon;
+				}
+			}
 		}
 
 		private void rc_OnRender(RenderingContext rc)
 		{
-			if (!Settings.GetBool("Window.RequireForeground") || this.poe.Window.IsForeground())
+			if (Settings.GetBool("Window.RequireForeground") && !this.gameController.Window.IsForeground()) return;
+
+			this._modelUpdatePeriod++;
+			if (this._modelUpdatePeriod > 6)
 			{
-				this.modelUpdatePeriod++;
-				if (this.modelUpdatePeriod > 6)
-				{
-					this.poe.Update();
-					this.modelUpdatePeriod = 0;
-				}
-				bool ingame = this.poe.InGame;
-				if ( !ingame || this.poe.Player == null)
-				{
-					return;
-				}
-				foreach (HUDPlugin current in this.hudRenderers)
-				{
-					current.Render(rc);
-				}
+				this.gameController.RefreshState();
+				this._modelUpdatePeriod = 0;
+			}
+			bool ingame = this.gameController.InGame;
+			if ( !ingame || this.gameController.Player == null)
+			{
+				return;
+			}
+			foreach (HUDPlugin current in this.plugins)
+			{
+				current.Render(rc);
 			}
 		}
-		public bool Detach()
-		{
-			foreach (HUDPlugin current in this.hudRenderers)
-			{
+		public bool Detach() {
+			foreach (HUDPlugin current in this.plugins)
 				current.OnDisable();
-			}
 			return false;
 		}
 	}

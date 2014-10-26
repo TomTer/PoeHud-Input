@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using PoeHUD.Framework;
 
-namespace PoeHUD.ExileBot
+namespace PoeHUD.Controllers
 {
 	public class FileIndex
 	{

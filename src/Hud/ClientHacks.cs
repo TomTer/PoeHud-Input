@@ -3,7 +3,7 @@ using PoeHUD.Framework;
 
 namespace PoeHUD.Hud
 {
-	public class ClientHacks : HUDPlugin
+	public class ClientHacks : HUDPluginBase
 	{
 		private Memory m;
 		private bool maphackEnabled;
@@ -12,7 +12,7 @@ namespace PoeHUD.Hud
 		private bool hasSetWriteAccess;
 		public override void OnEnable()
 		{
-			this.m = this.poe.Memory;
+			this.m = this.model.Memory;
 			if (Settings.GetBool("ClientHacks"))
 			{
 				this.maphackEnabled = Settings.GetBool("ClientHacks.Maphack");
@@ -47,12 +47,12 @@ namespace PoeHUD.Hud
 					this.DisableMaphack();
 				}
 			}
-			if (this.zoomhackEnabled && this.poe.InGame)
+			if (this.zoomhackEnabled && this.model.InGame)
 			{
-				float zFar = this.poe.Internal.IngameState.Camera.ZFar;
+				float zFar = this.model.Internal.IngameState.Camera.ZFar;
 				if (zFar != 10000f)
 				{
-					this.poe.Internal.IngameState.Camera.ZFar = 10000f;
+					this.model.Internal.IngameState.Camera.ZFar = 10000f;
 				}
 			}
 			bool flag2 = Settings.GetBool("ClientHacks") && Settings.GetBool("ClientHacks.Zoomhack");
@@ -80,6 +80,7 @@ namespace PoeHUD.Hud
 				this.DisableFullbright();
 			}
 		}
+
 		public override void OnDisable()
 		{
 			if (!this.m.IsInvalid())

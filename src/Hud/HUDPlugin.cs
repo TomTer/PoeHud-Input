@@ -1,23 +1,37 @@
 using System;
-using PoeHUD.ExileBot;
+using System.Collections.Generic;
+using PoeHUD.Controllers;
 using PoeHUD.Framework;
+using PoeHUD.Hud.Icons;
 
 namespace PoeHUD.Hud
 {
-	public abstract class HUDPlugin
+	public interface HUDPlugin
 	{
-		protected PathOfExile poe;
-		protected OverlayRenderer overlay;
-		public void Init(PathOfExile poe, OverlayRenderer overlay)
+		void Init(GameController poe);
+		void OnEnable();
+		void OnDisable();
+
+		void Render(RenderingContext rc);
+	}
+
+	public interface HUDPluginWithMapIcons : HUDPlugin
+	{
+		IEnumerable<MapIcon> GetIcons();
+	}
+
+	public abstract class HUDPluginBase : HUDPlugin
+	{
+		protected GameController model;
+		public void Init(GameController poe)
 		{
-			this.poe = poe;
-			this.overlay = overlay;
+			this.model = poe;
 			this.OnEnable();
 		}
 		public abstract void OnEnable();
-		public abstract void Render(RenderingContext rc);
 		public abstract void OnDisable();
 
+		public abstract void Render(RenderingContext rc);
 
 		// could not fing a better place yet
 		protected static RectUV GetDirectionsUv(double phi, double distance)

@@ -1,13 +1,19 @@
 using System;
 using PoeHUD.Poe;
 
-namespace PoeHUD.ExileBot
+namespace PoeHUD.Controllers
 {
 	public class AreaController
 	{
 		public int Level { get; private set; }
 		public int Hash { get; private set; }
-		private PathOfExile Poe;
+		private readonly GameController Root;
+
+		public AreaController(GameController gameController)
+		{
+			Root = gameController;
+		}
+
 		public event Action<AreaController> OnAreaChange;
 
 		public AreaInstance CurrentArea { get; private set; }
@@ -15,14 +21,9 @@ namespace PoeHUD.ExileBot
 		// dict is wrong 'cause hash is wrong
 		// public Dictionary<int, AreaInstance> AreasVisited = new Dictionary<int, AreaInstance>();
 
-		public AreaController(PathOfExile poe)
+		public void RefreshState()
 		{
-			this.Poe = poe;
-			poe.OnUpdate += this.poe_OnUpdate;
-		}
-		private void poe_OnUpdate()
-		{
-			var igsd = this.Poe.Internal.game.IngameState.Data;
+			var igsd = this.Root.Internal.game.IngameState.Data;
 			AreaTemplate clientsArea = igsd.CurrentArea;
 			int curAreaHash = igsd.CurrentAreaHash;
 

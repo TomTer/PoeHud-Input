@@ -4,7 +4,7 @@ using PoeHUD.Game;
 using PoeHUD.Poe;
 using PoeHUD.Poe.EntityComponents;
 
-namespace PoeHUD.ExileBot
+namespace PoeHUD.Controllers
 {
 	public class ItemStats
 	{

@@ -5,7 +5,7 @@ using SlimDX.Direct3D9;
 
 namespace PoeHUD.Hud.Menu
 {
-	public class Menu : HUDPlugin
+	public class Menu : HUDPluginBase
 	{
 		private const int ButtonWidth = 210;
 		private const int ButtonHeight = 40;
@@ -33,13 +33,15 @@ namespace PoeHUD.Hud.Menu
 				current.Render(rc);
 			}
 		}
+
+
 		private bool OnMouseEvent(MouseEventID id, int x, int y)
 		{
-			if (Settings.GetBool("Window.RequireForeground") && !this.poe.Window.IsForeground())
+			if (Settings.GetBool("Window.RequireForeground") && !this.model.Window.IsForeground())
 			{
 				return false;
 			}
-			Vec2 vec = this.poe.Window.ScreenToClient(new Vec2(x, y));
+			Vec2 vec = this.model.Window.ScreenToClient(new Vec2(x, y));
 			if (id == MouseEventID.MouseMove)
 			{
 				if (this.currentHover != null && this.currentHover.TestHit(vec))
@@ -129,11 +131,11 @@ namespace PoeHUD.Hud.Menu
 			BooleanButton tooltip = this.CreateRootMenu("Advanced tooltips", 3, "Tooltip");
 			this.AddButton(tooltip, "Item level on hover", "Tooltip.ShowItemLevel");
 			this.AddButton(tooltip, "Item mods on hover", "Tooltip.ShowItemMods");
-			BooleanButton parent5 = this.CreateRootMenu("Boss warnings", 4, "DangerAlert");
-			this.AddButton(parent5, "Sound warning", "DangerAlert.PlaySound");
-			BooleanButton booleanButton8 = this.AddButton(parent5, "Text warning", "DangerAlert.ShowText");
-			booleanButton8.AddChild(new IntPicker("Font size", 6, 30, "DangerAlert.ShowText.FontSize"));
-			booleanButton8.AddChild(new IntPicker("Background alpha", 0, 200, "DangerAlert.ShowText.BgAlpha"));
+			BooleanButton parent5 = this.CreateRootMenu("Boss warnings", 4, "MonsterTracker");
+			this.AddButton(parent5, "Sound warning", "MonsterTracker.PlaySound");
+			BooleanButton booleanButton8 = this.AddButton(parent5, "Text warning", "MonsterTracker.ShowText");
+			booleanButton8.AddChild(new IntPicker("Font size", 6, 30, "MonsterTracker.ShowText.FontSize"));
+			booleanButton8.AddChild(new IntPicker("Background alpha", 0, 200, "MonsterTracker.ShowText.BgAlpha"));
 			BooleanButton booleanButton9 = this.CreateRootMenu("Xph Display", 5, "XphDisplay");
 			booleanButton9.AddChild(new IntPicker("Font size", 6, 30, "XphDisplay.FontSize"));
 			booleanButton9.AddChild(new IntPicker("Background alpha", 0, 200, "XphDisplay.BgAlpha"));

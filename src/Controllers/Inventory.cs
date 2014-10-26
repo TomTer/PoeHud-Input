@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 
-namespace PoeHUD.ExileBot
+namespace PoeHUD.Controllers
 {
 	public class Inventory
 	{
 		private Poe.Inventory InternalInventory;
-		private PathOfExile Poe;
+		private GameController Poe;
 		public int Width
 		{
 			get
@@ -20,24 +20,24 @@ namespace PoeHUD.ExileBot
 				return this.InternalInventory.Height;
 			}
 		}
-		public List<Entity> Items
+		public List<EntityWrapper> Items
 		{
 			get
 			{
-				List<Entity> list = new List<Entity>();
+				List<EntityWrapper> list = new List<EntityWrapper>();
 				foreach (Poe.Entity current in this.InternalInventory.Items)
 				{
-					list.Add(new Entity(this.Poe, current));
+					list.Add(new EntityWrapper(this.Poe, current));
 				}
 				return list;
 			}
 		}
-		public Inventory(PathOfExile Poe, Poe.Inventory InternalInventory)
+		public Inventory(GameController Poe, Poe.Inventory InternalInventory)
 		{
 			this.Poe = Poe;
 			this.InternalInventory = InternalInventory;
 		}
-		public Inventory(PathOfExile Poe, int address) : this(Poe, Poe.Internal.GetObject<Poe.Inventory>(address))
+		public Inventory(GameController Poe, int address) : this(Poe, Poe.Internal.GetObject<Poe.Inventory>(address))
 		{
 		}
 	}

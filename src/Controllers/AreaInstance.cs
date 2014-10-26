@@ -1,7 +1,7 @@
 using System;
 using PoeHUD.Poe;
 
-namespace PoeHUD.ExileBot
+namespace PoeHUD.Controllers
 {
 	public class AreaInstance
 	{
