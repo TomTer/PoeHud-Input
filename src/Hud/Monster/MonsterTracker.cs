@@ -167,14 +167,14 @@ namespace PoeHUD.Hud.Monster
 		private MapIcon GetMapIconForMonster(EntityWrapper e)
 		{
 			if (!e.IsHostile)
-				return new MapIcon(e, new HudTexture("monster_ally.png"), 6) {Behaviour = MapIconBehaviour.Creature};
+				return new MapIconCreature(e, new HudTexture("monster_ally.png"), 6);
 
 			switch (e.GetComponent<ObjectMagicProperties>().Rarity)
 			{
-				case MonsterRarity.White: return new MapIcon(e, new HudTexture("monster_enemy.png"), 6) { Behaviour = MapIconBehaviour.Creature };
-				case MonsterRarity.Magic: return new MapIcon(e, new HudTexture("monster_enemy_blue.png"), 8) { Behaviour = MapIconBehaviour.Creature };
-				case MonsterRarity.Rare: return new MapIcon(e, new HudTexture("monster_enemy_yellow.png"), 10) { Behaviour = MapIconBehaviour.Creature };
-				case MonsterRarity.Unique: return new MapIcon(e, new HudTexture("monster_enemy_orange.png"), 10) { Behaviour = MapIconBehaviour.Creature };
+				case MonsterRarity.White: return new MapIconCreature(e, new HudTexture("monster_enemy.png"), 6);
+				case MonsterRarity.Magic: return new MapIconCreature(e, new HudTexture("monster_enemy_blue.png"), 8);
+				case MonsterRarity.Rare: return new MapIconCreature(e, new HudTexture("monster_enemy_yellow.png"), 10);
+				case MonsterRarity.Unique: return new MapIconCreature(e, new HudTexture("monster_enemy_orange.png"), 10);
 			}
 			return null;
 		}

@@ -82,13 +82,13 @@ namespace PoeHUD.Hud.Monster
 		{
 			if (e.HasComponent<NPC>() && masters.Contains(e.Path))
 			{
-				return new MapIcon(e, new MapIconDrawStyle(new HudTexture("monster_ally.png"), 10));
+				return new MapIconCreature(e, new HudTexture("monster_ally.png"), 10);
 			}
 			if (e.HasComponent<Chest>() && !e.GetComponent<Chest>().IsOpened)
 			{
 				return e.GetComponent<Chest>().IsStrongbox
-					? new MapIcon(e, new HudTexture("strongbox.png", e.GetComponent<ObjectMagicProperties>().Rarity), 16) { Behaviour = MapIconBehaviour.Chest }
-					: new MapIcon(e, new HudTexture("minimap_default_icon.png"), 6) { Behaviour = MapIconBehaviour.Chest };
+					? new MapIconChest(e, new HudTexture("strongbox.png", e.GetComponent<ObjectMagicProperties>().Rarity), 16)
+					: new MapIconChest(e, new HudTexture("minimap_default_icon.png"), 6);
 			}
 			return null;
 

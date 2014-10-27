@@ -1,46 +1,26 @@
+using System;
 using PoeHUD.Controllers;
 using PoeHUD.Framework;
 using PoeHUD.Poe.EntityComponents;
 
 namespace PoeHUD.Hud
 {
-	public struct MapIconDrawStyle
+	public class MapIconCreature : MapIcon
 	{
-		public readonly HudTexture Texture;
-		public readonly int Size;
+		public MapIconCreature(EntityWrapper entity) : base(entity) { }
+		public MapIconCreature(EntityWrapper entity, HudTexture hudTexture, int iconSize) : base(entity, hudTexture, iconSize) { }
 
-		public MapIconDrawStyle(HudTexture hudTexture, int iconSize)
-		{
-			Texture = hudTexture;
-			Size = iconSize;
-		}
-
-		// might add gradient style here
+		public override bool ShouldSkip() { return !Entity.IsAlive; }
 	}
 
-	public class MapIconBehaviour
+	public class MapIconChest : MapIcon
 	{
-		public virtual bool IsEntityStillValid(EntityWrapper entity) { return entity.IsValid; }
-		public virtual bool ShouldSkip(EntityWrapper entity) { return false; }
+		public MapIconChest(EntityWrapper entity) : base(entity) { }
+		public MapIconChest(EntityWrapper entity, HudTexture hudTexture, int iconSize) : base(entity, hudTexture, iconSize) { }
 
-		public static readonly MapIconBehaviour Default = new MapIconBehaviour();
-		public static readonly MapIconBehaviour Chest = new MapIconBehaviourChest();
-		public static readonly MapIconBehaviour Creature = new MapIconBehaviourMonster();
-	}
-
-	public class MapIconBehaviourMonster : MapIconBehaviour
-	{
-		public override bool ShouldSkip(EntityWrapper entity)
+		public override bool IsEntityStillValid()
 		{
-			return !entity.IsAlive;
-		}
-	}
-
-	public class MapIconBehaviourChest : MapIconBehaviour
-	{
-		public override bool IsEntityStillValid(EntityWrapper entity)
-		{
-			return entity.IsValid && !entity.GetComponent<Chest>().IsOpened;
+			return Entity.IsValid && !Entity.GetComponent<Chest>().IsOpened;
 		}
 	}
 
@@ -55,23 +35,39 @@ namespace PoeHUD.Hud
 	public class MapIcon
 	{
 		public readonly EntityWrapper Entity;
-		public readonly MapIconDrawStyle MinimapStyle;
-		public readonly MapIconDrawStyle LargeMapStyle;
-		public MapIconBehaviour Behaviour = MapIconBehaviour.Default;
+		public HudTexture MinimapIcon;
+		public HudTexture LargeMapIcon;
+		public int Size;
+		public int? SizeOfLargeIcon;
 
-		public Vec2 WorldPosition { get { return this.Entity.GetComponent<Positioned>().GridPos; } }
+		public Vec2 WorldPosition { get { return Entity.GetComponent<Positioned>().GridPos; } }
 
-		public MapIcon(EntityWrapper entity, HudTexture hudTexture, int iconSize) : this(entity, new MapIconDrawStyle(hudTexture, iconSize)) { }
-
-		public MapIcon(EntityWrapper entity, MapIconDrawStyle miniStyle) : this(entity, miniStyle, miniStyle) { }
-		public MapIcon(EntityWrapper entity, MapIconDrawStyle miniStyle, MapIconDrawStyle largeStyle)
-		{
+		public MapIcon(EntityWrapper entity) {
 			Entity = entity;
-			MinimapStyle = miniStyle;
-			LargeMapStyle = largeStyle;
 		}
 
-		public bool IsEntityStillValid() { return Behaviour.IsEntityStillValid(Entity); }
-		public bool ShouldSkip() { return Behaviour.ShouldSkip(Entity); }
+		public MapIcon(EntityWrapper entity, HudTexture hudTexture, int iconSize = 10) : this(entity)
+		{
+			MinimapIcon = hudTexture;
+			Size = iconSize;
+		}
+
+		public static Vec2 deltaInWorldToMinimapDelta(Vec2 delta, double diag, float scale)
+		{
+			const float CameraAngle = 38;
+
+			// Values according to 40 degree rotation of cartesian coordiantes, still doesn't seem right but closer
+			float cosX = (float)(delta.X / scale * diag * Math.Cos(Math.PI / 180 * CameraAngle));
+			float cosY = (float)(delta.Y / scale * diag * Math.Cos(Math.PI / 180 * CameraAngle));
+			float sinX = (float)(delta.X / scale * diag * Math.Sin(Math.PI / 180 * CameraAngle));
+			float sinY = (float)(delta.Y / scale * diag * Math.Sin(Math.PI / 180 * CameraAngle));
+			// 2D rotation formulas not correct, but it's what appears to work?
+			int x = +(int)(cosX - cosY);
+			int y = -(int)((sinX + sinY));
+			return new Vec2(x, y);
+		}
+
+		public virtual bool IsEntityStillValid() { return Entity.IsValid; }
+		public virtual bool ShouldSkip() { return false; }
 	}
 }

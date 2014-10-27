@@ -45,26 +45,13 @@ namespace PoeHUD.Hud.Icons
 				if (icon.ShouldSkip())
 					continue;
 
-				Vec2 point = WorldToMinimap(icon.WorldPosition, minimapCenter, diag, scale);
+				Vec2 point = minimapCenter + MapIcon.deltaInWorldToMinimapDelta(icon.WorldPosition - playerPos, diag, scale);
 
-				var style = icon.MinimapStyle;
-				int size = style.Size;
+				var texture = icon.MinimapIcon;
+				int size = icon.Size;
 				Rect rect = new Rect(point.X - size / 2, point.Y - size / 2, size, size);
-				style.Texture.DrawAt(rc, point, rect);
+				texture.DrawAt(rc, point, rect);
 			}
-		}
-
-		private Vec2 WorldToMinimap(Vec2 world, Vec2 minimapCenter, double diag, float scale)
-		{
-			// Values according to 40 degree rotation of cartesian coordiantes, still doesn't seem right but closer
-			float cosX = (float)((world.X - playerPos.X) / scale * diag * Math.Cos((Math.PI / 180) * 40));
-			float cosY = (float)((world.Y - playerPos.Y) / scale * diag * Math.Cos((Math.PI / 180) * 40));
-			float sinX = (float)((world.X - playerPos.X) / scale * diag * Math.Sin((Math.PI / 180) * 40));
-			float sinY = (float)((world.Y - playerPos.Y) / scale * diag * Math.Sin((Math.PI / 180) * 40));
-			// 2D rotation formulas not correct, but it's what appears to work?
-			int x = (int)(minimapCenter.X + cosX - cosY);
-			int y = (int)(minimapCenter.Y - (sinX + sinY));
-			return new Vec2(x, y);
 		}
 	}
 }
