@@ -8,6 +8,7 @@ using PoeHUD.Game;
 using PoeHUD.Poe.EntityComponents;
 using SlimDX.Direct3D9;
 
+
 namespace PoeHUD.Hud.Health
 {
 	public class HealthBarRenderer : HUDPluginBase, EntityListObserver
@@ -85,7 +86,10 @@ namespace PoeHUD.Hud.Health
 				            color = Settings.GetColor(current.settings + ".Under10Percent");
 				        }
 				        this.DrawEntityHealthbar(color, color2, bg, hpWidth, esWidth, rc);
-                        if (current.entity.IsHostile)
+                        if (current.entity.IsHostile && 
+                                (current.prio == RenderPrio.Magic ||
+                                current.prio == RenderPrio.Rare ||
+                                current.prio == RenderPrio.Unique))
 				        {
                             this.DrawEntityHealthPercents(percentsTextColor, hppercentAsString, bg, rc);
 				        }
