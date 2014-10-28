@@ -6,6 +6,7 @@ using PoeHUD.Controllers;
 using PoeHUD.Framework;
 using PoeHUD.Game;
 using PoeHUD.Poe.EntityComponents;
+using SlimDX.Direct3D9;
 
 namespace PoeHUD.Hud.Health
 {
@@ -65,27 +66,34 @@ namespace PoeHUD.Hud.Health
 					Vec3 worldCoords = current.entity.Pos;
 					Vec2 mobScreenCoords = this.model.Internal.IngameState.Camera.WorldToScreen(worldCoords.Translate(0f, 0f, -170f));
 					// System.Diagnostics.Debug.WriteLine("{0} is at {1} => {2} on screen", current.entity.Path, worldCoords, mobScreenCoords);
-					if (mobScreenCoords != Vec2.Empty)
-					{
-						int scaledWidth = (int)(Settings.GetInt(current.settings + ".Width") * clientWidth);
-						int scaledHeight = (int)(Settings.GetInt(current.settings + ".Height") * clientHeight);
-						Color color = Settings.GetColor(current.settings + ".Color");
-						Color color2 = Settings.GetColor(current.settings + ".Outline");
-						float hpPercent = current.entity.GetComponent<Life>().HPPercentage;
-						float esPercent = current.entity.GetComponent<Life>().ESPercentage;
-						float hpWidth = hpPercent * scaledWidth;
-						float esWidth = esPercent * scaledWidth;
-						Rect bg = new Rect(mobScreenCoords.X - scaledWidth / 2, mobScreenCoords.Y - scaledHeight / 2, scaledWidth, scaledHeight);
-					    if (hpPercent <= 0.1)
-					    {
-                            color = Settings.GetColor(current.settings + ".Under10Percent");
-					    }
-					    this.DrawEntityHealthbar(color, color2, bg, hpWidth, esWidth, rc);
+				    if (mobScreenCoords != Vec2.Empty)
+				    {
+				        int scaledWidth = (int) (Settings.GetInt(current.settings + ".Width")*clientWidth);
+				        int scaledHeight = (int) (Settings.GetInt(current.settings + ".Height")*clientHeight);
+				        Color color = Settings.GetColor(current.settings + ".Color");
+				        Color color2 = Settings.GetColor(current.settings + ".Outline");
+				        Color percentsTextColor = Settings.GetColor(current.settings + ".PercentTextColor");
+				        float hpPercent = current.entity.GetComponent<Life>().HPPercentage;
+				        float esPercent = current.entity.GetComponent<Life>().ESPercentage;
+				        float hpWidth = hpPercent*scaledWidth;
+				        float esWidth = esPercent*scaledWidth;
+				        String hppercentAsString = ((int) (hpPercent*100)).ToString();
+				        Rect bg = new Rect(mobScreenCoords.X - scaledWidth/2, mobScreenCoords.Y - scaledHeight/2, scaledWidth,
+				            scaledHeight);
+                        if (current.entity.IsHostile && hpPercent <= 0.1)
+				        {
+				            color = Settings.GetColor(current.settings + ".Under10Percent");
+				        }
+				        this.DrawEntityHealthbar(color, color2, bg, hpWidth, esWidth, rc);
+                        if (current.entity.IsHostile)
+				        {
+                            this.DrawEntityHealthPercents(percentsTextColor, hppercentAsString, bg, rc);
+				        }
 					}
 				}
 			}
 		}
-		private void DrawEntityHealthbar(Color color, Color outline, Rect bg, float hpWidth, float esWidth, RenderingContext rc)
+        private void DrawEntityHealthbar(Color color, Color outline, Rect bg, float hpWidth, float esWidth, RenderingContext rc)
 		{
 			if (outline.ToArgb() != 0)
 			{
@@ -105,7 +113,14 @@ namespace PoeHUD.Hud.Health
 				rc.AddTexture("esbar.png", bg, Color.White);
 			}
 		}
-		private Healthbar GetHealthbarSettings(EntityWrapper e)
+
+        private void DrawEntityHealthPercents(Color hppercentsTextColor, String hppercentsText, Rect bg, RenderingContext rc)
+	    {
+            // Draw percents 
+            rc.AddTextWithHeight(new Vec2(bg.X, bg.Y), hppercentsText, hppercentsTextColor, 11, DrawTextFormat.Bottom);
+	    }
+
+	    private Healthbar GetHealthbarSettings(EntityWrapper e)
 		{
 			if (e.HasComponent<Player>())
 			{
