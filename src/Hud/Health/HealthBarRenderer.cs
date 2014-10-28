@@ -76,7 +76,11 @@ namespace PoeHUD.Hud.Health
 						float hpWidth = hpPercent * scaledWidth;
 						float esWidth = esPercent * scaledWidth;
 						Rect bg = new Rect(mobScreenCoords.X - scaledWidth / 2, mobScreenCoords.Y - scaledHeight / 2, scaledWidth, scaledHeight);
-						this.DrawEntityHealthbar(color, color2, bg, hpWidth, esWidth, rc);
+					    if (hpPercent <= 0.1)
+					    {
+                            color = Settings.GetColor(current.settings + ".Under10Percent");
+					    }
+					    this.DrawEntityHealthbar(color, color2, bg, hpWidth, esWidth, rc);
 					}
 				}
 			}

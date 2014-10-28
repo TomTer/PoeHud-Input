@@ -82,3 +82,4 @@ color Healthbars.Enemies.Normal.Color=FFFF0000
 color Healthbars.Enemies.Magic.Color=FFFF0000
 color Healthbars.Enemies.Rare.Color=FFFF0000
 color Healthbars.Enemies.Unique.Color=FFFF0000
+color Healthbars.Enemies.Under10Percent=FF00FF00
