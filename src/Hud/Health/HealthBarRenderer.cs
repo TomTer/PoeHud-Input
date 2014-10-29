@@ -76,43 +76,30 @@ namespace PoeHUD.Hud.Health
 						Color percentsTextColor = Settings.GetColor(current.settings + ".PercentTextColor");
 						float hpPercent = current.entity.GetComponent<Life>().HPPercentage;
 						float esPercent = current.entity.GetComponent<Life>().ESPercentage;
-					    int curHp = current.entity.GetComponent<Life>().CurHP;
-					    int maxHp = current.entity.GetComponent<Life>().MaxHP;
 					    float hpWidth = hpPercent*scaledWidth;
 						float esWidth = esPercent*scaledWidth;
-						string hppercentAsString = ((int) (hpPercent*100)).ToString();
 						Rect bg = new Rect(mobScreenCoords.X - scaledWidth/2, mobScreenCoords.Y - scaledHeight/2, scaledWidth,
 							scaledHeight);
-						if (current.entity.IsHostile && hpPercent <= 0.1) // Set healthbar color to white for monsters when hp is <=10%
+						if (current.entity.IsHostile && hpPercent <= 0.1) // Set healthbar color to configured in settings.txt for hostiles when hp is <=10%
 						{
 							color = Settings.GetColor(current.settings + ".Under10Percent");
 						}
+                        // Draw healthbar
+                        this.DrawEntityHealthbar(color, color2, bg, hpWidth, esWidth, rc);
 
-                        if (!current.entity.IsHostile) // Minions, Player etc.
-                        {
-                            this.DrawEntityHealthbar(color, color2, bg, hpWidth, esWidth, rc);
-                        }
-                        else // Enemies
-                        {
-                            // Normal
-                            if (current.prio == RenderPrio.Normal)
-					        {
-                                this.DrawEntityHealthbar(color, color2, bg, hpWidth, esWidth, rc);
-					        }
-                            // Magic
-                            else if (current.prio == RenderPrio.Magic)
-					        {
-                                this.DrawEntityHealthbar(color, color2, bg, hpWidth, esWidth, rc);
-                                this.DrawEntityHealthPercents(percentsTextColor, hppercentAsString, bg, rc);
-					        }
-                            // Rare or Unique
-                            else if (current.prio == RenderPrio.Rare || current.prio == RenderPrio.Unique)
-                            {
-                                string monsterHpCorrectString = this.GetCorrectMonsterHealthString(curHp, maxHp);
-                                Color monsterHpTextColor = (hpPercent <= 0.1) ? Color.Red : Color.White;
-                                this.DrawEntityHealthbarPanel(color, color2, monsterHpTextColor, monsterHpCorrectString, bg, hpWidth, esWidth, rc);
-                                this.DrawEntityHealthPercents(percentsTextColor, hppercentAsString, bg, rc);
-                            }
+                        // Draw percents or health text for hostiles. Configurable in settings.txt
+					    if (current.entity.IsHostile)
+					    {
+                            int curHp = current.entity.GetComponent<Life>().CurHP;
+                            int maxHp = current.entity.GetComponent<Life>().MaxHP;
+                            string monsterHpCorrectString = this.GetCorrectMonsterHealthString(curHp, maxHp);
+                            string hppercentAsString = ((int)(hpPercent * 100)).ToString();
+                            Color monsterHpTextColor = (hpPercent <= 0.1) ?
+                                Settings.GetColor(current.settings + ".HealthTextColorUnder10Percent") :
+                                Settings.GetColor(current.settings + ".HealthTextColor");
+
+                            if (Settings.GetBool(current.settings + ".PrintPercents")) this.DrawEntityHealthPercents(percentsTextColor, hppercentAsString, bg, rc);
+                            if (Settings.GetBool(current.settings + ".PrintHealthText")) this.DrawEntityHealthbarText(monsterHpTextColor, monsterHpCorrectString, bg, rc);
 					    }
 					}
 				}
@@ -140,12 +127,10 @@ namespace PoeHUD.Hud.Health
 			}
 		}
 
-	    private void DrawEntityHealthbarPanel(Color fillingColor, Color outlineColor, Color TextColor, String healthString, Rect bg, float hpWidth, float esWidth,
-	        RenderingContext rc)
+	    private void DrawEntityHealthbarText(Color textColor, String healthString, Rect bg, RenderingContext rc)
 	    {
-            this.DrawEntityHealthbar(fillingColor, outlineColor, bg, hpWidth, esWidth, rc);
             // Draw monster health ex. "163 / 12k" 
-            rc.AddTextWithHeight(new Vec2(bg.X, bg.Y), healthString, TextColor, 9, DrawTextFormat.Left);
+            rc.AddTextWithHeight(new Vec2(bg.X, bg.Y), healthString, textColor, 9, DrawTextFormat.Left);
 	    }
 
 		private void DrawEntityHealthPercents(Color hppercentsTextColor, String hppercentsText, Rect bg, RenderingContext rc)
@@ -154,24 +139,24 @@ namespace PoeHUD.Hud.Health
 			rc.AddTextWithHeight(new Vec2(bg.X + bg.W + 4, bg.Y), hppercentsText, hppercentsTextColor, 9, DrawTextFormat.Left);
 		}
 
-        private string GetCorrectMonsterHealthString(int currentHP, int maxHP)
+        private string GetCorrectMonsterHealthString(int currentHp, int maxHp)
         {
             string currentHpString = null;
             string maxHpString = null;
 
-            if (currentHP > 1000)
+            if (currentHp > 1000)
             {
-                if (currentHP < 1000000) currentHpString = (currentHP/1000).ToString() + "k";
-                else currentHpString = (currentHP/1000000).ToString() + "kk";
+                if (currentHp < 1000000) currentHpString = (currentHp/1000).ToString() + "k";
+                else currentHpString = (currentHp/1000000).ToString() + "kk";
             }
-            else currentHpString = currentHP.ToString();
+            else currentHpString = currentHp.ToString();
 
-            if (maxHP > 1000)
+            if (maxHp > 1000)
             {
-                if (maxHP < 1000000) maxHpString = (maxHP/1000).ToString() + "k";
-                else maxHpString = (maxHP/1000000).ToString() + "kk";
+                if (maxHp < 1000000) maxHpString = (maxHp/1000).ToString() + "k";
+                else maxHpString = (maxHp/1000000).ToString() + "kk";
             }
-            else maxHpString = maxHP.ToString();
+            else maxHpString = maxHp.ToString();
 
             return String.Format("{0} / {1}", currentHpString, maxHpString);
         }
