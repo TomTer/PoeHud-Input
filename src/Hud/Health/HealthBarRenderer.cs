@@ -67,32 +67,32 @@ namespace PoeHUD.Hud.Health
 					Vec3 worldCoords = current.entity.Pos;
 					Vec2 mobScreenCoords = this.model.Internal.IngameState.Camera.WorldToScreen(worldCoords.Translate(0f, 0f, -170f));
 					// System.Diagnostics.Debug.WriteLine("{0} is at {1} => {2} on screen", current.entity.Path, worldCoords, mobScreenCoords);
-				    if (mobScreenCoords != Vec2.Empty)
-				    {
-				        int scaledWidth = (int) (Settings.GetInt(current.settings + ".Width")*clientWidth);
-				        int scaledHeight = (int) (Settings.GetInt(current.settings + ".Height")*clientHeight);
-				        Color color = Settings.GetColor(current.settings + ".Color");
-				        Color color2 = Settings.GetColor(current.settings + ".Outline");
-				        Color percentsTextColor = Settings.GetColor(current.settings + ".PercentTextColor");
-				        float hpPercent = current.entity.GetComponent<Life>().HPPercentage;
-				        float esPercent = current.entity.GetComponent<Life>().ESPercentage;
-				        float hpWidth = hpPercent*scaledWidth;
-				        float esWidth = esPercent*scaledWidth;
-				        String hppercentAsString = ((int) (hpPercent*100)).ToString();
-				        Rect bg = new Rect(mobScreenCoords.X - scaledWidth/2, mobScreenCoords.Y - scaledHeight/2, scaledWidth,
-				            scaledHeight);
-                        if (current.entity.IsHostile && hpPercent <= 0.1)
-				        {
-				            color = Settings.GetColor(current.settings + ".Under10Percent");
-				        }
-				        this.DrawEntityHealthbar(color, color2, bg, hpWidth, esWidth, rc);
-                        if (current.entity.IsHostile && 
-                                (current.prio == RenderPrio.Magic ||
-                                current.prio == RenderPrio.Rare ||
-                                current.prio == RenderPrio.Unique))
-				        {
-                            this.DrawEntityHealthPercents(percentsTextColor, hppercentAsString, bg, rc);
-				        }
+					if (mobScreenCoords != Vec2.Empty)
+					{
+						int scaledWidth = (int) (Settings.GetInt(current.settings + ".Width")*clientWidth);
+						int scaledHeight = (int) (Settings.GetInt(current.settings + ".Height")*clientHeight);
+						Color color = Settings.GetColor(current.settings + ".Color");
+						Color color2 = Settings.GetColor(current.settings + ".Outline");
+						Color percentsTextColor = Settings.GetColor(current.settings + ".PercentTextColor");
+						float hpPercent = current.entity.GetComponent<Life>().HPPercentage;
+						float esPercent = current.entity.GetComponent<Life>().ESPercentage;
+						float hpWidth = hpPercent*scaledWidth;
+						float esWidth = esPercent*scaledWidth;
+						String hppercentAsString = ((int) (hpPercent*100)).ToString();
+						Rect bg = new Rect(mobScreenCoords.X - scaledWidth/2, mobScreenCoords.Y - scaledHeight/2, scaledWidth,
+							scaledHeight);
+						if (current.entity.IsHostile && hpPercent <= 0.1)
+						{
+							color = Settings.GetColor(current.settings + ".Under10Percent");
+						}
+						this.DrawEntityHealthbar(color, color2, bg, hpWidth, esWidth, rc);
+						if (current.entity.IsHostile && 
+								(current.prio == RenderPrio.Magic ||
+								current.prio == RenderPrio.Rare ||
+								current.prio == RenderPrio.Unique))
+						{
+							this.DrawEntityHealthPercents(percentsTextColor, hppercentAsString, bg, rc);
+						}
 					}
 				}
 			}
@@ -101,7 +101,7 @@ namespace PoeHUD.Hud.Health
 		{
 			if (outline.ToArgb() != 0)
 			{
-				Rect rect = new Rect(bg.X - 2, bg.Y - 2, bg.W + 4, bg.H + 4);
+				Rect rect = new Rect(bg.X - 1, bg.Y - 1, bg.W + 2, bg.H + 2);
 				rc.AddBox(rect, outline);
 			}
 			rc.AddTexture(Settings.GetBool("Healthbars.ShowIncrements") ? "healthbar_increment.png" : "healthbar.png", bg, color);
@@ -109,7 +109,8 @@ namespace PoeHUD.Hud.Health
 			if ((int)hpWidth < bg.W)
 			{
 				Rect rect2 = new Rect(bg.X + (int)hpWidth, bg.Y, bg.W - (int)hpWidth, bg.H);
-				rc.AddTexture("healthbar_bg.png", rect2, color);
+				if( rect2.W > 0 )
+					rc.AddTexture("healthbar_bg.png", rect2, color);
 			}
 			if (Settings.GetBool("Healthbars.ShowES"))
 			{
@@ -118,13 +119,13 @@ namespace PoeHUD.Hud.Health
 			}
 		}
 
-        private void DrawEntityHealthPercents(Color hppercentsTextColor, String hppercentsText, Rect bg, RenderingContext rc)
-	    {
-            // Draw percents 
-            rc.AddTextWithHeight(new Vec2(bg.X, bg.Y), hppercentsText, hppercentsTextColor, 11, DrawTextFormat.Bottom);
-	    }
+		private void DrawEntityHealthPercents(Color hppercentsTextColor, String hppercentsText, Rect bg, RenderingContext rc)
+		{
+			// Draw percents 
+			rc.AddTextWithHeight(new Vec2(bg.X + bg.W + 2, bg.Y), hppercentsText, hppercentsTextColor, 9, DrawTextFormat.Left);
+		}
 
-	    private Healthbar GetHealthbarSettings(EntityWrapper e)
+		private Healthbar GetHealthbarSettings(EntityWrapper e)
 		{
 			if (e.HasComponent<Player>())
 			{
