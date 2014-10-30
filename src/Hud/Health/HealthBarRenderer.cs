@@ -76,23 +76,31 @@ namespace PoeHUD.Hud.Health
 						Color percentsTextColor = Settings.GetColor(current.settings + ".PercentTextColor");
 						float hpPercent = current.entity.GetComponent<Life>().HPPercentage;
 						float esPercent = current.entity.GetComponent<Life>().ESPercentage;
-						float hpWidth = hpPercent*scaledWidth;
+					    float hpWidth = hpPercent*scaledWidth;
 						float esWidth = esPercent*scaledWidth;
-						String hppercentAsString = ((int) (hpPercent*100)).ToString();
 						Rect bg = new Rect(mobScreenCoords.X - scaledWidth/2, mobScreenCoords.Y - scaledHeight/2, scaledWidth,
 							scaledHeight);
-						if (current.entity.IsHostile && hpPercent <= 0.1)
+						if (current.entity.IsHostile && hpPercent <= 0.1) // Set healthbar color to configured in settings.txt for hostiles when hp is <=10%
 						{
 							color = Settings.GetColor(current.settings + ".Under10Percent");
 						}
-						this.DrawEntityHealthbar(color, color2, bg, hpWidth, esWidth, rc);
-						if (current.entity.IsHostile && 
-								(current.prio == RenderPrio.Magic ||
-								current.prio == RenderPrio.Rare ||
-								current.prio == RenderPrio.Unique))
-						{
-							this.DrawEntityHealthPercents(percentsTextColor, hppercentAsString, bg, rc);
-						}
+                        // Draw healthbar
+                        this.DrawEntityHealthbar(color, color2, bg, hpWidth, esWidth, rc);
+
+                        // Draw percents or health text for hostiles. Configurable in settings.txt
+					    if (current.entity.IsHostile)
+					    {
+                            int curHp = current.entity.GetComponent<Life>().CurHP;
+                            int maxHp = current.entity.GetComponent<Life>().MaxHP;
+                            string monsterHpCorrectString = this.GetCorrectMonsterHealthString(curHp, maxHp);
+                            string hppercentAsString = ((int)(hpPercent * 100)).ToString();
+                            Color monsterHpTextColor = (hpPercent <= 0.1) ?
+                                Settings.GetColor(current.settings + ".HealthTextColorUnder10Percent") :
+                                Settings.GetColor(current.settings + ".HealthTextColor");
+
+                            if (Settings.GetBool(current.settings + ".PrintPercents")) this.DrawEntityHealthPercents(percentsTextColor, hppercentAsString, bg, rc);
+                            if (Settings.GetBool(current.settings + ".PrintHealthText")) this.DrawEntityHealthbarText(monsterHpTextColor, monsterHpCorrectString, bg, rc);
+					    }
 					}
 				}
 			}
@@ -119,11 +127,39 @@ namespace PoeHUD.Hud.Health
 			}
 		}
 
+	    private void DrawEntityHealthbarText(Color textColor, String healthString, Rect bg, RenderingContext rc)
+	    {
+            // Draw monster health ex. "163 / 12k" 
+            rc.AddTextWithHeight(new Vec2(bg.X, bg.Y), healthString, textColor, 9, DrawTextFormat.Left);
+	    }
+
 		private void DrawEntityHealthPercents(Color hppercentsTextColor, String hppercentsText, Rect bg, RenderingContext rc)
 		{
 			// Draw percents 
-			rc.AddTextWithHeight(new Vec2(bg.X + bg.W + 2, bg.Y), hppercentsText, hppercentsTextColor, 9, DrawTextFormat.Left);
+			rc.AddTextWithHeight(new Vec2(bg.X + bg.W + 4, bg.Y), hppercentsText, hppercentsTextColor, 9, DrawTextFormat.Left);
 		}
+
+        private string GetCorrectMonsterHealthString(int currentHp, int maxHp)
+        {
+            string currentHpString = null;
+            string maxHpString = null;
+
+            if (currentHp > 1000)
+            {
+                if (currentHp < 1000000) currentHpString = (currentHp/1000).ToString() + "k";
+                else currentHpString = (currentHp/1000000).ToString() + "kk";
+            }
+            else currentHpString = currentHp.ToString();
+
+            if (maxHp > 1000)
+            {
+                if (maxHp < 1000000) maxHpString = (maxHp/1000).ToString() + "k";
+                else maxHpString = (maxHp/1000000).ToString() + "kk";
+            }
+            else maxHpString = maxHp.ToString();
+
+            return String.Format("{0} / {1}", currentHpString, maxHpString);
+        }
 
 		private Healthbar GetHealthbarSettings(EntityWrapper e)
 		{
