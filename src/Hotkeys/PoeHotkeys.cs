@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Management.Instrumentation;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -8,23 +9,37 @@ using System.Windows.Forms;
 using WindowsInput;
 using NHotkey;
 using NHotkey.WindowsForms;
+using PoeHUD.Controllers;
+using PoeHUD.Framework;
+using PoeHUD.Poe;
 
 namespace PoeHUD
 {
     public class PoeHotkeys
     {
 
-        public void RegisterRemaining(Keys key)
+        private readonly GameController gameController;
+
+        public PoeHotkeys(GameController gameController)
         {
-            HotkeyManager.Current.AddOrReplace("Increment", key, SendRemaining);
+            this.gameController = gameController;
         }
 
-        public void SendRemaining(object sender, HotkeyEventArgs e)
+        # region register hotkeys
+
+        public void RegisterRemainingHotkey(Keys key)
+        {
+            HotkeyManager.Current.AddOrReplace("WriteRemaining", key, SendRemaining);
+        }
+
+        #endregion
+
+        private void SendRemaining(object sender, HotkeyEventArgs e)
         {
             new InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.RETURN);
-            Thread.Sleep(10);
+            Thread.Sleep(3);
             new InputSimulator().Keyboard.TextEntry("/remaining");
-            Thread.Sleep(10);
+            Thread.Sleep(3);
             new InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.RETURN);
             e.Handled = true;
         }

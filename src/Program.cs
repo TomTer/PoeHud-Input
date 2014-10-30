@@ -71,13 +71,13 @@ namespace PoeHUD.Hud
 
 			using (Memory memory = new Memory(offs, pid))
 			{
-			    PoeHotkeys poeHotkeys = new PoeHotkeys();
-                poeHotkeys.RegisterRemaining(Keys.F5);
-
-
 			    offs.DoPatternScans(memory);
 				GameController gameController = new GameController(memory);
 				gameController.RefreshState();
+
+                PoeHotkeys poeHotkeys = new PoeHotkeys(gameController);
+                poeHotkeys.RegisterRemainingHotkey(Keys.F5);
+
 				try
 				{   
 					Console.WriteLine("Starting overlay");
