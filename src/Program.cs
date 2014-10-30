@@ -2,10 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
 using PoeHUD.Controllers;
 using PoeHUD.Framework;
 using PoeHUD.Poe;
+using WindowsInput;
 
 namespace PoeHUD.Hud
 {
@@ -68,11 +71,15 @@ namespace PoeHUD.Hud
 
 			using (Memory memory = new Memory(offs, pid))
 			{
-				offs.DoPatternScans(memory);
+			    PoeHotkeys poeHotkeys = new PoeHotkeys();
+                poeHotkeys.RegisterRemaining(Keys.F5);
+
+
+			    offs.DoPatternScans(memory);
 				GameController gameController = new GameController(memory);
 				gameController.RefreshState();
 				try
-				{
+				{   
 					Console.WriteLine("Starting overlay");
 					TransparentDXOverlay transparentDXOverlay = new TransparentDXOverlay(gameController.Window, () => memory.IsInvalid());
 					transparentDXOverlay.InitD3D();
