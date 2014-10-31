@@ -155,7 +155,7 @@ namespace PoeHUD.Hud.Menu
 			BooleanButton booleanButton10 = this.CreateRootMenu("Preload Alert", r++, "PreloadAlert");
 			booleanButton10.AddChild(new IntPicker("Font size", 6, 30, "PreloadAlert.FontSize"));
 			booleanButton10.AddChild(new IntPicker("Background alpha", 0, 200, "PreloadAlert.BgAlpha"));
-			BooleanButton dps = this.CreateRootMenu("Sohw DPS", r++, "DpsDisplay");
+			BooleanButton dps = this.CreateRootMenu("Show DPS", r++, "DpsDisplay");
 			// BooleanButton closeWithGame = this.CreateRootMenu("Exit when game is closed", 8, "ExitWithGame");
 		}
 		private BooleanButton AddButton(BooleanButton parent, string text, string setting)
