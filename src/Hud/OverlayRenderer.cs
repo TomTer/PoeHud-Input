@@ -2,6 +2,7 @@ using System.Collections.Generic;
 //using PoeHUD.Hud.Debug;
 using System.Linq;
 using PoeHUD.Controllers;
+using PoeHUD.Hud.DPS;
 using PoeHUD.Hud.Health;
 using PoeHUD.Hud.Icons;
 using PoeHUD.Hud.Loot;
@@ -33,6 +34,7 @@ namespace PoeHUD.Hud
 				new MonsterTracker(),
 				new PoiTracker(),
 				new XPHRenderer(),
+				//new DpsMeter(),
 				new ClientHacks(),
 	#if DEBUG
 			//	new ShowUiHierarchy(),

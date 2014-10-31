@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Controllers\AreaInstance.cs" />
     <Compile Include="Hud\DebugView\ShowUiHierarchy.cs" />
+    <Compile Include="Hud\DPS\DpsMeter.cs" />
     <Compile Include="Hud\Health\Healthbar.cs" />
     <Compile Include="Hud\Health\RenderPrio.cs" />
     <Compile Include="Hud\HudSkin.cs" />
@@ -165,9 +166,7 @@
     <EmbeddedResource Include="Hud\SettingsForm.resources" />
     <EmbeddedResource Include="Hud\TransparentDXOverlay.resources" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Hud\Plugin\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if "$(ConfigurationName)"=="Release" (
