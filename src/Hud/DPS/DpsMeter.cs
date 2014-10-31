@@ -65,6 +65,8 @@ namespace PoeHUD.Hud.DPS
 			int fontSize = Settings.GetInt("XphDisplay.FontSize");
 			Vec2 mapWithOffset = mountPoints[UiMountPoint.LeftOfMinimap];
 			int dps = ((int)damageMemory.Average());
+			if (dps > 1000000) //discard those - read form invalid addresses
+				return;
 			if (maxDps < dps)
 				maxDps = dps;
 			
