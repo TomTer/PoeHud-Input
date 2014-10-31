@@ -2,6 +2,7 @@ using System.Collections.Generic;
 //using PoeHUD.Hud.Debug;
 using System.Linq;
 using PoeHUD.Controllers;
+using PoeHUD.Framework;
 using PoeHUD.Hud.DPS;
 using PoeHUD.Hud.Health;
 using PoeHUD.Hud.Icons;
@@ -34,12 +35,12 @@ namespace PoeHUD.Hud
 				new MonsterTracker(),
 				new PoiTracker(),
 				new XPHRenderer(),
-				//new DpsMeter(),
 				new ClientHacks(),
 	#if DEBUG
 			//	new ShowUiHierarchy(),
 	#endif
-				new PreloadAlert()
+				new PreloadAlert(),
+				new DpsMeter(),
 			};
 			if (Settings.GetBool("Window.ShowIngameMenu"))
 			{
@@ -89,15 +90,48 @@ namespace PoeHUD.Hud
 			{
 				return;
 			}
+
+			Dictionary<UiMountPoint, Vec2> mountPoints = new Dictionary<UiMountPoint, Vec2>();
+			mountPoints[UiMountPoint.UnderMinimap] = GetRightTopUnderMinimap();
+			mountPoints[UiMountPoint.LeftOfMinimap] = GetRightTopLeftOfMinimap();
+
 			foreach (HUDPlugin current in this.plugins)
 			{
-				current.Render(rc);
+				current.Render(rc, mountPoints);
 			}
 		}
+
+		private Vec2 GetRightTopLeftOfMinimap()
+		{
+			Rect clientRect = gameController.Internal.IngameState.IngameUi.Minimap.SmallMinimap.GetClientRect();
+			return new Vec2(clientRect.X - 10, clientRect.Y + 5);
+		}
+
+		private Vec2 GetRightTopUnderMinimap()
+		{
+			var mm = gameController.Internal.game.IngameState.IngameUi.Minimap.SmallMinimap;
+			var gl = gameController.Internal.game.IngameState.IngameUi.GemLvlUpPanel;
+			Rect mmRect = mm.GetClientRect();
+			Rect glRect = gl.GetClientRect();
+
+			Rect clientRect;
+			if (gl.IsVisible && glRect.X + gl.Width < mmRect.X + mmRect.X + 50) // also this +50 value doesn't seems to have any impact
+				clientRect = glRect;
+			else
+				clientRect = mmRect;
+			return new Vec2(mmRect.X + mmRect.W, clientRect.Y + clientRect.H + 10);
+		}
+
 		public bool Detach() {
 			foreach (HUDPlugin current in this.plugins)
 				current.OnDisable();
 			return false;
 		}
+	}
+
+	public enum UiMountPoint
+	{
+		UnderMinimap,
+		LeftOfMinimap
 	}
 }

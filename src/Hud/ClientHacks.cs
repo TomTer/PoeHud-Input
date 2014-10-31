@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using PoeHUD.Framework;
 
 namespace PoeHUD.Hud
@@ -32,7 +33,7 @@ namespace PoeHUD.Hud
 				}
 			}
 		}
-		public override void Render(RenderingContext rc)
+		public override void Render(RenderingContext rc, Dictionary<UiMountPoint, Vec2> mountPoints)
 		{
 			bool flag = Settings.GetBool("ClientHacks") && Settings.GetBool("ClientHacks.Maphack");
 			if (flag != this.maphackEnabled)

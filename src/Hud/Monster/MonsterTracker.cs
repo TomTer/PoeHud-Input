@@ -91,7 +91,7 @@ namespace PoeHUD.Hud.Monster
 			this.alertTexts.Clear();
 			currentIcons.Clear();
 		}
-		public override void Render(RenderingContext rc)
+		public override void Render(RenderingContext rc, Dictionary<UiMountPoint, Vec2> mountPoints)
 		{
 			if (!Settings.GetBool("MonsterTracker.ShowText"))
 			{

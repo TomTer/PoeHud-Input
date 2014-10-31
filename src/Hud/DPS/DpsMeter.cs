@@ -18,9 +18,10 @@ namespace PoeHUD.Hud.DPS
 		private DateTime startTime;
 
 		
-		private const float dps_period = 0.4f;
+		private const float dps_period = 0.2f;
 		private readonly float[] damageMemory = new float[10];
 		private int ixDamageMemory;
+		private int maxDps = 0;
 
 		public override void OnEnable()
 		{
@@ -30,15 +31,20 @@ namespace PoeHUD.Hud.DPS
 
 		private void CurrentArea_OnAreaChange(AreaController area)
 		{
-			startTime = DateTime.Now;
 			lastEntities = new Dictionary<int, int>();
+			hasStarted = false;
+			maxDps = 0;
 		}
 
-		public override void Render(RenderingContext rc)
+		public override void Render(RenderingContext rc, Dictionary<UiMountPoint, Vec2> mountPoints)
 		{
+			if (!Settings.GetBool("DpsDisplay"))
+			{
+				return;
+			}
+
 			if (!hasStarted)
 			{
-				startTime = DateTime.Now;
 				lastCalcTime = DateTime.Now;
 				hasStarted = true;
 				return;
@@ -52,22 +58,25 @@ namespace PoeHUD.Hud.DPS
 				ixDamageMemory++;
 				if (ixDamageMemory >= damageMemory.Length)
 					ixDamageMemory = 0;
-				model.Area.CurrentArea.AddTimeSpent(delta);
 				damageMemory[ixDamageMemory] = CalculateDps(delta);
 				lastCalcTime = dtNow;
 			}
 
 			int fontSize = Settings.GetInt("XphDisplay.FontSize");
+			Vec2 mapWithOffset = mountPoints[UiMountPoint.LeftOfMinimap];
+			int dps = ((int)damageMemory.Average());
+			if (maxDps < dps)
+				maxDps = dps;
+			
+			var textSize = rc.AddTextWithHeight(mapWithOffset,  dps + " DPS", Color.White, fontSize * 3 / 2, DrawTextFormat.Right);
+			var tx2 = rc.AddTextWithHeight(new Vec2(mapWithOffset.X, mapWithOffset.Y + textSize.Y), maxDps + " peak DPS", Color.White, fontSize * 2 / 3, DrawTextFormat.Right);
 
-			Rect clientRect = model.Internal.IngameState.IngameUi.Minimap.SmallMinimap.GetClientRect();
-			Vec2 mapWithOffset = new Vec2(clientRect.X - 10, clientRect.Y + 5);
-			int yCursor = 0;
+			int width = Math.Max(tx2.X, textSize.X);
+			Rect rect = new Rect(mapWithOffset.X - 5 - width, mapWithOffset.Y - 5, width + 10, textSize.Y + tx2.Y + 10);
+			
+			rc.AddBox(rect, Color.FromArgb(160, Color.Black));
 
-			int width = clientRect.W;
-			Rect rect = new Rect(mapWithOffset.X - width + 5, mapWithOffset.Y - 5, width, yCursor + 20);
-
-			rc.AddTextWithHeight(new Vec2(rect.X + 5, mapWithOffset.Y + 55), ((int)damageMemory.Average()) + " DPS", Color.White,
-				fontSize, DrawTextFormat.Center);
+			mountPoints[UiMountPoint.LeftOfMinimap] = new Vec2(mapWithOffset.X, mapWithOffset.Y + 5 + rect.H);
 		}
 
 		private float CalculateDps(TimeSpan dt)

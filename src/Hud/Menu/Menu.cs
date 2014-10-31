@@ -24,7 +24,7 @@ namespace PoeHUD.Hud.Menu
 		{
 			this.hook.Dispose();
 		}
-		public override void Render(RenderingContext rc)
+		public override void Render(RenderingContext rc, Dictionary<UiMountPoint, Vec2> mountPoints)
 		{
 			int alpha = this.menuVisible ? 255 : 100;
 			rc.AddBox(this.bounds, Color.FromArgb(alpha, Color.Gray));
@@ -86,8 +86,9 @@ namespace PoeHUD.Hud.Menu
 		}
 		private void CreateButtons()
 		{
+			int r = 0;
 			this.buttons = new List<BooleanButton>();
-			BooleanButton parent = this.CreateRootMenu("Health bars", 0, "Healthbars");
+			BooleanButton parent = this.CreateRootMenu("Health bars", r++, "Healthbars");
 			BooleanButton booleanButton = this.AddButton(parent, "Players", "Healthbars.Players");
 			BooleanButton parent2 = this.AddButton(parent, "Enemies", "Healthbars.Enemies");
 			BooleanButton booleanButton2 = this.AddButton(parent, "Minions", "Healthbars.Minions");
@@ -117,14 +118,14 @@ namespace PoeHUD.Hud.Menu
             booleanButton6.AddChild(new BooleanButton("Print health text", "Healthbars.Enemies.Unique.PrintHealthText"));
 			booleanButton6.AddChild(new IntPicker("Width", 50, 180, "Healthbars.Enemies.Unique.Width"));
 			booleanButton6.AddChild(new IntPicker("Height", 10, 50, "Healthbars.Enemies.Unique.Height"));
-			BooleanButton parent3 = this.CreateRootMenu("Minimap icons", 1, "MinimapIcons");
+			BooleanButton parent3 = this.CreateRootMenu("Minimap icons", r++, "MinimapIcons");
 			this.AddButton(parent3, "Monsters", "MinimapIcons.Monsters");
 			this.AddButton(parent3, "Minions", "MinimapIcons.Minions");
 			this.AddButton(parent3, "Strongboxes", "MinimapIcons.Strongboxes");
 			this.AddButton(parent3, "Chests", "MinimapIcons.Chests");
 			this.AddButton(parent3, "Alert items", "MinimapIcons.AlertedItems");
             this.AddButton(parent3, "Masters", "MinimapIcons.Masters");
-			BooleanButton parent4 = this.CreateRootMenu("Item alert", 2, "ItemAlert");
+			BooleanButton parent4 = this.CreateRootMenu("Item alert", r++, "ItemAlert");
 			this.AddButton(parent4, "Rares", "ItemAlert.Rares");
 			this.AddButton(parent4, "Uniques", "ItemAlert.Uniques");
 			this.AddButton(parent4, "Currency", "ItemAlert.Currency");
@@ -136,24 +137,25 @@ namespace PoeHUD.Hud.Menu
 			this.AddButton(parent4, "Play sound", "ItemAlert.PlaySound");
 			BooleanButton booleanButton7 = this.AddButton(parent4, "Show text", "ItemAlert.ShowText");
 			booleanButton7.AddChild(new IntPicker("Font size", 6, 30, "ItemAlert.ShowText.FontSize"));
-			BooleanButton tooltip = this.CreateRootMenu("Advanced tooltips", 3, "Tooltip");
+			BooleanButton tooltip = this.CreateRootMenu("Advanced tooltips", r++, "Tooltip");
 			this.AddButton(tooltip, "Item level on hover", "Tooltip.ShowItemLevel");
 			this.AddButton(tooltip, "Item mods on hover", "Tooltip.ShowItemMods");
-			BooleanButton parent5 = this.CreateRootMenu("Boss warnings", 4, "MonsterTracker");
+			BooleanButton parent5 = this.CreateRootMenu("Boss warnings", r++, "MonsterTracker");
 			this.AddButton(parent5, "Sound warning", "MonsterTracker.PlaySound");
 			BooleanButton booleanButton8 = this.AddButton(parent5, "Text warning", "MonsterTracker.ShowText");
 			booleanButton8.AddChild(new IntPicker("Font size", 6, 30, "MonsterTracker.ShowText.FontSize"));
 			booleanButton8.AddChild(new IntPicker("Background alpha", 0, 200, "MonsterTracker.ShowText.BgAlpha"));
-			BooleanButton booleanButton9 = this.CreateRootMenu("Xph Display", 5, "XphDisplay");
+			BooleanButton booleanButton9 = this.CreateRootMenu("Xph Display", r++, "XphDisplay");
 			booleanButton9.AddChild(new IntPicker("Font size", 6, 30, "XphDisplay.FontSize"));
 			booleanButton9.AddChild(new IntPicker("Background alpha", 0, 200, "XphDisplay.BgAlpha"));
-			BooleanButton parent6 = this.CreateRootMenu("Client hacks", 6, "ClientHacks");
+			BooleanButton parent6 = this.CreateRootMenu("Client hacks", r++, "ClientHacks");
 			this.AddButton(parent6, "Maphack", "ClientHacks.Maphack");
 			this.AddButton(parent6, "Zoomhack", "ClientHacks.Zoomhack");
 			this.AddButton(parent6, "Fullbright", "ClientHacks.Fullbright");
-			BooleanButton booleanButton10 = this.CreateRootMenu("Preload Alert", 7, "PreloadAlert");
+			BooleanButton booleanButton10 = this.CreateRootMenu("Preload Alert", r++, "PreloadAlert");
 			booleanButton10.AddChild(new IntPicker("Font size", 6, 30, "PreloadAlert.FontSize"));
 			booleanButton10.AddChild(new IntPicker("Background alpha", 0, 200, "PreloadAlert.BgAlpha"));
+			BooleanButton dps = this.CreateRootMenu("Sohw DPS", r++, "DpsDisplay");
 			// BooleanButton closeWithGame = this.CreateRootMenu("Exit when game is closed", 8, "ExitWithGame");
 		}
 		private BooleanButton AddButton(BooleanButton parent, string text, string setting)

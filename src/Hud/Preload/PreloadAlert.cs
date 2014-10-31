@@ -72,7 +72,7 @@ namespace PoeHUD.Hud.Preload
 				}
 			}
 		}
-		public override void Render(RenderingContext rc)
+		public override void Render(RenderingContext rc, Dictionary<UiMountPoint, Vec2> mountPoints)
 		{
 			if (!Settings.GetBool("PreloadAlert"))
 			{
@@ -89,27 +89,29 @@ namespace PoeHUD.Hud.Preload
 			}
 			if (this.disp.Count > 0)
 			{
-				Rect minimapRect = this.model.Internal.IngameState.IngameUi.Minimap.SmallMinimap.GetClientRect();
-				Rect rect = /*this.overlay.XphRenderer.Bounds; */ new Rect(400, 200, 100, 100);
-				Vec2 vec = new Vec2(minimapRect.X - 10, minimapRect.Y + rect.H + 10);
+
+				Vec2 vec = mountPoints[UiMountPoint.LeftOfMinimap];
 				int num2 = vec.Y;
-				int num3 = minimapRect.W;
+				int maxWidth = 0;
 				int @int = Settings.GetInt("PreloadAlert.FontSize");
 				int int2 = Settings.GetInt("PreloadAlert.BgAlpha");
 				foreach (string current in this.disp)
 				{
 					Vec2 vec2 = rc.AddTextWithHeight(new Vec2(vec.X, num2), current, Color.White, @int, DrawTextFormat.Right);
-					if (vec2.X + 10 > num3)
+					if (vec2.X + 10 > maxWidth)
 					{
-						num3 = vec2.X + 10;
+						maxWidth = vec2.X + 10;
 					}
 					num2 += vec2.Y;
 				}
-				if (num3 > 0 && int2 > 0)
+				if (maxWidth > 0 && int2 > 0)
 				{
-					Rect bounds = new Rect(vec.X - num3 + 5, vec.Y - 5, num3, num2 - vec.Y + 10);
+					Rect bounds = new Rect(vec.X - maxWidth + 5, vec.Y - 5, maxWidth, num2 - vec.Y + 10);
 					rc.AddBox(bounds, Color.FromArgb(int2, 1, 1, 1));
+					mountPoints[UiMountPoint.LeftOfMinimap] = new Vec2(vec.X, vec.Y + 5 + bounds.H);
 				}
+
+				
 			}
 		}
 		private void InitAlertStrings()

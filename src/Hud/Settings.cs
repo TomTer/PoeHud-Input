@@ -240,6 +240,7 @@ namespace PoeHUD.Hud
 			bools.Add("Healthbars.Enemies.Unique", true);
 			bools.Add("XphDisplay", true);
 			bools.Add("ExitWithGame", true);
+			bools.Add("DpsDisplay", true);
 			ints.Add("PreloadAlert.FontSize", 12);
 			ints.Add("PreloadAlert.BgAlpha", 180);
 			ints.Add("XphDisplay.FontSize", 12);

@@ -23,7 +23,7 @@ namespace PoeHUD.Hud.MaxRolls
         {
         }
 
-        public override void Render(RenderingContext rc)
+		public override void Render(RenderingContext rc, Dictionary<UiMountPoint, Vec2> mountPoints)
         {
             if (!Settings.GetBool("Tooltip") || !Settings.GetBool("Tooltip.ShowItemMods"))
                 return;

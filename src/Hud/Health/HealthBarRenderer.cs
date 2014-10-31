@@ -46,7 +46,7 @@ namespace PoeHUD.Hud.Health
 		}
 
 
-		public override void Render(RenderingContext rc)
+		public override void Render(RenderingContext rc, Dictionary<UiMountPoint, Vec2> mountPoints)
 		{
 			if (!this.model.InGame || !Settings.GetBool("Healthbars"))
 			{

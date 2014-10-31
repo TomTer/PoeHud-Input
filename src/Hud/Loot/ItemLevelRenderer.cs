@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Drawing;
 using PoeHUD.Framework;
 using PoeHUD.Poe.EntityComponents;
@@ -15,7 +16,7 @@ namespace PoeHUD.Hud
 		public override void OnDisable()
 		{
 		}
-		public override void Render(RenderingContext rc)
+		public override void Render(RenderingContext rc, Dictionary<UiMountPoint, Vec2> mountPoints)
 		{
 			if (!Settings.GetBool("Tooltip") || !Settings.GetBool("Tooltip.ShowItemLevel"))
 			{

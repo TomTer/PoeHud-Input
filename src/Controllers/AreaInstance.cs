@@ -13,7 +13,7 @@ namespace PoeHUD.Controllers
 		public readonly bool HasWaypoint;
 		public readonly int Hash;
 
-		public TimeSpan TimeSpent = new TimeSpan(0);
+		public DateTime TimeEntered = DateTime.Now;
 
 		public AreaInstance(AreaTemplate area, int hash, int realLevel)
 		{
@@ -33,20 +33,13 @@ namespace PoeHUD.Controllers
 
 		public string DisplayName { get { return String.Concat(Name, " (", RealLevel, ")"); } }
 
-		internal void AddTimeSpent(TimeSpan delta)
-		{
-			TimeSpent += delta;
-		}
-
-		public string TimeString {
-			get {
-				int allsec = (int)TimeSpent.TotalSeconds;
-				int secs = allsec % 60;
-				int mins = allsec / 60;
-				int hours = mins / 60;
-				mins = mins % 60;
-				return String.Format(hours > 0 ? "{0}:{1:00}:{2:00}" : "{1}:{2:00}", hours, mins, secs);
-			}
+		public static string GetTimeString(TimeSpan TimeSpent) {
+			int allsec = (int)TimeSpent.TotalSeconds;
+			int secs = allsec % 60;
+			int mins = allsec / 60;
+			int hours = mins / 60;
+			mins = mins % 60;
+			return String.Format(hours > 0 ? "{0}:{1:00}:{2:00}" : "{1}:{2:00}", hours, mins, secs);
 		}
 	}
 }
