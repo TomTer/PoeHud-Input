@@ -65,8 +65,6 @@ namespace PoeHUD.Hud.DPS
 			int fontSize = Settings.GetInt("XphDisplay.FontSize");
 			Vec2 mapWithOffset = mountPoints[UiMountPoint.LeftOfMinimap];
 			int dps = ((int)damageMemory.Average());
-			if (dps > 1000000) //discard those - read form invalid addresses
-				return;
 			if (maxDps < dps)
 				maxDps = dps;
 			
@@ -90,6 +88,8 @@ namespace PoeHUD.Hud.DPS
 			foreach (var entity in model.Entities.Where(x => x.HasComponent<Poe.EntityComponents.Monster>() && x.IsHostile))
 			{
 				int entityEHP = entity.IsAlive ? entity.GetComponent<Life>().CurHP + entity.GetComponent<Life>().CurES : 0;
+				if (entityEHP > 10000000 || entityEHP < -1000000) //discard those - read form invalid addresses
+					continue;
 
 				if (lastEntities.ContainsKey(entity.Id))
 				{
