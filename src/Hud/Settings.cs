@@ -203,6 +203,7 @@ namespace PoeHUD.Hud
 			bools.Add("ClientHacks.Maphack", false);
 			bools.Add("ClientHacks.Zoomhack", false);
 			bools.Add("ClientHacks.Fullbright", false);
+			bools.Add("ClientHacks.Particles", false);
 			bools.Add("PreloadAlert", true);
 			bools.Add("Healthbars", true);
 			bools.Add("Healthbars.ShowES", false);

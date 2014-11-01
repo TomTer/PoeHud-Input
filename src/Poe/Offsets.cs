@@ -16,6 +16,7 @@ namespace PoeHUD.Poe
 		public int AreaChangeCount;
 		public int Fullbright1;
 		public int Fullbright2;
+		public int ParticlesCode;
 
 
 		public static Offsets Regular = new Offsets { IgsOffset = 0, IgsDelta = 0, ExeName = "PathOfExile" };
@@ -82,6 +83,22 @@ namespace PoeHUD.Poe
 			139, 9, 137, 8, 133, 201, 116, 12, 255, 65, 40, 139, 21, 0, 0, 0,
 			0, 137, 81, 36, 195, 204
 		}, "xxxxxxxxxxxxx????xxxxx");
+
+
+		/*
+			80 7E 48 00             cmp     byte ptr [esi+48h], 0
+			0F 85 A4 01 00 00       jnz     loc_542F41					; we catch the last 00 byte into pattern to match 4-bytes step
+			8B 46 08                mov     eax, [esi+8]
+			80 B8 1C 01 00 00 00    cmp     byte ptr [eax+11Ch], 0
+			75 12                   jnz     short loc_542DBB
+		 */
+		private static Pattern particlePattern = new Pattern(new byte[]
+		{
+			0x00, 0x8B, 0, 0, 0x80, 0xB8, 0, 0, 0, 0, 0x00, 0x75, 0x12
+		}, "xx??xx????xxx");
+
+
+
 		public void DoPatternScans(Memory m)
 		{
 			int[] array = m.FindPatterns(new Pattern[]
@@ -91,7 +108,8 @@ namespace PoeHUD.Poe
 				Offsets.fullbrightPattern,
 				Offsets.basePtrPattern,
 				Offsets.fileRootPattern,
-				Offsets.areaChangePattern
+				Offsets.areaChangePattern,
+				Offsets.particlePattern
 			});
 			MaphackFunc = array[0];
 			ZoomHackFunc = array[1] + 247;
@@ -100,6 +118,7 @@ namespace PoeHUD.Poe
 			Base = m.ReadInt(m.BaseAddress + array[3] + 22) - m.BaseAddress;
 			FileRoot = m.ReadInt(m.BaseAddress + array[4] + 40) - m.BaseAddress;
 			AreaChangeCount = m.ReadInt(m.BaseAddress + array[5] + 13) - m.BaseAddress;
+			ParticlesCode = m.BaseAddress + array[6] - 5;
 		}
 	}
 }

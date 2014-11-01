@@ -208,7 +208,7 @@ namespace PoeHUD.Framework
 				{
 					if (this.CompareData(pattern, exeImage, offset)) {
 						address[iPattern] = offset;
-						Console.WriteLine("Pattern " + iPattern + " is found");
+						Console.WriteLine("Pattern " + iPattern + " is found at " + (this.BaseAddress + offset).ToString("X"));
 						break;
 					}
 				}
