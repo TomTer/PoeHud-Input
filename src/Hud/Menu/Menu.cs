@@ -152,6 +152,7 @@ namespace PoeHUD.Hud.Menu
 			this.AddButton(parent6, "Maphack", "ClientHacks.Maphack");
 			this.AddButton(parent6, "Zoomhack", "ClientHacks.Zoomhack");
 			this.AddButton(parent6, "Fullbright", "ClientHacks.Fullbright");
+			this.AddButton(parent6, "Disable Particles", "ClientHacks.Particles");
 			BooleanButton booleanButton10 = this.CreateRootMenu("Preload Alert", r++, "PreloadAlert");
 			booleanButton10.AddChild(new IntPicker("Font size", 6, 30, "PreloadAlert.FontSize"));
 			booleanButton10.AddChild(new IntPicker("Background alpha", 0, 200, "PreloadAlert.BgAlpha"));
