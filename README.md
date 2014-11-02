@@ -3,6 +3,8 @@ PoeHud
 
 Reads data from Path of Exile client application and displays it on transparent overlay, while you play PoE.
 
+### Donation link
+https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=FR956N987FHLL&lc=RU&item_name=Development%20of%20PoeHUD&item_number=OwnedCore_1&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
 
 ### Requirements
 * .NET framerwork v.4 or newer (you already have it on Windows 8+, otherwise here's your dowload link)
