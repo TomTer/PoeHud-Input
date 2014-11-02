@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using PoeHUD.Controllers;
+using PoeHUD.Framework;
 using PoeHUD.Poe.EntityComponents;
 
 namespace PoeHUD.Hud.Monster
@@ -43,7 +44,7 @@ namespace PoeHUD.Hud.Monster
 		{
 			currentIcons.Clear();
 		}
-		public override void Render(RenderingContext rc)
+		public override void Render(RenderingContext rc, Dictionary<UiMountPoint, Vec2> mountPoints)
 		{
 			if (!Settings.GetBool("MonsterTracker.ShowText"))
 			{

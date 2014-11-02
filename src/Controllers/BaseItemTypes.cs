@@ -4,33 +4,16 @@ using PoeHUD.Framework;
 
 namespace PoeHUD.Controllers
 {
-	public class BaseItemTypes
+	public class BaseItemTypes : FileInMemory
 	{
-		private Memory m;
-		private int address;
-		private Dictionary<string, string> contents;
-		public BaseItemTypes(Memory m, int address)
-		{
-			this.m = m;
-			this.address = address;
-			this.contents = new Dictionary<string, string>();
-		}
+		private Dictionary<string, string> contents = new Dictionary<string, string>();
+
+		public BaseItemTypes(Memory m, int address) : base(m, address) {}
 		public string Translate(string metadata)
 		{
 			if (!this.contents.ContainsKey(metadata))
 			{
-				int i = this.m.ReadInt(this.address + 48);
-				int num = this.m.ReadInt(this.address + 52);
-				while (i < num)
-				{
-					string key = this.m.ReadStringU(this.m.ReadInt(i), 256, true);
-					string value = this.m.ReadStringU(this.m.ReadInt(i + 16), 256, true);
-					if (!this.contents.ContainsKey(key))
-					{
-						this.contents.Add(key, value);
-					}
-					i += 176;
-				}
+				loadItemTypes();
 			}
 			if (!this.contents.ContainsKey(metadata))
 			{
@@ -38,6 +21,19 @@ namespace PoeHUD.Controllers
 				return metadata;
 			}
 			return this.contents[metadata];
+		}
+
+		private void loadItemTypes()
+		{
+			foreach (int i in RecordAdresses())
+			{
+				string key = this.m.ReadStringU(this.m.ReadInt(i), 256, true);
+				string value = this.m.ReadStringU(this.m.ReadInt(i + 16), 256, true);
+				if (!this.contents.ContainsKey(key))
+				{
+					this.contents.Add(key, value);
+				}
+			}
 		}
 	}
 }

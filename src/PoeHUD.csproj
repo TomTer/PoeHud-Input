@@ -58,7 +58,10 @@
   <ItemGroup>
     <Compile Include="Controllers\AreaInstance.cs" />
     <Compile Include="Hotkeys\PoeHotkeys.cs" />
+    <Compile Include="Controllers\FileInMemory.cs" />
+    <Compile Include="Controllers\ModsDat.cs" />
     <Compile Include="Hud\DebugView\ShowUiHierarchy.cs" />
+    <Compile Include="Hud\DPS\DpsMeter.cs" />
     <Compile Include="Hud\Health\Healthbar.cs" />
     <Compile Include="Hud\Health\RenderPrio.cs" />
     <Compile Include="Hud\HudSkin.cs" />
@@ -212,6 +215,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if "$(ConfigurationName)"=="Release" (

@@ -12,7 +12,7 @@ namespace PoeHUD.Hud
 		void OnEnable();
 		void OnDisable();
 
-		void Render(RenderingContext rc);
+		void Render(RenderingContext rc, Dictionary<UiMountPoint, Vec2> mountPoints);
 	}
 
 	public interface HUDPluginWithMapIcons : HUDPlugin
@@ -31,7 +31,7 @@ namespace PoeHUD.Hud
 		public abstract void OnEnable();
 		public abstract void OnDisable();
 
-		public abstract void Render(RenderingContext rc);
+		public abstract void Render(RenderingContext rc, Dictionary<UiMountPoint, Vec2> mountPoints);
 
 		// could not fing a better place yet
 		protected static RectUV GetDirectionsUv(double phi, double distance)

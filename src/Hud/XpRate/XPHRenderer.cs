@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using PoeHUD.Controllers;
 using PoeHUD.Framework;
@@ -45,7 +46,7 @@ namespace PoeHUD.Hud.XpRate
 			this.startTime = DateTime.Now;
 			this.curTimeLeftString = "--h --m --s until level up";
 		}
-		public override void Render(RenderingContext rc)
+		public override void Render(RenderingContext rc, Dictionary<UiMountPoint, Vec2> mountPoints)
 		{
 			if (!Settings.GetBool("XphDisplay") || (this.model.Player != null && this.model.Player.GetComponent<Player>().Level >= 100))
 			{
@@ -62,9 +63,8 @@ namespace PoeHUD.Hud.XpRate
 			DateTime dtNow = DateTime.Now;
 			TimeSpan delta = dtNow - this.lastCalcTime;
 			
-			if (delta.TotalSeconds > 1.0)
+			if (delta.TotalSeconds > 1)
 			{
-				this.model.Area.CurrentArea.AddTimeSpent(delta);
 				calculateRemainingExp(dtNow);
 				this.lastCalcTime = dtNow;
 			}
@@ -72,8 +72,8 @@ namespace PoeHUD.Hud.XpRate
 			int fontSize = Settings.GetInt("XphDisplay.FontSize");
 			int bgAlpha = Settings.GetInt("XphDisplay.BgAlpha");
 
-			Rect clientRect = this.model.Internal.IngameState.IngameUi.Minimap.SmallMinimap.GetClientRect();
-			Vec2 mapWithOffset = new Vec2(clientRect.X - 10, clientRect.Y + 5);
+			Vec2 mapWithOffset = mountPoints[UiMountPoint.LeftOfMinimap];
+
 			int yCursor = 0;
 			Vec2 rateTextSize = rc.AddTextWithHeight(new Vec2(mapWithOffset.X, mapWithOffset.Y), this.curDisplayString, Color.White, fontSize, DrawTextFormat.Right);
 			yCursor += rateTextSize.Y;
@@ -81,11 +81,12 @@ namespace PoeHUD.Hud.XpRate
 			yCursor += remainingTextSize.Y;
 			int thirdLine = mapWithOffset.Y + yCursor;
 			Vec2 areaLevelNote = rc.AddTextWithHeight(new Vec2(mapWithOffset.X, thirdLine), this.model.Area.CurrentArea.DisplayName, Color.White, fontSize, DrawTextFormat.Right);
-			string strTimer = this.model.Area.CurrentArea.TimeString;
+
+			string strTimer = AreaInstance.GetTimeString(dtNow - this.model.Area.CurrentArea.TimeEntered);
 			Vec2 timerSize = rc.MeasureString(strTimer, fontSize, DrawTextFormat.Left);
 			yCursor += areaLevelNote.Y;
 
-
+			Rect clientRect = model.Internal.IngameState.IngameUi.Minimap.SmallMinimap.GetClientRect();
 			int textWidth = Math.Max( Math.Max(rateTextSize.X, remainingTextSize.X), areaLevelNote.X + timerSize.X + 20 ) + 10;
 			int width = Math.Max(textWidth, Math.Max(clientRect.W, 0/*this.overlay.PreloadAlert.Bounds.W*/));
 			Rect rect = new Rect(mapWithOffset.X - width + 5, mapWithOffset.Y - 5, width, yCursor + 10);
@@ -95,6 +96,8 @@ namespace PoeHUD.Hud.XpRate
 			rc.AddTextWithHeight(new Vec2(rect.X + 5, thirdLine), strTimer, Color.White, fontSize, DrawTextFormat.Left);
 			
 			rc.AddBox(rect, Color.FromArgb(bgAlpha, 1, 1, 1));
+
+			mountPoints[UiMountPoint.LeftOfMinimap] = new Vec2(mapWithOffset.X, mapWithOffset.Y + 5 + rect.H);
 		}
 
 		private void calculateRemainingExp(DateTime dtNow)

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using PoeHUD.Framework;
 
 namespace PoeHUD.Hud
@@ -9,6 +10,7 @@ namespace PoeHUD.Hud
 		private bool maphackEnabled;
 		private bool zoomhackEnabled;
 		private bool fullbrightEnabled;
+		private bool particlesEnabled;
 		private bool hasSetWriteAccess;
 		public override void OnEnable()
 		{
@@ -32,20 +34,16 @@ namespace PoeHUD.Hud
 				}
 			}
 		}
-		public override void Render(RenderingContext rc)
+		public override void Render(RenderingContext rc, Dictionary<UiMountPoint, Vec2> mountPoints)
 		{
 			bool flag = Settings.GetBool("ClientHacks") && Settings.GetBool("ClientHacks.Maphack");
 			if (flag != this.maphackEnabled)
 			{
 				this.maphackEnabled = !this.maphackEnabled;
 				if (this.maphackEnabled)
-				{
 					this.EnableMaphack();
-				}
 				else
-				{
 					this.DisableMaphack();
-				}
 			}
 			if (this.zoomhackEnabled && this.model.InGame)
 			{
@@ -60,24 +58,27 @@ namespace PoeHUD.Hud
 			{
 				this.zoomhackEnabled = !this.zoomhackEnabled;
 				if (this.zoomhackEnabled)
-				{
 					this.EnableZoomhack();
-				}
 				else
-				{
 					this.DisableZoomhack();
-				}
 			}
 			bool flag3 = Settings.GetBool("ClientHacks") && Settings.GetBool("ClientHacks.Fullbright");
 			if (flag3 != this.fullbrightEnabled)
 			{
 				this.fullbrightEnabled = !this.fullbrightEnabled;
 				if (this.fullbrightEnabled)
-				{
 					this.EnableFullbright();
-					return;
-				}
-				this.DisableFullbright();
+				else
+					this.DisableFullbright();
+			}
+			bool flag4 = Settings.GetBool("ClientHacks") && Settings.GetBool("ClientHacks.Particles");
+			if (flag4 != this.particlesEnabled)
+			{
+				this.particlesEnabled = !this.particlesEnabled;
+				if (this.particlesEnabled)
+					this.EnableParticles();
+				else
+					this.DisableParticles();
 			}
 		}
 
@@ -88,6 +89,7 @@ namespace PoeHUD.Hud
 				this.DisableMaphack();
 				this.DisableZoomhack();
 				this.DisableFullbright();
+				this.DisableParticles();
 			}
 		}
 		private void EnableFullbright()
@@ -106,6 +108,17 @@ namespace PoeHUD.Hud
 			this.m.WriteFloat(this.m.BaseAddress + m.offsets.Fullbright1, 1300f);
 			this.m.WriteFloat(this.m.BaseAddress + m.offsets.Fullbright2, 350f);
 		}
+
+		private void EnableParticles()
+		{
+			this.m.WriteBytes(m.offsets.ParticlesCode, new byte[] { 0x90, 0xE9 });
+		}
+		private void DisableParticles()
+		{
+			this.m.WriteBytes(m.offsets.ParticlesCode, new byte[] { 0x0F, 0x85 });
+		}
+
+
 		private void EnableZoomhack()
 		{
 			this.m.WriteBytes(this.m.BaseAddress + m.offsets.ZoomHackFunc, new byte[]

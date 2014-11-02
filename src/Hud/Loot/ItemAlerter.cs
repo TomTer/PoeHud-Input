@@ -108,27 +108,18 @@ namespace PoeHUD.Hud.Loot
 			playedSoundsCache.Clear();
 			currentIcons.Clear();
 		}
-		public override void Render(RenderingContext rc)
+		public override void Render(RenderingContext rc, Dictionary<UiMountPoint, Vec2> mountPoints)
 		{
 			if (!Settings.GetBool("ItemAlert") || !Settings.GetBool("ItemAlert.ShowText"))
 			{
 				return;
 			}
-			var mm = model.Internal.game.IngameState.IngameUi.Minimap.SmallMinimap;
-			var gl = model.Internal.game.IngameState.IngameUi.GemLvlUpPanel;
-			Rect mmRect = mm.GetClientRect();
-			Rect glRect = gl.GetClientRect();
 
-			Rect clientRect;
-			if (gl.IsVisible && glRect.X + gl.Width < mmRect.X + mmRect.X + 50) // also this +50 value doesn't seems to have any impact
-				clientRect = glRect;
-			else
-				clientRect = mmRect;
 
 			var playerPos = model.Player.GetComponent<Positioned>().GridPos;
 
-			Vec2 rightTopAnchor = new Vec2(mmRect.X + mmRect.W, clientRect.Y + clientRect.H + 10);
-			
+
+			Vec2 rightTopAnchor = mountPoints[UiMountPoint.UnderMinimap];
 			int y = rightTopAnchor.Y;
 			int fontSize = Settings.GetInt("ItemAlert.ShowText.FontSize");
 			
@@ -188,7 +179,7 @@ namespace PoeHUD.Hud.Loot
 
 			int fullHeight = vTextSize.Y + 2 * vPadding.Y + 2 * drawStyle.FrameWidth;
 			int fullWidth = vTextSize.X + 2 * vPadding.X + iconSize + 2 * drawStyle.FrameWidth + compassOffset;
-			rc.AddBox(new Rect(x - fullWidth, y, fullWidth, fullHeight), Color.FromArgb(180, 0, 0, 0));
+			rc.AddBox(new Rect(x - fullWidth, y, fullWidth - compassOffset, fullHeight), Color.FromArgb(180, 0, 0, 0));
 
 			var rectUV = GetDirectionsUv(phi, distance);
 			rc.AddSprite("directions.png", new Rect(x - vPadding.X - compassOffset + 6, y + vPadding.Y, vTextSize.Y, vTextSize.Y), rectUV);

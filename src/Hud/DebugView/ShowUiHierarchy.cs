@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using PoeHUD.Framework;
@@ -15,7 +16,7 @@ namespace PoeHUD.Hud.DebugView
 		public override void OnDisable()
 		{
 		}
-		public override void Render(RenderingContext rc)
+		public override void Render(RenderingContext rc, Dictionary<UiMountPoint, Vec2> mountPoints)
 		{
 			Element root = this.model.Internal.IngameState.UIRoot;
 
