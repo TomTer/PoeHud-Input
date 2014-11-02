@@ -102,7 +102,10 @@ namespace PoeHUD.Framework
 			{
 				return string.Empty;
 			}
-			string @string = Encoding.Unicode.GetString(this.ReadMem(addr, length));
+			byte[] mem = this.ReadMem(addr, length);
+			if (mem[0] == 0 && mem[1] == 0)
+				return string.Empty;
+			string @string = Encoding.Unicode.GetString(mem);
 			if (replaceNull)
 			{
 				int num = @string.IndexOf('\0');

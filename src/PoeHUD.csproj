@@ -47,7 +47,10 @@
   <ItemGroup>
     <Compile Include="Controllers\AreaInstance.cs" />
     <Compile Include="Controllers\FileInMemory.cs" />
-    <Compile Include="Controllers\ModsDat.cs" />
+    <Compile Include="Poe\FileSystem\StatsDat.cs" />
+    <Compile Include="Poe\FileSystem\ModsDat.cs" />
+    <Compile Include="Framework\ColorUtils.cs" />
+    <Compile Include="Framework\IntRange.cs" />
     <Compile Include="Hud\DebugView\ShowUiHierarchy.cs" />
     <Compile Include="Hud\DPS\DpsMeter.cs" />
     <Compile Include="Hud\Health\Healthbar.cs" />
@@ -67,18 +70,17 @@
     <Compile Include="Framework\RectUV.cs" />
     <Compile Include="Framework\Vec2.cs" />
     <Compile Include="Framework\Vec3.cs" />
-    <Compile Include="Hud\MaxRolls\MaxRolls_Mod.cs" />
     <Compile Include="Hud\Monster\PoiTracker.cs" />
     <Compile Include="Poe\EntityComponents\Actor.cs" />
     <Compile Include="Controllers\AreaController.cs" />
     <Compile Include="Poe\EntityComponents\AreaTransition.cs" />
     <Compile Include="Poe\EntityComponents\Armour.cs" />
-    <Compile Include="Controllers\BaseItemTypes.cs" />
+    <Compile Include="Poe\FileSystem\BaseItemTypes.cs" />
     <Compile Include="Poe\EntityComponents\Chest.cs" />
     <Compile Include="Poe\EntityComponents\Component.cs" />
     <Compile Include="Controllers\EntityWrapper.cs" />
     <Compile Include="Controllers\EntityListWrapper.cs" />
-    <Compile Include="Controllers\FileIndex.cs" />
+    <Compile Include="Poe\FileSystem\FsController.cs" />
     <Compile Include="Controllers\Inventory.cs" />
     <Compile Include="Controllers\InventoryIndex.cs" />
     <Compile Include="Game\ItemRarity.cs" />
@@ -93,6 +95,7 @@
     <Compile Include="Game\MonsterRarity.cs" />
     <Compile Include="Poe\EntityComponents\NPC.cs" />
     <Compile Include="Poe\EntityComponents\ObjectMagicProperties.cs" />
+    <Compile Include="Poe\FileSystem\TagsDat.cs" />
     <Compile Include="Poe\Offsets.cs" />
     <Compile Include="Controllers\GameController.cs" />
     <Compile Include="Poe\EntityComponents\Player.cs" />
