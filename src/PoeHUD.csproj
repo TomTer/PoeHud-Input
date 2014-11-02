@@ -46,6 +46,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\AreaInstance.cs" />
+    <Compile Include="Controllers\FileInMemory.cs" />
+    <Compile Include="Controllers\ModsDat.cs" />
     <Compile Include="Hud\DebugView\ShowUiHierarchy.cs" />
     <Compile Include="Hud\DPS\DpsMeter.cs" />
     <Compile Include="Hud\Health\Healthbar.cs" />
