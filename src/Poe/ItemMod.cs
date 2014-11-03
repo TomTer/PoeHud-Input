@@ -10,6 +10,7 @@ namespace PoeHUD.Poe
 		public int Value1 { get { return this.m.ReadInt(this.address, 0); } }
 		public int Value2 { get { return this.m.ReadInt(this.address, 4); } }
 		public int Value3 { get { return this.m.ReadInt(this.address, 8); } }
+		public int Value4 { get { return this.m.ReadInt(this.address, 12); } }
 
 		public string RawName
 		{

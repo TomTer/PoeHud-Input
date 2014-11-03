@@ -101,7 +101,7 @@ namespace PoeHUD.Hud.MaxRolls
 				yPos += textSize.Y;
 			}
 
-			for (int iStat = 0; iStat < 3; iStat++)
+			for (int iStat = 0; iStat < 4; iStat++)
 			{
 				IntRange range = item.TheMod.StatRange[iStat];
 				if(range.Min == 0 && range.Max == 0)

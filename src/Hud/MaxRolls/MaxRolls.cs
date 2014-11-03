@@ -30,7 +30,7 @@ namespace PoeHUD.Hud.MaxRolls
 			AffixType = TheMod.AffixType;
 			AffixText = String.IsNullOrEmpty(TheMod.UserFriendlyName) ? TheMod.Key : TheMod.UserFriendlyName;
 			IsCrafted = TheMod.Domain == 10;
-			StatValue = new int[] {mod.Value1, mod.Value2, mod.Value3};
+			StatValue = new int[] {mod.Value1, mod.Value2, mod.Value3, mod.Value4 };
 
 			int subOptimalTierDistance = 0;
 
