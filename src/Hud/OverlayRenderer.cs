@@ -36,6 +36,7 @@ namespace PoeHUD.Hud
 				new PoiTracker(),
 				new XPHRenderer(),
 				new ClientHacks(),
+                new AutoFlask(),
 	#if DEBUG
 			//	new ShowUiHierarchy(),
 	#endif

@@ -75,8 +75,6 @@ namespace PoeHUD.Hud
 				GameController gameController = new GameController(memory);
 				gameController.RefreshState();
 
-                PoeHotkeys poeHotkeys = new PoeHotkeys(gameController);
-                poeHotkeys.RegisterRemainingHotkey(Keys.F5);
 
 				try
 				{   

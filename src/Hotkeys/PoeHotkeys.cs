@@ -18,23 +18,32 @@ namespace PoeHUD
     public class PoeHotkeys
     {
 
-        private readonly GameController gameController;
 
-        public PoeHotkeys(GameController gameController)
+        public static void SendKey1()
         {
-            this.gameController = gameController;
+            new InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_1);
         }
 
-        # region register hotkeys
-
-        public void RegisterRemainingHotkey(Keys key)
+        public static void SendKey2()
         {
-            HotkeyManager.Current.AddOrReplace("WriteRemaining", key, SendRemaining);
+            new InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_2);
+        }
+        public static void SendKey3()
+        {
+            new InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_3);
         }
 
-        #endregion
+        public static void SendKey4()
+        {
+            new InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_4);
+        }
 
-        private void SendRemaining(object sender, HotkeyEventArgs e)
+        public static void SendKey5()
+        {
+            new InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_5);
+        }
+
+        public static void SendRemaining(object sender, HotkeyEventArgs e)
         {
             new InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.RETURN);
             Thread.Sleep(3);
@@ -44,49 +53,5 @@ namespace PoeHUD
             e.Handled = true;
         }
 
-
-        #region P/Invoke
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool SetForegroundWindow(IntPtr hWnd);
-
-        // For Windows Mobile, replace user32.dll with coredll.dll
-        [DllImport("user32.dll", SetLastError = true)]
-        static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-
-        // Find window by Caption only. Note you must pass IntPtr.Zero as the first parameter.
-        [DllImport("user32.dll", EntryPoint = "FindWindow", SetLastError = true)]
-        static extern IntPtr FindWindowByCaption(IntPtr ZeroOnly, string lpWindowName);
-        // You can also call FindWindow(default(string), lpWindowName) or FindWindow((string)null, lpWindowName)
-
-
-        public static bool BringWindowToTop(string windowName, bool wait)
-        {
-            int hWnd = FindWindow(windowName, wait);
-            if (hWnd != 0)
-            {
-                return SetForegroundWindow((IntPtr)hWnd);
-            }
-            return false;
-        }
-
-        // THE FOLLOWING METHOD REFERENCES THE FindWindowAPI
-        public static int FindWindow(string windowName, bool wait)
-        {
-            int hWnd = (int)FindWindow(null, windowName);
-            while (wait && hWnd == 0)
-            {
-                System.Threading.Thread.Sleep(500);
-                hWnd = (int)FindWindow(null, windowName);
-            }
-
-            return hWnd;
-        }
-
-
-
-
-        #endregion
     }
 }
