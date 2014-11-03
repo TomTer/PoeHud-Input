@@ -52,7 +52,7 @@ namespace PoeHUD.Hud
 			Size = iconSize;
 		}
 
-		public static Vec2 deltaInWorldToMinimapDelta(Vec2 delta, double diag, float scale)
+		public static Vec2 deltaInWorldToMinimapDelta(Vec2 delta, double diag, float scale, int deltaZ = 0)
 		{
 			const float CameraAngle = 38;
 
@@ -62,9 +62,7 @@ namespace PoeHUD.Hud
 			float sinX = (float)(delta.X / scale * diag * Math.Sin(Math.PI / 180 * CameraAngle));
 			float sinY = (float)(delta.Y / scale * diag * Math.Sin(Math.PI / 180 * CameraAngle));
 			// 2D rotation formulas not correct, but it's what appears to work?
-			int x = +(int)(cosX - cosY);
-			int y = -(int)((sinX + sinY));
-			return new Vec2(x, y);
+			return new Vec2((int)(cosX - cosY), -(int)((sinX + sinY)) + deltaZ);
 		}
 
 		public virtual bool IsEntityStillValid() { return Entity.IsValid; }

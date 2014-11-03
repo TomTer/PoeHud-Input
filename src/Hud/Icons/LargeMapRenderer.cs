@@ -9,7 +9,6 @@ namespace PoeHUD.Hud.Icons
 	public class LargeMapRenderer : HUDPluginBase
 	{
 		private readonly Func<IEnumerable<MapIcon>> getIcons;
-		private Vec2 playerPos;
 
 		public LargeMapRenderer(Func<IEnumerable<MapIcon>> gatherMapIcons)
 		{
@@ -37,7 +36,8 @@ namespace PoeHUD.Hud.Icons
 			BigMinimap mapWindow = model.Internal.game.IngameState.IngameUi.Minimap;
 			Rect rcMap = mapWindow.GetClientRect();
 
-			playerPos = model.Player.GetComponent<Positioned>().GridPos;
+			Vec2 playerPos = model.Player.GetComponent<Positioned>().GridPos;
+			float pPosZ = model.Player.GetComponent<Render>().Z;
 			Vec2 screenCenter = new Vec2(rcMap.W / 2, rcMap.H / 2) + new Vec2(rcMap.X, rcMap.Y);
 			float diag = (float)Math.Sqrt(camera.Width * camera.Width + camera.Height * camera.Height);
 
@@ -48,7 +48,8 @@ namespace PoeHUD.Hud.Icons
 				if (icon.ShouldSkip())
 					continue;
 
-				Vec2 point = screenCenter + MapIcon.deltaInWorldToMinimapDelta(icon.WorldPosition - playerPos, diag, scale);
+				float iZ = icon.Entity.GetComponent<Render>().Z;
+				Vec2 point = screenCenter + MapIcon.deltaInWorldToMinimapDelta(icon.WorldPosition - playerPos, diag, scale, (int)((iZ - pPosZ)/ 10));
 
 				var texture = icon.LargeMapIcon ?? icon.MinimapIcon;
 				int size = icon.SizeOfLargeIcon.GetValueOrDefault(icon.Size * 2);

@@ -34,7 +34,8 @@ namespace PoeHUD.Hud.Icons
 				return;
 
 
-			playerPos = model.Player.GetComponent<Positioned>().GridPos;
+			Vec2 playerPos = model.Player.GetComponent<Positioned>().GridPos;
+			float pPosZ = model.Player.GetComponent<Render>().Z;
 			
 			const float scale = 240f;
 			Rect clientRect = smallMinimap.GetClientRect();
@@ -45,7 +46,8 @@ namespace PoeHUD.Hud.Icons
 				if (icon.ShouldSkip())
 					continue;
 
-				Vec2 point = minimapCenter + MapIcon.deltaInWorldToMinimapDelta(icon.WorldPosition - playerPos, diag, scale);
+				float iZ = icon.Entity.GetComponent<Render>().Z;
+				Vec2 point = minimapCenter + MapIcon.deltaInWorldToMinimapDelta(icon.WorldPosition - playerPos, diag, scale, (int)((iZ - pPosZ) / 20));
 
 				var texture = icon.MinimapIcon;
 				int size = icon.Size;
