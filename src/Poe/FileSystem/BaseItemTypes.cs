@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
+using PoeHUD.Controllers;
 using PoeHUD.Framework;
 
-namespace PoeHUD.Controllers
+namespace PoeHUD.Poe.Files
 {
 	public class BaseItemTypes : FileInMemory
 	{

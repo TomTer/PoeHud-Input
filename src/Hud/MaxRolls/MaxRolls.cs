@@ -1,144 +1,77 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Xml.Linq;
 using System.Linq;
+using PoeHUD.Controllers;
+using PoeHUD.Framework;
+using PoeHUD.Poe;
+using PoeHUD.Poe.Files;
 
 namespace PoeHUD.Hud.MaxRolls
 {
-    public static class MaxRolls
-    {
-        public static Dictionary<string, MaxRolls_Mod> data;
 
-        static MaxRolls()
-        {
-            XDocument doc = XDocument.Load("config/rolls.xml");
-            data = new Dictionary<string, MaxRolls_Mod>();
-            if (doc == null || doc.Root == null)
-                throw new ApplicationException("invalid data");
-            foreach (XElement m in doc.Root.Elements("mod"))
-            {
-                MaxRolls_Mod mod = new MaxRolls_Mod(m);
-                data.Add(m.Attribute("name").Value, mod);
-            }
-        }
-        public static void Initialize() {
-            return;
-        }
-    }
+	public class RollValue
+	{
+		public readonly int Tier = -1;
+		private readonly int TotalTiers = 1;
+		public readonly ModsDat.ModType AffixType;
+		public readonly bool IsCrafted;
+		public readonly String AffixText;
+		public readonly Color TextColor;
+		public readonly ModsDat.ModRecord TheMod;
 
-	public class MaxRolls_Current
-    {
-        public string name;
-        public Color color;
-        public string curr;
-        public string max;
-        public string curr2;
-        public string max2;
-        public int tier;
+		public readonly int[] StatValue;
 
-        public MaxRolls_Current(string modName, int modLevel, int ilvl)
-        {
-            if (MaxRolls.data.ContainsKey(modName))
-            {
-                var current = MaxRolls.data[modName];
-                var currentMod = current.modLevel;
-                tier = (current.modLevel.Count - modLevel + 1);
-                this.name = '[' + MaxRolls.data[modName].type + "] " +"[T" + tier.ToString() + "] "+ MaxRolls.data[modName].name;
-                var currentLvl = currentMod[modLevel-1];
-                int count = currentMod.Count - 1;
-                // Color
-                switch (tier)
-                {                
-                    case 1:
-                        this.color = Color.Green;
-                        break;
-                    case 2:
-                        this.color = Color.Yellow;
-                        break;
-                    default:
-                        this.color = Color.White;
-                        break;
 
-                }
-				// Master Color override
-				string[] masterMods =
+		public RollValue(ItemMod mod, FsController fs, int iLvl)
+		{
+			string name = mod.RawName;
+			TheMod = fs.Mods.records[name];
+			AffixType = TheMod.AffixType;
+			AffixText = String.IsNullOrEmpty(TheMod.UserFriendlyName) ? TheMod.Key : TheMod.UserFriendlyName;
+			IsCrafted = TheMod.Domain == 10;
+			StatValue = new int[] {mod.Value1, mod.Value2, mod.Value3, mod.Value4 };
+
+			int subOptimalTierDistance = 0;
+
+			List<ModsDat.ModRecord> allTiers;
+			if (fs.Mods.recordsByTier.TryGetValue(Tuple.Create(TheMod.Group, TheMod.AffixType), out allTiers))
+			{
+				bool tierFound = false;
+				TotalTiers = 0;
+				//AllTiersRange = new[]{new IntRange(), new IntRange(), new IntRange()};
+				foreach (var tn in allTiers)
 				{
-					"StrMaster",
-					"StrDexMaster",
-					"DexMaster",
-					"DexIntMaster",
-					"IntMaster",
-					"StrIntMaster",
-					"StrDexIntMaster"
-				};
-				if (masterMods.Any(a => modName.Contains(a)))
-					this.color = Color.SkyBlue;
-                // Current
-                if (currentLvl.min == currentLvl.max)
-                    curr = currentLvl.max;
-                else
-                    curr = currentLvl.min + "-" + currentLvl.max;
-                // Current 2
-                if (current.multi) {
-                    if (currentLvl.min2 == currentLvl.max2)
-                        curr2 = currentLvl.max2;
-                    else
-                        curr2 = currentLvl.min2 + "-" + currentLvl.max2;
-                } else {
-                    curr2 = null;
-                }
-                // Maximum
-                max = "---";
-                max2 = null;
-                if (ilvl >= currentMod[count].ilvl)
-                {
-                    // Special condition if max of last level < max of previous
-                    if (count>0 && currentMod[count].ilvl == currentMod[count - 1].ilvl)
-                    {
-                        max = currentMod[count].min + "-" + currentMod[count].max;
-                        if (current.multi) 
-                            max2 = currentMod[count].min2 + "-" + currentMod[count].max2;
-                    }
-                    else
-                    {
-                        max = currentMod[0].min + "-" + currentMod[count].max;
-                        if (current.multi)
-                            max2 = currentMod[0].min2 + "-" + currentMod[count].max2;
-                    }
-                }
-                else {
-                    // If we got mod on impossible ilvl
-                    if (currentMod[0].ilvl > ilvl)
-                    {
-                        System.Windows.Forms.MessageBox.Show("Check rolls.xml, item contains mod " + modName + " which shouldnt have it at this ilvl");
-                    }
-                    else
-                    {
-                        for (int i = 1; i <= count; i++)
-                        {
-                            if (currentMod[i].ilvl > ilvl)
-                            {
-                                max = currentMod[0].min + "-" + currentMod[i - 1].max;
-                                if (current.multi)
-                                    max2 = currentMod[0].min2 + "-" + currentMod[i - 1].max2;
-                                if (currentLvl.max == currentMod[i - 1].max)
-                                    this.color = Color.Yellow;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            {
-                name = modName + " (" + modLevel + ")";
-                color = Color.White;
-                curr = "---";
-                max = "---";
-                curr2 = null;
-                max2 = null;
-            }
-        }
-    }
+					// still not filtering out some mods. (like a.spd from gloves projected onto rings)
+					if (tn.StatNames[0] != TheMod.StatNames[0] || tn.StatNames[1] != TheMod.StatNames[1] 
+					    ||tn.StatNames[2] != TheMod.StatNames[2] || tn.StatNames[3] != TheMod.StatNames[3])
+						continue;
+
+					TotalTiers++;
+					if (tn.Equals(TheMod))
+					{
+						Tier = TotalTiers;
+						tierFound = true;
+					}
+					if (!tierFound && tn.MinLevel <= iLvl)
+						subOptimalTierDistance++;
+
+					
+				}
+			}
+			double hue;
+			if (TotalTiers == 1)
+				hue = 180;
+			else
+				hue = 120 - Math.Min(subOptimalTierDistance, 3)*40;
+
+			TextColor = ColorUtils.ColorFromHsv(hue, TotalTiers == 1 ? 0 : 1,1);
+
+		}
+
+		internal bool CouldHaveTiers()
+		{
+			return TotalTiers > 1;
+		}
+	}
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using PoeHUD.Framework;
 using PoeHUD.Poe;
 using PoeHUD.Poe.EntityComponents;
+using PoeHUD.Poe.Files;
 using PoeHUD.Poe.UI;
 
 namespace PoeHUD.Controllers
@@ -22,7 +23,7 @@ namespace PoeHUD.Controllers
 
 		public bool InGame { get { return this.Internal.IngameState.InGame; } }
 
-		public FileIndex Files { get; private set; }
+		public FsController Files { get; private set; }
 
 		public EntityListObserver EntityListObserver { get { return _entityListWrapper.Observer; } set { _entityListWrapper.Observer = value; } }
 
@@ -33,7 +34,7 @@ namespace PoeHUD.Controllers
 			this._entityListWrapper = new EntityListWrapper(this);
 			this.Window = new GameWindow(memory.Process);
 			this.Internal = new TheGame(memory);
-			this.Files = new FileIndex(memory);
+			this.Files = new FsController(memory);
 		}
 		public void RefreshState()
 		{
