@@ -23,9 +23,9 @@ namespace PoeHUD.Poe
 			return t;
 		}
 
-		public virtual T ReadObjectAt<T>(int offet) where T : RemoteMemoryObject, new()
+		public virtual T ReadObjectAt<T>(int offset) where T : RemoteMemoryObject, new()
 		{
-			return ReadObject<T>(address + offet);
+			return ReadObject<T>(address + offset);
 		}
 		public T ReadObject<T>(int address) where T : RemoteMemoryObject, new()
 		{

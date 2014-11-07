@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using PoeHUD.Framework;
+using PoeHUD.Shell;
 using SlimDX.Direct3D9;
 
 namespace PoeHUD.Hud.Menu

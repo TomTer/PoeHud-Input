@@ -21,7 +21,8 @@ namespace PoeHUD.Hud.Menu
 		{
 			get;
 		}
-		public MenuItem()
+
+		protected MenuItem()
 		{
 			this.children = new List<MenuItem>();
 		}

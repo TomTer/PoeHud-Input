@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 //using PoeHUD.Hud.Debug;
+using System.Diagnostics;
 using System.Linq;
+using System.Text;
+using System.Windows.Forms;
 using PoeHUD.Controllers;
 using PoeHUD.Framework;
 using PoeHUD.Hud.DebugView;
@@ -39,7 +42,7 @@ namespace PoeHUD.Hud
 				new ClientHacks(),
                 new AutoFlask(),
 	#if DEBUG
-			//	new ShowUiHierarchy(),
+				// new ShowUiHierarchy(),
 				new MainAddresses(),
 	#endif
 				new PreloadAlert(),
@@ -95,8 +98,8 @@ namespace PoeHUD.Hud
 			}
 
 			Dictionary<UiMountPoint, Vec2> mountPoints = new Dictionary<UiMountPoint, Vec2>();
-			mountPoints[UiMountPoint.UnderMinimap] = GetRightTopUnderMinimap();
-			mountPoints[UiMountPoint.LeftOfMinimap] = GetRightTopLeftOfMinimap();
+			mountPoints[UiMountPoint.UnderMinimap] = gameController.Internal.IngameState.IngameUi.GetRightTopUnderMinimap();
+			mountPoints[UiMountPoint.LeftOfMinimap] = gameController.Internal.IngameState.IngameUi.GetRightTopLeftOfMinimap();
 
 			foreach (HUDPlugin current in this.plugins)
 			{
@@ -104,26 +107,21 @@ namespace PoeHUD.Hud
 			}
 		}
 
-		private Vec2 GetRightTopLeftOfMinimap()
+		public void KeyPressOnForm(object sender, KeyPressEventArgs args)
 		{
-			Rect clientRect = gameController.Internal.IngameState.IngameUi.Minimap.SmallMinimap.GetClientRect();
-			return new Vec2(clientRect.X - 10, clientRect.Y + 5);
+			if (args.KeyChar == 'b')
+			{
+				Clipboard.SetText(new IdcScriptMaker(gameController).GetBaseAddressScript());
+			}
 		}
 
-		private Vec2 GetRightTopUnderMinimap()
+		private string PrepareIdcScript()
 		{
-			var mm = gameController.Internal.game.IngameState.IngameUi.Minimap.SmallMinimap;
-			var gl = gameController.Internal.game.IngameState.IngameUi.GemLvlUpPanel;
-			Rect mmRect = mm.GetClientRect();
-			Rect glRect = gl.GetClientRect();
+			StringBuilder sb = new StringBuilder();
 
-			Rect clientRect;
-			if (gl.IsVisible && glRect.X + gl.Width < mmRect.X + mmRect.X + 50) // also this +50 value doesn't seems to have any impact
-				clientRect = glRect;
-			else
-				clientRect = mmRect;
-			return new Vec2(mmRect.X + mmRect.W, clientRect.Y + clientRect.H + 10);
+			return sb.ToString();
 		}
+
 
 		public bool Detach() {
 			foreach (HUDPlugin current in this.plugins)

@@ -5,10 +5,11 @@ using System.Threading;
 using System.Windows.Forms;
 using PoeHUD.Controllers;
 using PoeHUD.Framework;
+using PoeHUD.Hud;
 using SlimDX;
 using SlimDX.Direct3D9;
 
-namespace PoeHUD.Hud
+namespace PoeHUD.Shell
 {
 	public class TransparentDXOverlay : Form
 	{
@@ -49,7 +50,7 @@ namespace PoeHUD.Hud
 			base.Name = "TransparentDXOverlay";
 			base.TopMost = true;
 			base.TransparencyKey = Color.Transparent;
-			base.Deactivate += new EventHandler(this.TransparentDXOverlay_Deactivate);
+			base.Deactivate += TransparentDXOverlay_Deactivate;
 			base.ResumeLayout(false);
 		}
 		public TransparentDXOverlay(GameWindow window, Func<bool> fnGameEnded)
@@ -77,6 +78,7 @@ namespace PoeHUD.Hud
 			if( !wantsExit )
 				Invoke(new Action(this.Close));
 		}
+
 
 		private void TransparentDXOverlay_Load(object sender, EventArgs e)
 		{

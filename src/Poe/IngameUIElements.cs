@@ -1,3 +1,4 @@
+using PoeHUD.Framework;
 using PoeHUD.Poe.UI;
 
 namespace PoeHUD.Poe
@@ -33,7 +34,7 @@ namespace PoeHUD.Poe
 
 		public Element MtxShop { get { return ReadObjectAt<Element>(4+0xF0); } }
 
-		public Element InventoryPanel { get { return ReadObjectAt<Element>(4+0xF4); } }
+		public InventoryPanel InventoryPanel { get { return ReadObjectAt<InventoryPanel>(0xF8); } }
 
 		public Element StashPanel { get { return ReadObjectAt<Element>(4+0xF8); } }
 
@@ -74,5 +75,27 @@ namespace PoeHUD.Poe
 		public Element GemLvlUpPanel { get { return ReadObjectAt<Element>(4+0x1F8); } }
 
 		public Element ItemOnGroundTooltip { get { return ReadObjectAt<Element>(4+0x208); } }
+
+
+		public Vec2 GetRightTopLeftOfMinimap()
+		{
+			Rect clientRect = Minimap.SmallMinimap.GetClientRect();
+			return new Vec2(clientRect.X - 10, clientRect.Y + 5);
+		}
+
+		public Vec2 GetRightTopUnderMinimap()
+		{
+			var mm = Minimap.SmallMinimap;
+			var gl = GemLvlUpPanel;
+			Rect mmRect = mm.GetClientRect();
+			Rect glRect = gl.GetClientRect();
+
+			Rect clientRect;
+			if (gl.IsVisible && glRect.X + gl.Width < mmRect.X + mmRect.X + 50) // also this +50 value doesn't seem to have any impact
+				clientRect = glRect;
+			else
+				clientRect = mmRect;
+			return new Vec2(mmRect.X + mmRect.W, clientRect.Y + clientRect.H + 10);
+		}
 	}
 }

@@ -24,6 +24,7 @@ namespace PoeHUD.Hud.DebugView
 			int yPos = 80;
 			int x = 320;
 			int[] path = new int[12];
+
 			//var tt = this.model.Internal.IngameState.IngameUi;
 			//for (path[0] = 0x0; path[0] <= 0x0 ; path[0] += 4 )
 			//{
@@ -34,14 +35,15 @@ namespace PoeHUD.Hud.DebugView
 			//	drawElt(rc, starting_it, new Vec2((int)(v2.X*.75), (int)(v2.Y*.75)), ref x, ref yPos, path, 1);
 			//}
 
+			int offset = 0x250;
 
-			for (path[0] = 0x40; path[0] <= 0x210; path[0] += 4)
+			for (int i = 0; i < 18; i++)
 			{
 
 				//if (path[0] == 0x120 || path[0] == 0xd8 || path[0] == 0xa0 || path[0] == 0x154 || path[0] == 0x158)
 				//	continue;
-
-				Element starting_it = this.model.Internal.IngameState.IngameUi.ReadObjectAt<Element>(path[0]);
+				path[0] = offset + i * 4;
+				Element starting_it = this.model.Internal.IngameState.IngameUi.InventoryPanel.ReadObjectAt<Element>(path[0] + Element.OffsetBuffers );
 				var v2 = starting_it.GetParentPos();
 				drawElt(rc, starting_it, new Vec2((int)(v2.X * .75), (int)(v2.Y * .75)), ref x, ref yPos, path, 1);
 			}

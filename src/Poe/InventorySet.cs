@@ -43,7 +43,7 @@ namespace PoeHUD.Poe
 				return list;
 			}
 		}
-        public Inventory this[InventoryIndex inv]
+        public Inventory this[InventorySlotType inv]
         {
             get
             {

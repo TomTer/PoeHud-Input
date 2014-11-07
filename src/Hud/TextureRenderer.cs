@@ -43,11 +43,11 @@ namespace PoeHUD.Hud
 		}
 		private struct ColoredTexturedVertex
 		{
-			public float X;
-			public float Y;
-			public float U;
-			public float V;
-			public int Color;
+			public readonly float X;
+			public readonly float Y;
+			public readonly float U;
+			public readonly float V;
+			public readonly int Color;
 			public static VertexFormat Format
 			{
 				get

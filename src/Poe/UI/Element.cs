@@ -7,6 +7,7 @@ namespace PoeHUD.Poe.UI
 	public class Element : RemoteMemoryObject
 	{
 		public const int OffsetBuffers = 0x808;
+		public const int UiElementSize = 0x15C;
 		// dd id
 		// dd (something zero)
 		// 16 dup <128-bytes structure>
@@ -20,6 +21,11 @@ namespace PoeHUD.Poe.UI
 		public float Y { get { return this.m.ReadFloat(this.address + 0x68 + OffsetBuffers); } }
 		public float Width { get { return this.m.ReadFloat(this.address + 0xF0 + OffsetBuffers); } }
 		public float Height { get { return this.m.ReadFloat(this.address + 0xF4 + OffsetBuffers); } }
+		
+		// +110, 114 contain reference to texture
+		// +11C points to array of textures
+
+		// +160 contains reference to an object located next. Must be some kind of model (since it contains refs to children)
 
 		public int ChildCount
 		{
@@ -116,6 +122,11 @@ namespace PoeHUD.Poe.UI
 		public Element GetChildAtIndex(int index)
 		{
 			return index >= this.ChildCount ? null : base.GetObject<Element>(this.m.ReadInt(this.address + OffsetBuffers + 0x10, index * 4));
+		}
+
+		public T ReadObjectAfterBuffers<T>(int offet) where T : RemoteMemoryObject, new()
+		{
+			return base.ReadObjectAt<T>(offet + OffsetBuffers);
 		}
 	}
 }

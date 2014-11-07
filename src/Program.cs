@@ -9,6 +9,7 @@ using PoeHUD.Controllers;
 using PoeHUD.Framework;
 using PoeHUD.Poe;
 using WindowsInput;
+using PoeHUD.Shell;
 
 namespace PoeHUD.Hud
 {
@@ -79,7 +80,9 @@ namespace PoeHUD.Hud
 					Console.WriteLine("Starting overlay");
 					TransparentDXOverlay transparentDXOverlay = new TransparentDXOverlay(gameController.Window, () => memory.IsInvalid());
 					transparentDXOverlay.InitD3D();
+					
 					overlay = new OverlayRenderer(gameController, transparentDXOverlay.RC);
+					transparentDXOverlay.KeyPress += overlay.KeyPressOnForm;
 					Application.Run(transparentDXOverlay);
 				}
 				finally

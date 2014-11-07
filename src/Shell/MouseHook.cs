@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using PoeHUD.Framework;
 
-namespace PoeHUD.Hud
+namespace PoeHUD.Shell
 {
 	public class MouseHook : IDisposable
 	{
