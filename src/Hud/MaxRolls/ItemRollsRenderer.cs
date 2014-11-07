@@ -4,7 +4,7 @@ using PoeHUD.Controllers;
 using PoeHUD.Framework;
 using PoeHUD.Poe;
 using PoeHUD.Poe.EntityComponents;
-using PoeHUD.Poe.Files;
+using PoeHUD.Poe.FileSystem;
 using PoeHUD.Poe.UI;
 using SlimDX.Direct3D9;
 

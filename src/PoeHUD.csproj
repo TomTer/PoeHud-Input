@@ -46,7 +46,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\AreaInstance.cs" />
-    <Compile Include="Controllers\FileInMemory.cs" />
+    <Compile Include="Hud\DebugView\MainAddresses.cs" />
+    <Compile Include="Poe\FileSystem\FileInMemory.cs" />
     <Compile Include="Poe\FileSystem\StatsDat.cs" />
     <Compile Include="Poe\FileSystem\ModsDat.cs" />
     <Compile Include="Framework\ColorUtils.cs" />
@@ -63,7 +64,7 @@
     <Compile Include="Hud\Loot\ItemUsefulProperties.cs" />
     <Compile Include="Hud\MaxRolls\ItemRollsRenderer.cs" />
     <Compile Include="Hud\MaxRolls\MaxRolls.cs" />
-    <Compile Include="Framework\GameWindow.cs" />
+    <Compile Include="Controllers\GameWindow.cs" />
     <Compile Include="Framework\Imports.cs" />
     <Compile Include="Framework\Memory.cs" />
     <Compile Include="Framework\Rect.cs" />

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using PoeHUD.Controllers;
 using PoeHUD.Framework;
+using PoeHUD.Hud.DebugView;
 using PoeHUD.Hud.DPS;
 using PoeHUD.Hud.Health;
 using PoeHUD.Hud.Icons;
@@ -38,6 +39,7 @@ namespace PoeHUD.Hud
 				new ClientHacks(),
 	#if DEBUG
 			//	new ShowUiHierarchy(),
+				new MainAddresses(),
 	#endif
 				new PreloadAlert(),
 				new DpsMeter(),
@@ -77,7 +79,7 @@ namespace PoeHUD.Hud
 
 		private void rc_OnRender(RenderingContext rc)
 		{
-			if (Settings.GetBool("Window.RequireForeground") && !this.gameController.Window.IsForeground()) return;
+			// if (Settings.GetBool("Window.RequireForeground") && !this.gameController.Window.IsForeground()) return;
 
 			this._modelUpdatePeriod++;
 			if (this._modelUpdatePeriod > 6)

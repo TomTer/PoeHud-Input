@@ -25,7 +25,7 @@ namespace PoeHUD.Poe.UI
 		{
 			get
 			{
-				return (this.m.ReadInt(this.address + 20 + OffsetBuffers) - this.m.ReadInt(this.address + 16 + OffsetBuffers)) / 4;
+				return (this.m.ReadInt(this.address + 0x14 + OffsetBuffers) - this.m.ReadInt(this.address + 0x10 + OffsetBuffers)) / 4;
 			}
 		}
 		public bool IsVisibleLocal
@@ -115,14 +115,7 @@ namespace PoeHUD.Poe.UI
 		}
 		public Element GetChildAtIndex(int index)
 		{
-			if (index >= this.ChildCount)
-			{
-				return null;
-			}
-			return base.GetObject<Element>(this.m.ReadInt(this.address + 2072, new int[]
-			{
-				index * 4
-			}));
+			return index >= this.ChildCount ? null : base.GetObject<Element>(this.m.ReadInt(this.address + OffsetBuffers + 0x10, index * 4));
 		}
 	}
 }

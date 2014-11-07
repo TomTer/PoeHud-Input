@@ -5,11 +5,10 @@ using System.Linq;
 using PoeHUD.Controllers;
 using PoeHUD.Framework;
 using PoeHUD.Poe;
-using PoeHUD.Poe.Files;
+using PoeHUD.Poe.FileSystem;
 
 namespace PoeHUD.Hud.MaxRolls
 {
-
 	public class RollValue
 	{
 		public readonly int Tier = -1;

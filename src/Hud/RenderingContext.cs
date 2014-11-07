@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using PoeHUD.Controllers;
 using PoeHUD.Framework;
 using SlimDX.Direct3D9;
 

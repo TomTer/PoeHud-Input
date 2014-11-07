@@ -58,9 +58,7 @@ namespace PoeHUD.Hud
 			AppDomain.CurrentDomain.UnhandledException += delegate(object sender, UnhandledExceptionEventArgs exceptionArgs)
 			{
 				if (overlay != null)
-				{
 					overlay.Detach();
-				}
 				MessageBox.Show("Program exited with message:\n " + exceptionArgs.ExceptionObject.ToString());
 				Environment.Exit(1);
 			};
