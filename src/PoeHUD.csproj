@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Controllers\AreaInstance.cs" />
     <Compile Include="Hud\DebugView\MainAddresses.cs" />
+    <Compile Include="Hud\IdcScriptMaker.cs" />
     <Compile Include="Poe\FileSystem\FileInMemory.cs" />
     <Compile Include="Poe\FileSystem\StatsDat.cs" />
     <Compile Include="Poe\FileSystem\ModsDat.cs" />
@@ -83,7 +84,7 @@
     <Compile Include="Controllers\EntityListWrapper.cs" />
     <Compile Include="Poe\FileSystem\FsController.cs" />
     <Compile Include="Controllers\Inventory.cs" />
-    <Compile Include="Controllers\InventoryIndex.cs" />
+    <Compile Include="Game\InventorySlotType.cs" />
     <Compile Include="Game\ItemRarity.cs" />
     <Compile Include="Game\ItemStat.cs" />
     <Compile Include="Controllers\ItemStats.cs" />
@@ -116,8 +117,10 @@
     <Compile Include="Poe\UI\Element.cs" />
     <Compile Include="Poe\UI\BigMinimap.cs" />
     <Compile Include="Poe\UI\EntityLabel.cs" />
+    <Compile Include="Poe\UI\InventoryPanel.cs" />
     <Compile Include="Poe\UI\Inventory.cs" />
     <Compile Include="Poe\UI\InventoryItemIcon.cs" />
+    <Compile Include="Poe\UI\ItemContainer.cs" />
     <Compile Include="Poe\UI\Label.cs" />
     <Compile Include="Poe\UI\Tooltip.cs" />
     <Compile Include="Poe\EntityComponents\Positioned.cs" />
@@ -147,8 +150,8 @@
     <Compile Include="Hud\Menu\MenuItem.cs" />
     <Compile Include="Hud\MapIcon.cs" />
     <Compile Include="Hud\Icons\LargeMapRenderer.cs" />
-    <Compile Include="Hud\MouseEventID.cs" />
-    <Compile Include="Hud\MouseHook.cs" />
+    <Compile Include="Framework\MouseEventID.cs" />
+    <Compile Include="Shell\MouseHook.cs" />
     <Compile Include="Hud\OverlayRenderer.cs" />
     <Compile Include="Hud\Preload\PreloadAlert.cs" />
     <Compile Include="Program.cs" />
@@ -156,7 +159,7 @@
     <Compile Include="Hud\Settings.cs" />
     <Compile Include="Hud\Sounds.cs" />
     <Compile Include="Hud\TextureRenderer.cs" />
-    <Compile Include="Hud\TransparentDXOverlay.cs">
+    <Compile Include="Shell\TransparentDXOverlay.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Hud\XpRate\XPHRenderer.cs" />
@@ -164,7 +167,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Hud\TransparentDXOverlay.resources" />
+    <EmbeddedResource Include="Shell\TransparentDXOverlay.resources" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

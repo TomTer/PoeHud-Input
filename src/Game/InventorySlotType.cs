@@ -1,6 +1,6 @@
 namespace PoeHUD.Controllers
 {
-	public enum InventoryIndex
+	public enum InventorySlotType
 	{
 		PlayerInventory,
 		Chest,

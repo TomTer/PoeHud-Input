@@ -29,7 +29,7 @@ namespace PoeHUD.Hud
 		}
 
 
-		public void DrawAt(RenderingContext rc, Vec2 point, Rect rect)
+		public virtual void DrawAt(RenderingContext rc, Vec2 point, Rect rect)
 		{
 			rc.AddTexture(this.TextureFile, rect, TintColor);
 		}
@@ -48,7 +48,7 @@ namespace PoeHUD.Hud
 			SpriteSize = spriteSize;
 		}
 
-		public void DrawAt(RenderingContext rc, Vec2 point, Rect rect)
+		public override void DrawAt(RenderingContext rc, Vec2 point, Rect rect)
 		{
 			float xD = ((float)(SpriteSize.X)) / SpriteSize.X;
 			float yD = ((float)(SpriteSize.Y)) / SpriteSize.Y;

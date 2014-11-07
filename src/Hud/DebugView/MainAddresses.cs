@@ -29,6 +29,8 @@ namespace PoeHUD.Hud.DebugView
 			sb.AppendFormat("IngameData = {0:X8}\r\n", model.Internal.IngameState.Data.address);
 			sb.AppendFormat("InventoryFrame = {0:X8}\r\n", model.Internal.IngameState.IngameUi.InventoryPanel.address);
 
+			sb.AppendFormat("Chest = {0}\r\n", model.Internal.IngameState.IngameUi.InventoryPanel.ChestSlot.GetItem().Path );
+
 			var szText = rc.AddTextWithHeight(pos, sb.ToString(), Color.White, 11, DrawTextFormat.Right);
 			Rect box = new Rect(pos.X - szText.X - 5, pos.Y - 5, szText.X + 10, szText.Y + 10);
 			rc.AddBox(box, Color.FromArgb(160, 0, 0, 0));

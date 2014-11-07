@@ -1,4 +1,4 @@
-namespace PoeHUD.Hud
+namespace PoeHUD.Framework
 {
 	public enum MouseEventID
 	{
