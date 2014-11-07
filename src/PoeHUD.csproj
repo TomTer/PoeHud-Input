@@ -154,11 +154,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Hud\RenderingContext.cs" />
     <Compile Include="Hud\Settings.cs" />
-    <Compile Include="Hud\SettingsEditor.cs" />
-    <Compile Include="Hud\SettingsEditorStatus.cs" />
-    <Compile Include="Hud\SettingsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Hud\Sounds.cs" />
     <Compile Include="Hud\TextureRenderer.cs" />
     <Compile Include="Hud\TransparentDXOverlay.cs">
@@ -169,7 +164,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Hud\SettingsForm.resources" />
     <EmbeddedResource Include="Hud\TransparentDXOverlay.resources" />
   </ItemGroup>
   <ItemGroup />
