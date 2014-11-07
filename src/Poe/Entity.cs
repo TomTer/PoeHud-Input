@@ -6,66 +6,37 @@ namespace PoeHUD.Poe
 {
 	public class Entity : RemoteMemoryObject
 	{
-		private int ComponentLookup
-		{
-			get
-			{
-				Memory arg_19_0 = this.m;
-				int arg_19_1 = this.address;
-				int[] array = new int[2];
-				array[0] = 88;
-				return arg_19_0.ReadInt(arg_19_1, array);
-			}
-		}
-		private int ComponentList
-		{
-			get
-			{
-				return this.m.ReadInt(this.address + 4);
-			}
-		}
-		public string Path
-		{
-			get
-			{
-				return this.m.ReadStringU(this.m.ReadInt(this.address, new int[]
-				{
-					8
-				}), 256, true);
-			}
-		}
-		public int ID
-		{
-			get
-			{
-				return this.m.ReadInt(this.address + 24);
-			}
-		}
-		public long LongId
-		{
-			get
-			{
-				return (long)(this.ID | this.Path.GetHashCode());
-			}
-		}
+		private int ComponentLookup { get { return this.m.ReadInt(this.address, 0x58, 0); } }
+		private int ComponentList { get { return this.m.ReadInt(this.address + 4); } }
+		public string Path { get { return this.m.ReadStringU(this.m.ReadInt(this.address, 8), 256, true); } }
+		public int ID { get { return this.m.ReadInt(this.address + 0x18); } }
+		public long LongId { get { return (long)(this.ID | this.Path.GetHashCode()); } }
+		
 		public bool IsValid
 		{
 			get
 			{
-				Memory arg_18_0 = this.m;
-				int arg_18_1 = this.address;
-				int[] array = new int[2];
-				array[0] = 8;
-				return arg_18_0.ReadInt(arg_18_1, array) == 6619213;
+				return this.m.ReadInt(this.address, 8, 0) == 6619213;
 			}
 		}
 		public bool IsHostile
 		{
 			get
 			{
-				return (this.m.ReadByte(this.address + 29) & 1) == 0;
+				return (this.m.ReadByte(this.address + 0x1D) & 1) == 0;
 			}
 		}
+
+		public IEnumerable<int> EnumComponentAdresses(){
+			int start = this.m.ReadInt(this.address + 4);
+			int end = this.m.ReadInt(this.address + 8);
+			while(start < end) {
+				yield return this.m.ReadInt(start);
+				start += 4;
+			}
+		}
+
+
 		public bool HasComponent<T>() where T : Component, new()
 		{
 			string name = typeof(T).Name;
@@ -135,5 +106,7 @@ namespace PoeHUD.Poe
 		{
 			return this.Path;
 		}
+
+
 	}
 }

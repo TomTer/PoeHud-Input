@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using PoeHUD.Framework;
 
-namespace PoeHUD.Controllers
+namespace PoeHUD.Poe.FileSystem
 {
 	public class FileInMemory
 	{

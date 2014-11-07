@@ -6,7 +6,7 @@ namespace PoeHUD.Poe.UI
 		{
 			get
 			{
-				return base.ReadObject<Poe.Inventory>(this.address + 2436);
+				return base.ReadObject<Poe.Inventory>(this.address + 0x17C + OffsetBuffers);
 			}
 		}
 	}

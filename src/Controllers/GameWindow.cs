@@ -1,11 +1,12 @@
 using System;
 using System.Diagnostics;
+using PoeHUD.Framework;
 
-namespace PoeHUD.Framework
+namespace PoeHUD.Controllers
 {
 	public class GameWindow
 	{
-		private IntPtr handle;
+		public readonly IntPtr HWnd;
 		public Process Process
 		{
 			get;
@@ -14,12 +15,12 @@ namespace PoeHUD.Framework
 		public GameWindow(Process process)
 		{
 			this.Process = process;
-			this.handle = process.MainWindowHandle;
+			this.HWnd = process.MainWindowHandle;
 		}
 		public Rect ClientRect()
 		{
-			Rect result = default(Rect);
-			Imports.GetClientRect(this.handle, out result);
+			Rect result;
+			Imports.GetClientRect(this.HWnd, out result);
 			Vec2 vec = this.ClientToScreen(Vec2.Empty);
 			result.X = vec.X;
 			result.Y = vec.Y;
@@ -27,17 +28,17 @@ namespace PoeHUD.Framework
 		}
 		public Vec2 ClientToScreen(Vec2 v)
 		{
-			Imports.ClientToScreen(this.handle, ref v);
+			Imports.ClientToScreen(this.HWnd, ref v);
 			return v;
 		}
 		public Vec2 ScreenToClient(Vec2 v)
 		{
-			Imports.ScreenToClient(this.handle, ref v);
+			Imports.ScreenToClient(this.HWnd, ref v);
 			return v;
 		}
 		public bool IsForeground()
 		{
-			return Imports.GetForegroundWindow() == this.handle;
+			return Imports.GetForegroundWindow() == this.HWnd;
 		}
 	}
 }

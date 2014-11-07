@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
+using PoeHUD.Controllers;
 using PoeHUD.Framework;
 using SlimDX;
 using SlimDX.Direct3D9;

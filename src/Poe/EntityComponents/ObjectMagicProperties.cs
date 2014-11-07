@@ -34,11 +34,7 @@ namespace PoeHUD.Poe.EntityComponents
 				}
 				for (int i = num; i < num2; i += 24)
 				{
-					Memory arg_6F_0 = this.m;
-					Memory arg_64_0 = this.m;
-					int arg_64_1 = i + 20;
-					int[] offsets = new int[1];
-					string item = arg_6F_0.ReadStringU(arg_64_0.ReadInt(arg_64_1, offsets), 256, true);
+					string item = this.m.ReadStringU(this.m.ReadInt(i + 20, 0), 256, true);
 					list.Add(item);
 				}
 				return list;
