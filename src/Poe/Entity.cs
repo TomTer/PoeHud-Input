@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using PoeHUD.Framework;
 using PoeHUD.Poe.EntityComponents;
 
@@ -6,105 +8,59 @@ namespace PoeHUD.Poe
 {
 	public class Entity : RemoteMemoryObject
 	{
-		private int ComponentLookup { get { return this.m.ReadInt(this.address, 0x58, 0); } }
-		private int ComponentList { get { return this.m.ReadInt(this.address + 4); } }
-		public string Path { get { return this.m.ReadStringU(this.m.ReadInt(this.address, 8), 256, true); } }
-		public int ID { get { return this.m.ReadInt(this.address + 0x18); } }
-		public long LongId { get { return (long)(this.ID | this.Path.GetHashCode()); } }
+		private int ComponentLookup { get { return M.ReadInt(Address, 0x58, 0); } }
+		private int ComponentList { get { return M.ReadInt(Address + 4); } }
+		private int ComponentListEnd { get { return M.ReadInt(Address + 8); } }
+		public string Path { get { return M.ReadStringU(M.ReadInt(Address, 8), 256, true); } }
+		public int ID { get { return M.ReadInt(Address + 0x18); } }
+		public long LongId { get { return (long)(ID | Path.GetHashCode()); } }
 		
-		public bool IsValid
-		{
-			get
-			{
-				return this.m.ReadInt(this.address, 8, 0) == 6619213;
-			}
-		}
-		public bool IsHostile
-		{
-			get
-			{
-				return (this.m.ReadByte(this.address + 0x1D) & 1) == 0;
-			}
-		}
-
-		public IEnumerable<int> EnumComponentAdresses(){
-			int start = this.m.ReadInt(this.address + 4);
-			int end = this.m.ReadInt(this.address + 8);
-			while(start < end) {
-				yield return this.m.ReadInt(start);
-				start += 4;
-			}
-		}
-
+		public bool IsValid { get { return M.ReadInt(Address, 8, 0) == 6619213; } }
+		public bool IsHostile { get { return (M.ReadByte(Address + 0x1D) & 1) == 0; } }
 
 		public bool HasComponent<T>() where T : Component, new()
 		{
-			string name = typeof(T).Name;
-			int componentLookup = this.ComponentLookup;
-			int num = componentLookup;
-			int num2 = 0;
-			while (true)
-			{
-				string text = this.m.ReadString(this.m.ReadInt(num + 8), 256, true);
-				if (text.Equals(name))
-				{
-					break;
-				}
-				num = this.m.ReadInt(num);
-				num2++;
-				if (num == componentLookup || num == 0 || num == -1 || num2 >= 200)
-				{
-					return false;
-				}
-			}
-			return true;
+			string name = ComponentNames.Map[typeof(T)];
+			return EnumComponents().Any(keyValuePair => keyValuePair.Key.Equals(name, StringComparison.OrdinalIgnoreCase));
 		}
 		public T GetComponent<T>() where T : Component, new()
 		{
-			string name = typeof(T).Name;
-			int componentLookup = this.ComponentLookup;
-			int num = componentLookup;
-			int num2 = 0;
-			while (true)
-			{
-				string text = this.m.ReadString(this.m.ReadInt(num + 8), 256, true);
-				if (text.Equals(name))
-				{
-					break;
-				}
-				num = this.m.ReadInt(num);
-				num2++;
-				if (num == componentLookup || num == 0 || num == -1 || num2 >= 200)
-				{
-					goto IL_8D;
-				}
-			}
-			int num3 = this.m.ReadInt(num + 12);
-			return base.ReadObject<T>(this.ComponentList + num3 * 4);
-			IL_8D:
-			return base.GetObject<T>(0);
+			string name = ComponentNames.Map[typeof(T)];
+			KeyValuePair<string, int> pairNeeded = EnumComponents().FirstOrDefault(keyValuePair => keyValuePair.Key.Equals(name, StringComparison.OrdinalIgnoreCase));
+
+			return base.GetObject<T>(pairNeeded.Value);
 		}
-		public Dictionary<string, int> GetComponents()
+
+		public IEnumerable<KeyValuePair<string, int>> EnumComponents(bool uniqueOnly = false)
 		{
-			Dictionary<string, int> dictionary = new Dictionary<string, int>();
-			int componentLookup = this.ComponentLookup;
-			int num = componentLookup;
-			do
+			HashSet<string> shown = uniqueOnly ? new HashSet<string>() : null;
+			int componentLookup = ComponentLookup;
+			int cntCopmonents = (ComponentListEnd - ComponentList) / 4;
+
+			for(int addr = -2; addr != componentLookup && addr != 0 && addr != -1; addr = M.ReadInt(addr))
 			{
-				string text = this.m.ReadString(this.m.ReadInt(num + 8), 256, true);
-				int value = this.m.ReadInt(this.ComponentList + this.m.ReadInt(num + 12) * 4);
-				if (!dictionary.ContainsKey(text) && !string.IsNullOrWhiteSpace(text))
-				{
-					dictionary.Add(text, value);
-				}
-				num = this.m.ReadInt(num);
+				if (addr == -2) // to pass the for cycle condition on 1st iteration
+					addr = componentLookup;
+				string text = M.ReadString(M.ReadInt(addr + 8), 256, true);
+				int index = M.ReadInt(addr + 0xC);
+				if( index >= cntCopmonents || string.IsNullOrWhiteSpace(text))
+					continue;
+
+				int componentAddress = M.ReadInt(ComponentList + index * 4);
+				
+				if( 0 == componentAddress)
+					continue;
+				if (uniqueOnly && shown.Contains(text))
+					continue;
+				if (uniqueOnly)
+					shown.Add(text);
+				yield return new KeyValuePair<string, int>(text, componentAddress);
 			}
-			while (num != componentLookup && num != 0 && num != -1);
-			return dictionary;
+
 		}
 		public override string ToString()
 		{
-			return this.Path;
+			return Path;
 		}
 
 

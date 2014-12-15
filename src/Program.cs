@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using PoeHUD.Controllers;
 using PoeHUD.Framework;
 using PoeHUD.Poe;
+using PoeHUD.Settings;
 using PoeHUD.Shell;
 
 namespace PoeHUD.Hud
@@ -49,11 +51,7 @@ namespace PoeHUD.Hud
 				return;
 			}
 
-			Sounds.LoadSounds();
-			if (!Settings.LoadSettings())
-			{
-				return;
-			}
+			Sounds.PreLoadCommonSounds();
 
 			OverlayRenderer overlay = null;
 			AppDomain.CurrentDomain.UnhandledException += delegate(object sender, UnhandledExceptionEventArgs exceptionArgs)
@@ -64,6 +62,8 @@ namespace PoeHUD.Hud
 				Environment.Exit(1);
 			};
 
+			SettingsRoot settings = new SettingsRoot("config\\new_settings.txt");
+			settings.ReadFromFile(); // 1st read for globals and menu
 
 			using (Memory memory = new Memory(offs, pid))
 			{
@@ -73,10 +73,13 @@ namespace PoeHUD.Hud
 				try
 				{
 					Console.WriteLine("Starting overlay");
-					TransparentDXOverlay transparentDXOverlay = new TransparentDXOverlay(gameController.Window, () => memory.IsInvalid());
+					EventScheduler es = new EventScheduler(gameController);
+					settings.SetObserver((o,s) => es.RequestSave(settings));
+
+					TransparentDxOverlay transparentDXOverlay = new TransparentDxOverlay(gameController.Window, settings, es);
 					transparentDXOverlay.InitD3D();
 					
-					overlay = new OverlayRenderer(gameController, transparentDXOverlay.RC);
+					overlay = new OverlayRenderer(gameController, settings, transparentDXOverlay.RC);
 					transparentDXOverlay.KeyPress += overlay.KeyPressOnForm;
 					Application.Run(transparentDXOverlay);
 				}
@@ -88,6 +91,61 @@ namespace PoeHUD.Hud
 					}
 				}
 			}
+		}
+	}
+
+	public class EventScheduler
+	{
+		private TransparentDxOverlay form;
+
+		public readonly GameController gameController;
+		private const int TICK_PERIOD = 500; //ms
+
+		public EventScheduler(GameController gameController) {
+			this.gameController = gameController;
+		}
+
+
+		private const int CntTasks = 1;
+		private readonly int[] TasksDelays = new int[CntTasks];
+		private readonly Action[] TaskExecutors = new Action[] { null };
+
+
+		public delegate void HatedCsharpDelegate();
+		private void CheckGameStillRunningLoop()
+		{
+			HatedCsharpDelegate deactivate = new HatedCsharpDelegate(form.OnDeactivate);
+			while (!form.ExitRequested && !gameController.Memory.IsInvalid())
+			{
+				Thread.Sleep(TICK_PERIOD);
+				for (int i = 0; i < CntTasks; i++) {
+					if (TasksDelays[i] == 0 && TaskExecutors[i] != null) TaskExecutors[i]();
+					if (TasksDelays[i] >= 0) TasksDelays[i]--;
+				}
+
+				bool gameIsFg = gameController.Window.IsForeground();
+				if (!gameIsFg)
+					continue;
+
+				if (!form.TopMost)
+					form.Invoke(deactivate);
+
+			}
+			if (!form.ExitRequested)
+				form.Invoke(new HatedCsharpDelegate(form.Close));
+		}
+
+		internal void StartWatching(TransparentDxOverlay transparentDXOverlay)
+		{
+			form = transparentDXOverlay;
+			var th = new Thread(CheckGameStillRunningLoop) { IsBackground = true };
+			th.Start();
+		}
+
+
+		public void RequestSave(SettingsRoot settings) {
+			TaskExecutors[0] = settings.SaveSettings;
+			TasksDelays[0] = 2;
 		}
 	}
 }

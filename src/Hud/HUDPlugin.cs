@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using PoeHUD.Controllers;
 using PoeHUD.Framework;
 using PoeHUD.Hud.Icons;
+using PoeHUD.Settings;
 
 namespace PoeHUD.Hud
 {
@@ -11,6 +12,9 @@ namespace PoeHUD.Hud
 		void Init(GameController poe);
 		void OnEnable();
 		void OnDisable();
+		void OnAreaChange(AreaController area);
+
+		SettingsForModule SettingsNode { get; }
 
 		void Render(RenderingContext rc, Dictionary<UiMountPoint, Vec2> mountPoints);
 	}
@@ -28,8 +32,10 @@ namespace PoeHUD.Hud
 			this.model = poe;
 			this.OnEnable();
 		}
-		public abstract void OnEnable();
-		public abstract void OnDisable();
+		public virtual void OnEnable() { }
+		public virtual void OnDisable() { }
+		public virtual void OnAreaChange(AreaController area) { }
+		public abstract SettingsForModule SettingsNode { get; }
 
 		public abstract void Render(RenderingContext rc, Dictionary<UiMountPoint, Vec2> mountPoints);
 

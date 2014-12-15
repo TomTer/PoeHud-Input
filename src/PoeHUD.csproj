@@ -36,6 +36,7 @@
     <RootNamespace>PoeHUD</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -46,8 +47,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\AreaInstance.cs" />
+    <Compile Include="Framework\FsUtils.cs" />
     <Compile Include="Hud\DebugView\MainAddresses.cs" />
     <Compile Include="Hud\IdcScriptMaker.cs" />
+    <Compile Include="Hud\Loot\ItemSettings.cs" />
+    <Compile Include="Poe\EntityComponents\Base.cs" />
+    <Compile Include="Poe\EntityComponents\Charges.cs" />
+    <Compile Include="Poe\EntityComponents\ComponentNames.cs" />
+    <Compile Include="Poe\EntityComponents\Flask.cs" />
+    <Compile Include="Poe\EntityComponents\Stats.cs" />
     <Compile Include="Poe\FileSystem\FileInMemory.cs" />
     <Compile Include="Poe\FileSystem\StatsDat.cs" />
     <Compile Include="Poe\FileSystem\ModsDat.cs" />
@@ -59,12 +67,12 @@
     <Compile Include="Hud\Health\RenderPrio.cs" />
     <Compile Include="Hud\HudSkin.cs" />
     <Compile Include="Hud\HudTexture.cs" />
-    <Compile Include="Hud\Icons\MinimapRenderer.cs" />
+    <Compile Include="Hud\Icons\MapIconsRenderer.cs" />
     <Compile Include="Hud\Loot\AlertDrawStyle.cs" />
     <Compile Include="Hud\Loot\CraftingBase.cs" />
     <Compile Include="Hud\Loot\ItemUsefulProperties.cs" />
-    <Compile Include="Hud\MaxRolls\ItemRollsRenderer.cs" />
-    <Compile Include="Hud\MaxRolls\MaxRolls.cs" />
+    <Compile Include="Hud\AdvTooltips\AdvTooltopRenderer.cs" />
+    <Compile Include="Hud\AdvTooltips\RollValue.cs" />
     <Compile Include="Controllers\GameWindow.cs" />
     <Compile Include="Framework\Imports.cs" />
     <Compile Include="Framework\Memory.cs" />
@@ -85,16 +93,14 @@
     <Compile Include="Poe\FileSystem\FsController.cs" />
     <Compile Include="Controllers\Inventory.cs" />
     <Compile Include="Game\InventorySlotType.cs" />
-    <Compile Include="Game\ItemRarity.cs" />
     <Compile Include="Game\ItemStat.cs" />
-    <Compile Include="Controllers\ItemStats.cs" />
     <Compile Include="Game\ItemType.cs" />
     <Compile Include="Poe\EntityComponents\Life.cs" />
     <Compile Include="Game\Link.cs" />
     <Compile Include="Poe\EntityComponents\Map.cs" />
     <Compile Include="Poe\EntityComponents\Mods.cs" />
     <Compile Include="Poe\EntityComponents\Monster.cs" />
-    <Compile Include="Game\MonsterRarity.cs" />
+    <Compile Include="Game\Rarity.cs" />
     <Compile Include="Poe\EntityComponents\NPC.cs" />
     <Compile Include="Poe\EntityComponents\ObjectMagicProperties.cs" />
     <Compile Include="Poe\FileSystem\TagsDat.cs" />
@@ -114,6 +120,7 @@
     <Compile Include="Poe\InventorySet.cs" />
     <Compile Include="Poe\ItemMod.cs" />
     <Compile Include="Poe\ServerData.cs" />
+    <Compile Include="Poe\UI\ChatElement.cs" />
     <Compile Include="Poe\UI\Element.cs" />
     <Compile Include="Poe\UI\BigMinimap.cs" />
     <Compile Include="Poe\UI\EntityLabel.cs" />
@@ -145,18 +152,20 @@
     <Compile Include="Hud\HUDPlugin.cs" />
     <Compile Include="Hud\Menu\IntPicker.cs" />
     <Compile Include="Hud\Loot\ItemAlerter.cs" />
-    <Compile Include="Hud\Loot\ItemLevelRenderer.cs" />
     <Compile Include="Hud\Menu\Menu.cs" />
     <Compile Include="Hud\Menu\MenuItem.cs" />
-    <Compile Include="Hud\MapIcon.cs" />
-    <Compile Include="Hud\Icons\LargeMapRenderer.cs" />
+    <Compile Include="Hud\Icons\MapIcon.cs" />
     <Compile Include="Framework\MouseEventID.cs" />
+    <Compile Include="Settings\ISetting.cs" />
+    <Compile Include="Settings\Setting.cs" />
+    <Compile Include="Settings\SettingsBlock.cs" />
+    <Compile Include="Settings\SettingsForModule.cs" />
+    <Compile Include="Settings\SettingsRoot.cs" />
     <Compile Include="Shell\MouseHook.cs" />
     <Compile Include="Hud\OverlayRenderer.cs" />
     <Compile Include="Hud\Preload\PreloadAlert.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Hud\RenderingContext.cs" />
-    <Compile Include="Hud\Settings.cs" />
     <Compile Include="Hud\Sounds.cs" />
     <Compile Include="Hud\TextureRenderer.cs" />
     <Compile Include="Shell\TransparentDXOverlay.cs">
@@ -166,14 +175,10 @@
     <Compile Include="Pattern.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Shell\TransparentDXOverlay.resources" />
-  </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if "$(ConfigurationName)"=="Release" (
-copy $(TargetPath) $(ProjectDir)\..
-)</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>

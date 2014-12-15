@@ -6,14 +6,14 @@ namespace PoeHUD.Poe.EntityComponents
 		{
 			get
 			{
-				return this.address != 0 && this.m.ReadByte(this.address + 36) == 1;
+				return this.Address != 0 && this.M.ReadByte(this.Address + 36) == 1;
 			}
 		}
 		public bool IsStrongbox
 		{
 			get
 			{
-				return this.address != 0 && this.m.ReadInt(this.address + 52) != 0;
+				return this.Address != 0 && this.M.ReadInt(this.Address + 52) != 0;
 			}
 		}
 	}

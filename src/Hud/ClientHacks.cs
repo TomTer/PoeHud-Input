@@ -1,11 +1,24 @@
 using System;
 using System.Collections.Generic;
 using PoeHUD.Framework;
+using PoeHUD.Settings;
 
 namespace PoeHUD.Hud
 {
 	public class ClientHacks : HUDPluginBase
 	{
+		public class HacksSettings : SettingsForModule
+		{
+			public HacksSettings() : base("Client Hacks") { }
+	
+			public Setting<bool> Maphack = new Setting<bool>("Maphack");
+			public Setting<bool> Zoomhack = new Setting<bool>("Zoomhack");
+			public Setting<bool> Fullbright = new Setting<bool>("Full bright");
+			public Setting<bool> SuspendParticles = new Setting<bool>("Suspend Particles");
+		}
+
+		public HacksSettings Settings = new HacksSettings();
+
 		private Memory m;
 		private bool maphackEnabled;
 		private bool zoomhackEnabled;
@@ -15,19 +28,19 @@ namespace PoeHUD.Hud
 		public override void OnEnable()
 		{
 			this.m = this.model.Memory;
-			if (Settings.GetBool("ClientHacks"))
+			if (Settings.Enabled)
 			{
-				this.maphackEnabled = Settings.GetBool("ClientHacks.Maphack");
+				this.maphackEnabled = Settings.Maphack;
 				if (this.maphackEnabled)
 				{
 					this.EnableMaphack();
 				}
-				this.zoomhackEnabled = Settings.GetBool("ClientHacks.Zoomhack");
+				this.zoomhackEnabled = Settings.Zoomhack;
 				if (this.zoomhackEnabled)
 				{
 					this.EnableZoomhack();
 				}
-				this.fullbrightEnabled = Settings.GetBool("ClientHacks.Fullbright");
+				this.fullbrightEnabled = Settings.Fullbright;
 				if (this.fullbrightEnabled)
 				{
 					this.EnableFullbright();
@@ -36,8 +49,7 @@ namespace PoeHUD.Hud
 		}
 		public override void Render(RenderingContext rc, Dictionary<UiMountPoint, Vec2> mountPoints)
 		{
-			bool flag = Settings.GetBool("ClientHacks") && Settings.GetBool("ClientHacks.Maphack");
-			if (flag != this.maphackEnabled)
+			if ((Settings.Maphack) != this.maphackEnabled)
 			{
 				this.maphackEnabled = !this.maphackEnabled;
 				if (this.maphackEnabled)
@@ -53,8 +65,7 @@ namespace PoeHUD.Hud
 					this.model.Internal.IngameState.Camera.ZFar = 10000f;
 				}
 			}
-			bool flag2 = Settings.GetBool("ClientHacks") && Settings.GetBool("ClientHacks.Zoomhack");
-			if (flag2 != this.zoomhackEnabled)
+			if ((Settings.Zoomhack) != this.zoomhackEnabled)
 			{
 				this.zoomhackEnabled = !this.zoomhackEnabled;
 				if (this.zoomhackEnabled)
@@ -62,8 +73,7 @@ namespace PoeHUD.Hud
 				else
 					this.DisableZoomhack();
 			}
-			bool flag3 = Settings.GetBool("ClientHacks") && Settings.GetBool("ClientHacks.Fullbright");
-			if (flag3 != this.fullbrightEnabled)
+			if (Settings.Fullbright != this.fullbrightEnabled)
 			{
 				this.fullbrightEnabled = !this.fullbrightEnabled;
 				if (this.fullbrightEnabled)
@@ -71,8 +81,7 @@ namespace PoeHUD.Hud
 				else
 					this.DisableFullbright();
 			}
-			bool flag4 = Settings.GetBool("ClientHacks") && Settings.GetBool("ClientHacks.Particles");
-			if (flag4 != this.particlesEnabled)
+			if (Settings.SuspendParticles != this.particlesEnabled)
 			{
 				this.particlesEnabled = !this.particlesEnabled;
 				if (this.particlesEnabled)
@@ -92,6 +101,12 @@ namespace PoeHUD.Hud
 				this.DisableParticles();
 			}
 		}
+
+		public override SettingsForModule SettingsNode
+		{
+			get { return Settings; }
+		}
+
 		private void EnableFullbright()
 		{
 			if (!this.hasSetWriteAccess)

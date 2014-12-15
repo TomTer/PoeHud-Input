@@ -1,33 +1,21 @@
 using System.Drawing;
 using PoeHUD.Framework;
+using PoeHUD.Settings;
 using SlimDX.Direct3D9;
 
 namespace PoeHUD.Hud.Menu
 {
 	public class BooleanButton : MenuItem
 	{
-		private string text;
-		private string settingName;
+		public readonly string text;
 		public bool isEnabled;
-		public override int DesiredHeight
-		{
-			get
-			{
-				return 25;
-			}
-		}
-		public override int DesiredWidth
-		{
-			get
-			{
-				return 210;
-			}
-		}
-		public BooleanButton(string text, string settingName)
+		public readonly Setting<bool> setting;
+
+		public BooleanButton(Menu.MenuSettings ms, string text, Setting<bool> setting = null) : base(ms)
 		{
 			this.text = text;
-			this.settingName = settingName;
-			this.isEnabled = Settings.GetBool(settingName);
+			this.isEnabled = setting == null || setting.Value;
+			this.setting = setting;
 		}
 		public override void Render(RenderingContext rc)
 		{
@@ -52,11 +40,13 @@ namespace PoeHUD.Hud.Menu
 		}
 		protected override void HandleEvent(MouseEventID id, Vec2 pos)
 		{
+			if (null == setting)
+				return;
 			if (id == MouseEventID.LeftButtonDown)
 			{
 				this.isEnabled = !this.isEnabled;
+				setting.Value = this.isEnabled;
 			}
-			Settings.SetBool(this.settingName, this.isEnabled);
 		}
 	}
 }

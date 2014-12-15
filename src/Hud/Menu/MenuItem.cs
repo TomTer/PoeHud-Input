@@ -1,30 +1,22 @@
 using System.Collections.Generic;
+using System.Linq;
 using PoeHUD.Framework;
 
 namespace PoeHUD.Hud.Menu
 {
 	public abstract class MenuItem
 	{
-		protected List<MenuItem> children;
+		protected readonly Menu.MenuSettings settings;
+		protected readonly List<MenuItem> children = new List<MenuItem>();
 		protected MenuItem currentHover;
 		protected bool isVisible;
-		public Rect Bounds
-		{
-			get;
-			set;
-		}
-		public abstract int DesiredWidth
-		{
-			get;
-		}
-		public abstract int DesiredHeight
-		{
-			get;
-		}
+		public Rect Bounds { get; set; }
+		public virtual int Width { get { return settings.ItemWidth; } }
+		public virtual int Height { get { return settings.ItemHeight; } }
 
-		protected MenuItem()
+		protected MenuItem(Menu.MenuSettings settings)
 		{
-			this.children = new List<MenuItem>();
+			this.settings = settings;
 		}
 		public abstract void Render(RenderingContext rc);
 		protected abstract void HandleEvent(MouseEventID id, Vec2 pos);
@@ -34,32 +26,16 @@ namespace PoeHUD.Hud.Menu
 		}
 		public bool TestHit(Vec2 pos)
 		{
-			if (!this.isVisible)
-			{
-				return false;
-			}
-			if (this.TestBounds(pos))
-			{
-				return true;
-			}
-			foreach (MenuItem current in this.children)
-			{
-				if (current.TestHit(pos))
-				{
-					return true;
-				}
-			}
-			return false;
+			return this.isVisible && (this.TestBounds(pos) || this.children.Any(current => current.TestHit(pos)));
 		}
+
 		public void SetVisible(bool visible)
 		{
 			this.isVisible = visible;
-			if (!visible)
+			if (visible) return;
+			foreach (MenuItem current in this.children)
 			{
-				foreach (MenuItem current in this.children)
-				{
-					current.SetVisible(false);
-				}
+				current.SetVisible(false);
 			}
 		}
 		public void SetHovered(bool hover)
@@ -102,40 +78,25 @@ namespace PoeHUD.Hud.Menu
 				this.currentHover = null;
 				return;
 			}
-			else
+
+			if (this.TestBounds(pos))
 			{
-				if (this.TestBounds(pos))
-				{
-					this.HandleEvent(id, pos);
-					return;
-				}
-				if (this.currentHover != null)
-				{
-					this.currentHover.OnEvent(id, pos);
-				}
+				this.HandleEvent(id, pos);
 				return;
 			}
+			if (this.currentHover != null)
+				this.currentHover.OnEvent(id, pos);
 		}
 		private MenuItem GetChildAt(Vec2 pos)
 		{
-			foreach (MenuItem current in this.children)
-			{
-				if (current.TestHit(pos))
-				{
-					return current;
-				}
-			}
-			return null;
+			return this.children.FirstOrDefault(current => current.TestHit(pos));
 		}
+
 		public void AddChild(MenuItem item)
 		{
-			int num = this.Bounds.Y;
 			int x = this.Bounds.X + this.Bounds.W;
-			foreach (MenuItem current in this.children)
-			{
-				num += current.Bounds.H;
-			}
-			item.Bounds = new Rect(x, num, item.DesiredWidth, item.DesiredHeight);
+			int num = this.Bounds.Y + this.children.Sum(current => current.Bounds.H);
+			item.Bounds = new Rect(x, num, item.Width, item.Height);
 			this.children.Add(item);
 		}
 	}

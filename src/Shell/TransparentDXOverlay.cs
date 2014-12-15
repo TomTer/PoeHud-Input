@@ -6,13 +6,16 @@ using System.Windows.Forms;
 using PoeHUD.Controllers;
 using PoeHUD.Framework;
 using PoeHUD.Hud;
+using PoeHUD.Settings;
 using SlimDX;
 using SlimDX.Direct3D9;
 
 namespace PoeHUD.Shell
 {
-	public class TransparentDXOverlay : Form
+	public class TransparentDxOverlay : Form
 	{
+		public bool ExitRequested;
+
 		internal struct Margins
 		{
 			public int Left;
@@ -26,14 +29,14 @@ namespace PoeHUD.Shell
 		public const int LWA_ALPHA = 2;
 		public const int LWA_COLORKEY = 1;
 		private Device dx;
+		private Direct3D d3d;
+		
 		private readonly GameWindow window;
 		private Thread dxThread;
-		private bool wantsExit;
-		public static IntPtr CurrentHandle;
-		private TransparentDXOverlay.Margins marg;
+		private readonly SettingsRoot Settings;
 
-		private readonly Func<bool> fnHasGameEnded = null;
-		private Thread poeGuard;
+		private Margins marg;
+
 		public RenderingContext RC
 		{
 			get;
@@ -45,129 +48,120 @@ namespace PoeHUD.Shell
 			base.SuspendLayout();
 			base.AutoScaleDimensions = new SizeF(6f, 13f);
 			base.AutoScaleMode = AutoScaleMode.Font;
-			this.BackColor = SystemColors.Control;
+			BackColor = SystemColors.Control;
 			base.ClientSize = new Size(594, 448);
-			base.Name = "TransparentDXOverlay";
-			base.TopMost = true;
+			base.Name = "TransparentDxOverlay";
 			base.TransparencyKey = Color.Transparent;
-			base.Deactivate += TransparentDXOverlay_Deactivate;
 			base.ResumeLayout(false);
 		}
-		public TransparentDXOverlay(GameWindow window, Func<bool> fnGameEnded)
+
+		public TransparentDxOverlay(GameWindow window, SettingsRoot settings, EventScheduler es)
 		{
-			this.InitializeComponent();
-			this.BackColor = Color.Black;
+			Settings = settings;
+			InitializeComponent();
+			BackColor = Color.Black;
 			this.window = window;
 			base.ShowIcon = false;
-			base.TopMost = true;
-			base.FormClosing += new FormClosingEventHandler(this.TransparentDXOverlay_FormClosing);
-			string textForTitle = Settings.GetString("Window.Name");
-			this.Text = String.IsNullOrWhiteSpace(textForTitle) ? "ExileHUD" : textForTitle;
+			base.FormClosing += new FormClosingEventHandler(TransparentDXOverlay_FormClosing);
+			string textForTitle = Settings.Global.WindowName;
+			Text = String.IsNullOrWhiteSpace(textForTitle) ? "ExileHUD" : textForTitle;
 			base.FormBorderStyle = FormBorderStyle.None;
-			base.Load += new EventHandler(this.TransparentDXOverlay_Load);
-
-			fnHasGameEnded = fnGameEnded;
-			this.poeGuard = new Thread(CheckGameStillRunningLoop);
-			this.poeGuard.Start();
+			base.Load += TransparentDXOverlay_Load;
+			overseer = es;
 		}
 
-		private void CheckGameStillRunningLoop()
-		{
-			while (!wantsExit && !fnHasGameEnded())
-				Thread.Sleep(500);
-			if( !wantsExit )
-				Invoke(new Action(this.Close));
-		}
+		private readonly EventScheduler overseer;
+
+
 
 
 		private void TransparentDXOverlay_Load(object sender, EventArgs e)
 		{
-			Console.WriteLine("SetWindowLong: " + TransparentDXOverlay.SetWindowLong(base.Handle, -20, (IntPtr)((long)((ulong)(TransparentDXOverlay.GetWindowLong(base.Handle, -20) | 524288u | 32u)))));
-			Console.WriteLine("SetWindowLong error: " + Marshal.GetLastWin32Error());
-			TransparentDXOverlay.SetLayeredWindowAttributes(base.Handle, 0u, 255, 2u);
-			Rect rect = this.window.ClientRect();
-			this.marg.Left = rect.X;
-			this.marg.Top = rect.Y;
-			this.marg.Right = rect.X + rect.W;
-			this.marg.Bottom = rect.Y + rect.H;
-			IntPtr intPtr = TransparentDXOverlay.DwmExtendFrameIntoClientArea(base.Handle, ref this.marg);
+			uint curExStyle = GetWindowLong(base.Handle, GWL_EXSTYLE);
+			int swlRes = SetWindowLong(base.Handle, GWL_EXSTYLE, (IntPtr)(curExStyle| WS_EX_LAYERED | WS_EX_TRANSPARENT));
+			Console.WriteLine("SetWindowLong returned: " + swlRes + "; error code = " + Marshal.GetLastWin32Error());
+			SetLayeredWindowAttributes(base.Handle, 0u, 255, LWA_ALPHA);
+
+			Rect rect = window.ClientRect();
+			marg.Left = rect.X;
+			marg.Top = rect.Y;
+			marg.Right = rect.X + rect.W;
+			marg.Bottom = rect.Y + rect.H;
+			IntPtr intPtr = DwmExtendFrameIntoClientArea(base.Handle, ref marg);
 			Console.WriteLine("DwmExtendFrameIntoClientArea: " + intPtr);
+			
 			base.Bounds = new Rectangle(rect.X, rect.Y, rect.W, rect.H);
-			TransparentDXOverlay.CurrentHandle = base.Handle;
-			this.dxThread = new Thread(this.DxLoop);
-			this.dxThread.IsBackground = true;
-			this.dxThread.Start();
+
+			dxThread = new Thread(DxLoop) {IsBackground = true};
+			dxThread.Start();
+			overseer.StartWatching(this);
 		}
+
+		private readonly PresentParameters presentParameters = new PresentParameters
+		{
+			Windowed = true,
+			SwapEffect = SwapEffect.Discard,
+			BackBufferFormat = Format.A8R8G8B8,
+			PresentationInterval = PresentInterval.One
+		};
+
 		public void InitD3D()
 		{
-			Rect rect = this.window.ClientRect();
-			PresentParameters presentParameters = new PresentParameters();
-			presentParameters.Windowed = true;
-			presentParameters.SwapEffect = SwapEffect.Discard;
-			presentParameters.BackBufferFormat = Format.A8R8G8B8;
+			Rect rect = window.ClientRect();
+
 			presentParameters.BackBufferWidth = rect.W;
 			presentParameters.BackBufferHeight = rect.H;
-			presentParameters.PresentationInterval = PresentInterval.One;
-			this.dx = new Device(new Direct3D(), 0, DeviceType.Hardware, base.Handle, CreateFlags.Multithreaded | CreateFlags.HardwareVertexProcessing, new PresentParameters[]
-			{
-				presentParameters
-			});
-			this.RC = new RenderingContext(this.dx, this.window);
+
+			dx = new Device(d3d = new Direct3D(), 0, DeviceType.Hardware, base.Handle, CreateFlags.Multithreaded | CreateFlags.HardwareVertexProcessing, new[] { presentParameters });
+			RC = new RenderingContext(dx, window);
 			Configuration.AddResultWatch(ResultCode.DeviceLost, ResultWatchFlags.AlwaysIgnore);
 		}
 		private void TransparentDXOverlay_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			this.wantsExit = true;
-			this.dxThread.Join();
-			this.dx.Dispose();
+			ExitRequested = true;
+			dxThread.Join();
+			d3d.Dispose();
+			dx.Dispose();
 		}
-		private void TransparentDXOverlay_Deactivate(object sender, EventArgs e)
+		public void OnDeactivate()
 		{
 			base.TopMost = true;
 			base.BringToFront();
 		}
 		public void ResetDirectx()
 		{
-			if (!this.dx.Disposed)
-			{
-				this.RC.OnLostDevice();
-				while (this.dx.TestCooperativeLevel() != ResultCode.DeviceNotReset)
-				{
-					Thread.Sleep(10);
-				}
-				Rect rect = this.window.ClientRect();
-				PresentParameters presentParameters = new PresentParameters();
-				presentParameters.Windowed = true;
-				presentParameters.SwapEffect = SwapEffect.Discard;
-				presentParameters.BackBufferFormat = Format.A8R8G8B8;
-				presentParameters.BackBufferWidth = rect.W;
-				presentParameters.BackBufferHeight = rect.H;
-				presentParameters.PresentationInterval = PresentInterval.One;
-				this.dx.Reset(new[] { presentParameters });
-				this.RC.OnResetDevice();
-				this.dxThread = new Thread(this.DxLoop) {IsBackground = true};
-				this.dxThread.Start();
-			}
+			if (dx.Disposed) return;
+
+			RC.OnLostDevice();
+			while (dx.TestCooperativeLevel() != ResultCode.DeviceNotReset)
+				Thread.Sleep(50);
+
+			Rect rect = window.ClientRect();
+
+			presentParameters.BackBufferWidth = rect.W;
+			presentParameters.BackBufferHeight = rect.H;
+
+			dx.Reset(new[] { presentParameters });
+			RC.OnResetDevice();
 		}
+
 		public void DxLoop()
 		{
-			while (!this.wantsExit)
-			{
-				this.dx.Clear(ClearFlags.Target, Color.FromArgb(0, 0, 0, 0), 1f, 0);
-				this.dx.SetRenderState(RenderState.ZEnable, false);
-				this.dx.SetRenderState(RenderState.Lighting, false);
-				this.dx.SetRenderState(RenderState.AlphaBlendEnable, true);
-				this.dx.SetRenderState(RenderState.CullMode, Cull.None);
-				this.dx.BeginScene();
-				this.RC.RenderFrame();
-				this.dx.EndScene();
-				if (this.dx.Present() == ResultCode.DeviceLost)
-				{
-					base.Invoke(new Action(this.ResetDirectx));
-					return;
-				}
-			}
+			do {
+				dx.Clear(ClearFlags.Target, Color.FromArgb(0, 0, 0, 0), 1f, 0);
+				dx.SetRenderState(RenderState.ZEnable, false);
+				dx.SetRenderState(RenderState.Lighting, false);
+				dx.SetRenderState(RenderState.AlphaBlendEnable, true);
+				dx.SetRenderState(RenderState.CullMode, Cull.None);
+				dx.BeginScene();
+				RC.RenderFrame();
+				dx.EndScene();
+
+				if (!ExitRequested && dx.Present() == ResultCode.DeviceLost ) // recover dx
+					base.Invoke(new EventScheduler.HatedCsharpDelegate(ResetDirectx));
+			} while (!ExitRequested);
 		}
+
 		[DllImport("user32.dll", SetLastError = true)]
 		private static extern uint GetWindowLong(IntPtr hWnd, int nIndex);
 		[DllImport("user32.dll", SetLastError = true)]
@@ -175,6 +169,6 @@ namespace PoeHUD.Shell
 		[DllImport("user32.dll", SetLastError = true)]
 		private static extern bool SetLayeredWindowAttributes(IntPtr hwnd, uint crKey, byte bAlpha, uint dwFlags);
 		[DllImport("dwmapi.dll")]
-		private static extern IntPtr DwmExtendFrameIntoClientArea(IntPtr hWnd, ref TransparentDXOverlay.Margins pMargins);
+		private static extern IntPtr DwmExtendFrameIntoClientArea(IntPtr hWnd, ref Margins pMargins);
 	}
 }

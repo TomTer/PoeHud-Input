@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using PoeHUD.Framework;
+using PoeHUD.Settings;
 using SlimDX.Direct3D9;
 
 namespace PoeHUD.Hud.Menu
@@ -8,32 +9,21 @@ namespace PoeHUD.Hud.Menu
 	public class IntPicker : MenuItem
 	{
 		private int value;
-		private int min;
-		private int max;
-		private string text;
+		private readonly int min;
+		private readonly int max;
+		private readonly string text;
 		private bool isHolding;
-		private string settingName;
-		public override int DesiredWidth
-		{
-			get
-			{
-				return 210;
-			}
-		}
-		public override int DesiredHeight
-		{
-			get
-			{
-				return 30;
-			}
-		}
-		public IntPicker(string text, int min, int max, string settingName)
+		private readonly Setting<int> setting;
+
+		public override int Height { get { return base.Height + 5; } }
+
+		public IntPicker(Menu.MenuSettings menuSettings, string text, SettingIntRange setting) : base(menuSettings)
 		{
 			this.text = text;
-			this.min = min;
-			this.max = max;
-			this.value = Settings.GetInt(settingName);
-			this.settingName = settingName;
+			this.min = setting.Min;
+			this.max = setting.Max;
+			this.value = setting.Value;
+			this.setting = setting;
 		}
 		public override void Render(RenderingContext rc)
 		{
@@ -53,25 +43,11 @@ namespace PoeHUD.Hud.Menu
 		private void CalcValue(int x)
 		{
 			int num = base.Bounds.X + 5;
-			int num2 = num + base.Bounds.W - 10;
-			float num3;
-			if (x <= num)
-			{
-				num3 = 0f;
-			}
-			else
-			{
-				if (x >= num2)
-				{
-					num3 = 1f;
-				}
-				else
-				{
-					num3 = (float)(x - num) / (float)(num2 - num);
-				}
-			}
-			this.value = (int)Math.Round((double)((float)this.min + num3 * (float)(this.max - this.min)));
-			Settings.SetInt(this.settingName, this.value);
+			int num2 = base.Bounds.X + base.Bounds.W - 5;
+			float num3 = x <= num ? 0f : (x >= num2 ? 1f : (float) (x - num)/(num2 - num));
+			this.value = (int)Math.Round(this.min + num3 * (this.max - this.min));
+			setting.Value = value;
+
 		}
 		protected override bool TestBounds(Vec2 pos)
 		{

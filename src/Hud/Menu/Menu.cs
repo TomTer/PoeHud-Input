@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using PoeHUD.Framework;
+using PoeHUD.Settings;
 using PoeHUD.Shell;
 using SlimDX.Direct3D9;
 
@@ -8,37 +11,62 @@ namespace PoeHUD.Hud.Menu
 {
 	public class Menu : HUDPluginBase
 	{
-		private const int ButtonWidth = 210;
-		private const int ButtonHeight = 40;
+		public class MenuSettings : SettingsForModule
+		{
+			public MenuSettings() : base("Menu") { }
+
+			public Setting<int> PositionHeight = new Setting<int>("PositionHeight", 100);
+			public Setting<int> PositionWidth = new Setting<int>("PositionWidth", 0);
+			public SettingIntRange AnchorWidth = new SettingIntRange("Anchor Width", 40, 100, 50);
+			public SettingIntRange AnchorHeight = new SettingIntRange("Anchor Height", 16, 40, 25);
+			public SettingIntRange ItemWidth = new SettingIntRange("Item Width", 40, 300, 200);
+			public SettingIntRange ItemHeight = new SettingIntRange("Item Height", 16, 40, 25);
+		}
+
+		public MenuSettings Settings = new MenuSettings();
+
 		private MouseHook hook;
 		private List<BooleanButton> buttons;
 		private BooleanButton currentHover;
 		private Rect bounds;
 		private bool menuVisible;
+		private SettingsRoot settingsRoot;
+
+		public Menu(SettingsRoot settings)
+		{
+			this.settingsRoot = settings;
+			settingsRoot.AddModule(Settings);
+			settingsRoot.ReadFromFile();
+		}
 		public override void OnEnable()
 		{
-			this.bounds = new Rect(Settings.GetInt("Menu.PositionWidth"), Settings.GetInt("Menu.PositionHeight"), Settings.GetInt("Menu.Length"), Settings.GetInt("Menu.Size"));
+			this.bounds = new Rect(Settings.PositionWidth, Settings.PositionHeight, Settings.AnchorWidth, Settings.AnchorHeight);
 			this.CreateButtons();
-			this.hook = new MouseHook(new MouseHook.MouseEvent(this.OnMouseEvent));
+			this.hook = new MouseHook(this.OnMouseEvent);
 		}
 		public override void OnDisable()
 		{
 			this.hook.Dispose();
 		}
+
+		public override SettingsForModule SettingsNode
+		{
+			get { return Settings; }
+		}
+
 		public override void Render(RenderingContext rc, Dictionary<UiMountPoint, Vec2> mountPoints)
 		{
 			int alpha = this.menuVisible ? 255 : 100;
 			rc.AddBox(this.bounds, Color.FromArgb(alpha, Color.Gray));
-			rc.AddTextWithHeight(new Vec2(Settings.GetInt("Menu.PositionWidth") + 25, Settings.GetInt("Menu.PositionHeight") + 12), "Menu", Color.Gray, 10, DrawTextFormat.VerticalCenter | DrawTextFormat.Center); foreach (BooleanButton current in this.buttons)
-			{
+			rc.AddTextWithHeight(new Vec2(Settings.PositionWidth + Settings.AnchorWidth / 2, Settings.PositionHeight + Settings.AnchorHeight / 2), "Menu", Color.Gray, 10, DrawTextFormat.Center | DrawTextFormat.VerticalCenter); 
+			foreach (BooleanButton current in this.buttons)
 				current.Render(rc);
-			}
 		}
 
 
 		private bool OnMouseEvent(MouseEventID id, int x, int y)
 		{
-			if (Settings.GetBool("Window.RequireForeground") && !this.model.Window.IsForeground())
+			if (Settings.Global.RequireForeground && !this.model.Window.IsForeground())
 			{
 				return false;
 			}
@@ -50,24 +78,15 @@ namespace PoeHUD.Hud.Menu
 					this.currentHover.OnEvent(id, vec);
 					return false;
 				}
-				using (List<BooleanButton>.Enumerator enumerator = this.buttons.GetEnumerator())
+				foreach (var current in buttons.Where(current => current.TestHit(vec)))
 				{
-					while (enumerator.MoveNext())
-					{
-						BooleanButton current = enumerator.Current;
-						if (current.TestHit(vec))
-						{
-							if (this.currentHover != null)
-							{
-								this.currentHover.SetHovered(false);
-							}
-							this.currentHover = current;
-							current.SetHovered(true);
-							return false;
-						}
-					}
+					if (this.currentHover != null)
+						this.currentHover.SetHovered(false);
+					this.currentHover = current;
+					current.SetHovered(true);
 					return false;
 				}
+				return false;
 			}
 			if (this.bounds.HasPoint(vec) && id == MouseEventID.LeftButtonDown)
 			{
@@ -85,91 +104,46 @@ namespace PoeHUD.Hud.Menu
 			}
 			return false;
 		}
+
+		private void createChildMenus(BooleanButton parent, SettingsBlock module)
+		{
+			foreach (ISetting setting in module.Members.Where(setting => !String.IsNullOrWhiteSpace(setting.Key)))
+			{
+				if( setting is Setting<bool>)
+					parent.AddChild(new BooleanButton(Settings, setting.Key, setting as Setting<bool>));
+				else if (setting is SettingsBlock)
+				{
+					var sm = setting as SettingsForModule;
+					var c = new BooleanButton(Settings,setting.Key, sm == null ? null : sm.Enabled);
+					parent.AddChild(c);
+					createChildMenus(c, setting as SettingsBlock);
+				}
+				if (setting is SettingIntRange)
+				{
+					var sir = setting as SettingIntRange;
+					parent.AddChild(new IntPicker(Settings, setting.Key, sir));
+				}
+			}
+		}
+
 		private void CreateButtons()
 		{
-			int r = 0;
 			this.buttons = new List<BooleanButton>();
-			BooleanButton parent = this.CreateRootMenu("Health bars", r++, "Healthbars");
-			BooleanButton booleanButton = this.AddButton(parent, "Players", "Healthbars.Players");
-			BooleanButton parent2 = this.AddButton(parent, "Enemies", "Healthbars.Enemies");
-			BooleanButton booleanButton2 = this.AddButton(parent, "Minions", "Healthbars.Minions");
-			this.AddButton(parent, "Show ES", "Healthbars.ShowES");
-			this.AddButton(parent, "Show in town", "Healthbars.ShowInTown");
-			booleanButton.AddChild(new IntPicker("Width", 50, 180, "Healthbars.Players.Width"));
-			booleanButton.AddChild(new IntPicker("Height", 10, 50, "Healthbars.Players.Height"));
-			booleanButton2.AddChild(new IntPicker("Width", 50, 180, "Healthbars.Minions.Width"));
-			booleanButton2.AddChild(new IntPicker("Height", 10, 50, "Healthbars.Minions.Height"));
-			BooleanButton booleanButton3 = this.AddButton(parent2, "White", "Healthbars.Enemies.Normal");
-            booleanButton3.AddChild(new BooleanButton("Print percents", "Healthbars.Enemies.Normal.PrintPercents"));
-            booleanButton3.AddChild(new BooleanButton("Print health text", "Healthbars.Enemies.Normal.PrintHealthText"));
-			booleanButton3.AddChild(new IntPicker("Width", 50, 180, "Healthbars.Enemies.Normal.Width"));
-			booleanButton3.AddChild(new IntPicker("Height", 10, 50, "Healthbars.Enemies.Normal.Height"));
-			BooleanButton booleanButton4 = this.AddButton(parent2, "Magic", "Healthbars.Enemies.Magic");
-            booleanButton4.AddChild(new BooleanButton("Print percents", "Healthbars.Enemies.Magic.PrintPercents"));
-            booleanButton4.AddChild(new BooleanButton("Print health text", "Healthbars.Enemies.Magic.PrintHealthText"));
-			booleanButton4.AddChild(new IntPicker("Width", 50, 180, "Healthbars.Enemies.Magic.Width"));
-			booleanButton4.AddChild(new IntPicker("Height", 10, 50, "Healthbars.Enemies.Magic.Height"));
-			BooleanButton booleanButton5 = this.AddButton(parent2, "Rare", "Healthbars.Enemies.Rare");
-            booleanButton5.AddChild(new BooleanButton("Print percents", "Healthbars.Enemies.Rare.PrintPercents"));
-            booleanButton5.AddChild(new BooleanButton("Print health text", "Healthbars.Enemies.Rare.PrintHealthText"));
-			booleanButton5.AddChild(new IntPicker("Width", 50, 180, "Healthbars.Enemies.Rare.Width"));
-			booleanButton5.AddChild(new IntPicker("Height", 10, 50, "Healthbars.Enemies.Rare.Height"));
-			BooleanButton booleanButton6 = this.AddButton(parent2, "Uniques", "Healthbars.Enemies.Unique");
-            booleanButton6.AddChild(new BooleanButton("Print percents", "Healthbars.Enemies.Unique.PrintPercents"));
-            booleanButton6.AddChild(new BooleanButton("Print health text", "Healthbars.Enemies.Unique.PrintHealthText"));
-			booleanButton6.AddChild(new IntPicker("Width", 50, 180, "Healthbars.Enemies.Unique.Width"));
-			booleanButton6.AddChild(new IntPicker("Height", 10, 50, "Healthbars.Enemies.Unique.Height"));
-			BooleanButton parent3 = this.CreateRootMenu("Minimap icons", r++, "MinimapIcons");
-			this.AddButton(parent3, "Monsters", "MinimapIcons.Monsters");
-			this.AddButton(parent3, "Minions", "MinimapIcons.Minions");
-			this.AddButton(parent3, "Strongboxes", "MinimapIcons.Strongboxes");
-			this.AddButton(parent3, "Chests", "MinimapIcons.Chests");
-			this.AddButton(parent3, "Alert items", "MinimapIcons.AlertedItems");
-            this.AddButton(parent3, "Masters", "MinimapIcons.Masters");
-			BooleanButton parent4 = this.CreateRootMenu("Item alert", r++, "ItemAlert");
-			this.AddButton(parent4, "Rares", "ItemAlert.Rares");
-			this.AddButton(parent4, "Uniques", "ItemAlert.Uniques");
-			this.AddButton(parent4, "Currency", "ItemAlert.Currency");
-			this.AddButton(parent4, "Maps", "ItemAlert.Maps");
-			this.AddButton(parent4, "RGB", "ItemAlert.RGB");
-			this.AddButton(parent4, "Crafting bases", "ItemAlert.Crafting");
-			this.AddButton(parent4, "Skill gems", "ItemAlert.SkillGems");
-			this.AddButton(parent4, "Only quality gems", "ItemAlert.QualitySkillGems");
-			this.AddButton(parent4, "Play sound", "ItemAlert.PlaySound");
-			BooleanButton booleanButton7 = this.AddButton(parent4, "Show text", "ItemAlert.ShowText");
-			booleanButton7.AddChild(new IntPicker("Font size", 6, 30, "ItemAlert.ShowText.FontSize"));
-			BooleanButton tooltip = this.CreateRootMenu("Advanced tooltips", r++, "Tooltip");
-			this.AddButton(tooltip, "Item level on hover", "Tooltip.ShowItemLevel");
-			this.AddButton(tooltip, "Item mods on hover", "Tooltip.ShowItemMods");
-			BooleanButton parent5 = this.CreateRootMenu("Boss warnings", r++, "MonsterTracker");
-			this.AddButton(parent5, "Sound warning", "MonsterTracker.PlaySound");
-			BooleanButton booleanButton8 = this.AddButton(parent5, "Text warning", "MonsterTracker.ShowText");
-			booleanButton8.AddChild(new IntPicker("Font size", 6, 30, "MonsterTracker.ShowText.FontSize"));
-			booleanButton8.AddChild(new IntPicker("Background alpha", 0, 200, "MonsterTracker.ShowText.BgAlpha"));
-			BooleanButton booleanButton9 = this.CreateRootMenu("Xph Display", r++, "XphDisplay");
-			booleanButton9.AddChild(new IntPicker("Font size", 6, 30, "XphDisplay.FontSize"));
-			booleanButton9.AddChild(new IntPicker("Background alpha", 0, 200, "XphDisplay.BgAlpha"));
-			BooleanButton parent6 = this.CreateRootMenu("Client hacks", r++, "ClientHacks");
-			this.AddButton(parent6, "Maphack", "ClientHacks.Maphack");
-			this.AddButton(parent6, "Zoomhack", "ClientHacks.Zoomhack");
-			this.AddButton(parent6, "Fullbright", "ClientHacks.Fullbright");
-			this.AddButton(parent6, "Disable Particles", "ClientHacks.Particles");
-			BooleanButton booleanButton10 = this.CreateRootMenu("Preload Alert", r++, "PreloadAlert");
-			booleanButton10.AddChild(new IntPicker("Font size", 6, 30, "PreloadAlert.FontSize"));
-			booleanButton10.AddChild(new IntPicker("Background alpha", 0, 200, "PreloadAlert.BgAlpha"));
-			BooleanButton dps = this.CreateRootMenu("Show DPS", r++, "DpsDisplay");
-			// BooleanButton closeWithGame = this.CreateRootMenu("Exit when game is closed", 8, "ExitWithGame");
+
+			foreach (var module in settingsRoot.Members.OfType<SettingsForModule>())
+			{
+				bool isMenuSettings = module == Settings;
+
+				BooleanButton parent = this.CreateRootMenu(module.BlockName, isMenuSettings ? null : module.Enabled);
+				createChildMenus(parent, module);
+			}
 		}
-		private BooleanButton AddButton(BooleanButton parent, string text, string setting)
+
+		private BooleanButton CreateRootMenu(string text, Setting<bool> setting)
 		{
-			BooleanButton booleanButton = new BooleanButton(text, setting);
-			parent.AddChild(booleanButton);
-			return booleanButton;
-		}
-		private BooleanButton CreateRootMenu(string text, int yIndex, string setting)
-		{
-			BooleanButton booleanButton = new BooleanButton(text, setting);
-			booleanButton.Bounds = new Rect(Settings.GetInt("Menu.PositionWidth"), Settings.GetInt("Menu.PositionHeight") + Settings.GetInt("Menu.Size") + yIndex * booleanButton.DesiredHeight, booleanButton.DesiredWidth, booleanButton.DesiredHeight);
+			BooleanButton booleanButton = new BooleanButton(Settings, text, setting);
+			int dy = Settings.AnchorHeight + this.buttons.Sum(c => c.Height);
+			booleanButton.Bounds = new Rect(Settings.PositionWidth, Settings.PositionHeight + dy, booleanButton.Width, booleanButton.Height);
 			this.buttons.Add(booleanButton);
 			return booleanButton;
 		}

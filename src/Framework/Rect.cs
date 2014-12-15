@@ -17,6 +17,12 @@ namespace PoeHUD.Framework
 		{
 			this = new Rect(0, 0, w, h);
 		}
+
+		public Rect(Vec2 position, Vec2 size = default(Vec2))
+		{
+			this = new Rect(position.X, position.Y, size.X, size.Y);
+		}
+
 		public bool HasPoint(Vec2 v)
 		{
 			return HasPoint(v.X, v.Y);

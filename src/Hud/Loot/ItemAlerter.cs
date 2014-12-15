@@ -5,10 +5,9 @@ using System.IO;
 using System.Linq;
 using PoeHUD.Controllers;
 using PoeHUD.Framework;
-using PoeHUD.Game;
-using PoeHUD.Hud.Icons;
 using PoeHUD.Poe.EntityComponents;
 using PoeHUD.Poe.UI;
+using PoeHUD.Settings;
 using SlimDX.Direct3D9;
 using Entity = PoeHUD.Poe.Entity;
 
@@ -18,55 +17,84 @@ namespace PoeHUD.Hud.Loot
 	{
 		private HashSet<long> playedSoundsCache;
 		private Dictionary<EntityWrapper, AlertDrawStyle> currentAlerts;
-		private Dictionary<EntityWrapper, MapIcon> currentIcons;
 
 		private Dictionary<string, CraftingBase> craftingBases;
 		private HashSet<string> currencyNames;
 
+		public class ItemAlertSettings : SettingsForModule
+		{
+			public Setting<bool> PlaySound = new Setting<bool>("Play Sound", true);
+			public Setting<bool> AlertOfCraftingBases = new Setting<bool>("Crafting Bases", true);
+			public Setting<bool> ShowText = new Setting<bool>("Show Text", true);
+			public SettingIntRange TextFontSize = new SettingIntRange("Font Size", 7, 30, 14);
+			public Setting<bool> AlertOfRares = new Setting<bool>("Rares", true);
+			public Setting<bool> AlertOfUniques = new Setting<bool>("Uniques", true);
+			public Setting<bool> AlertOfMaps = new Setting<bool>("Maps", true);
+			public ItemAlertSocketSettings Sockets = new ItemAlertSocketSettings();
+			public GemSettings AlertOfGems = new GemSettings();
+			public Setting<bool> AlertOfCurrency = new Setting<bool>("Currency", true);
+			
+			public ItemAlertSettings() : base("Item Alert") {}
+		}
+
+		public class GemSettings : SettingsForModule
+		{
+			public GemSettings() : base("Skill Gems")
+			{
+			}
+
+			public SettingIntRange MinQuality = new SettingIntRange("Minimum Quality", 0, 20);
+		}
+
+		public class ItemAlertSocketSettings : SettingsBlock
+		{
+			public ItemAlertSocketSettings() : base("Sockets") { }
+
+			public SettingIntRange MinLinksToAlert = new SettingIntRange("Minimum Links", 2, 6, 5);
+			public Setting<bool> AlertOfRgb = new Setting<bool>("Chrome Link", true);
+			public SettingIntRange MinSocketsToAlert = new SettingIntRange("Minimum Sockets", 1, 6, 6);
+		}
+
+		public ItemAlertSettings Settings = new ItemAlertSettings();
 		public override void OnEnable()
 		{
 			playedSoundsCache = new HashSet<long>();
 			currentAlerts = new Dictionary<EntityWrapper, AlertDrawStyle>();
-			currentIcons = new Dictionary<EntityWrapper, MapIcon>();
-			currencyNames = LoadCurrency();
-			craftingBases = LoadCraftingBases();
-
-			model.Area.OnAreaChange += CurrentArea_OnAreaChange;
+			currencyNames = LoadCurrency("config/currency.txt");
+			craftingBases = CraftingBase.LoadFromFile("config/crafting_bases.txt");
 		}
-		public override void OnDisable()
+
+		public override SettingsForModule SettingsNode
 		{
-			model.Area.OnAreaChange -= CurrentArea_OnAreaChange;
+			get { return Settings; }
 		}
 
 		public void EntityRemoved(EntityWrapper entity)
 		{
 			currentAlerts.Remove(entity);
-			currentIcons.Remove(entity);
 		}
 
 		public void EntityAdded(EntityWrapper entity)
 		{
-			if (!Settings.GetBool("ItemAlert") || currentAlerts.ContainsKey(entity))
+			if (!Settings.Enabled || currentAlerts.ContainsKey(entity))
 			{
 				return;
 			}
-			if (entity.HasComponent<WorldItem>())
+			if (!entity.HasComponent<WorldItem>()) return;
+
+			EntityWrapper item = new EntityWrapper(model, entity.GetComponent<WorldItem>().ItemEntity);
+			ItemUsefulProperties props = EvaluateItem(item);
+
+			if (!props.IsWorthAlertingPlayer(Settings, currencyNames)) return;
+
+			AlertDrawStyle drawStyle = props.GetDrawStyle();
+			currentAlerts.Add(entity, drawStyle);
+			drawStyle.IconForMap = new MapIcon(entity, new HudTexture("minimap_default_icon.png", drawStyle.color), 8) { Type = MapIcon.IconType.Item };
+
+			if (Settings.PlaySound && drawStyle.soundToPlay != null && !playedSoundsCache.Contains(entity.LongId))
 			{
-				EntityWrapper item = new EntityWrapper(model, entity.GetComponent<WorldItem>().ItemEntity);
-				ItemUsefulProperties props = EvaluateItem(item);
-
-				if (props.IsWorthAlertingPlayer(currencyNames))
-				{
-					AlertDrawStyle drawStyle = props.GetDrawStyle();
-					currentAlerts.Add(entity, drawStyle);
-					currentIcons[entity] = new MapIcon(entity, new HudTexture("minimap_default_icon.png", drawStyle.color), 8);
-
-					if (Settings.GetBool("ItemAlert.PlaySound") && !playedSoundsCache.Contains(entity.LongId))
-					{
-						playedSoundsCache.Add(entity.LongId);
-						Sounds.AlertSound.Play();
-					}
-				}
+				playedSoundsCache.Add(entity.LongId);
+				drawStyle.soundToPlay.Play();
 			}
 		}
 
@@ -95,7 +123,7 @@ namespace PoeHUD.Hud.Loot
 			ip.IsVaalFragment = item.Path.Contains("VaalFragment");
 
 			CraftingBase craftingBase;
-			if (craftingBases.TryGetValue(ip.Name, out craftingBase) && Settings.GetBool("ItemAlert.Crafting"))
+			if (craftingBases.TryGetValue(ip.Name, out craftingBase) && Settings.AlertOfCraftingBases)
 				ip.IsCraftingBase = ip.ItemLevel >= craftingBase.MinItemLevel 
 					&& ip.Quality >= craftingBase.MinQuality
 					&& (craftingBase.Rarities == null || craftingBase.Rarities.Contains(ip.Rarity));
@@ -103,31 +131,23 @@ namespace PoeHUD.Hud.Loot
 			return ip;
 		}
 
-		private void CurrentArea_OnAreaChange(AreaController area)
+		public override void OnAreaChange(AreaController area)
 		{
 			playedSoundsCache.Clear();
-			currentIcons.Clear();
 		}
 		public override void Render(RenderingContext rc, Dictionary<UiMountPoint, Vec2> mountPoints)
 		{
-			if (!Settings.GetBool("ItemAlert") || !Settings.GetBool("ItemAlert.ShowText"))
-			{
-				return;
-			}
-
+			if (!Settings.ShowText) return;
 
 			var playerPos = model.Player.GetComponent<Positioned>().GridPos;
 
-
 			Vec2 rightTopAnchor = mountPoints[UiMountPoint.UnderMinimap];
 			int y = rightTopAnchor.Y;
-			int fontSize = Settings.GetInt("ItemAlert.ShowText.FontSize");
+			int fontSize = Settings.TextFontSize;
 			
-			const int vMargin = 2;
-			foreach (KeyValuePair<EntityWrapper, AlertDrawStyle> kv in currentAlerts)
+			const int VMargin = 2;
+			foreach (KeyValuePair<EntityWrapper, AlertDrawStyle> kv in currentAlerts.Where(a => a.Key.IsValid))
 			{
-				if (!kv.Key.IsValid) continue;
-
 				string text = GetItemName(kv);
 				if( null == text ) continue;
 
@@ -136,7 +156,7 @@ namespace PoeHUD.Hud.Loot
 
 				Vec2 vPadding = new Vec2(5, 2);
 				Vec2 itemDrawnSize = drawItem(rc, kv.Value, delta, rightTopAnchor.X, y, vPadding, text, fontSize);
-				y += itemDrawnSize.Y + vMargin;
+				y += itemDrawnSize.Y + VMargin;
 			}
 			
 		}
@@ -144,16 +164,16 @@ namespace PoeHUD.Hud.Loot
 		public IEnumerable<MapIcon> GetIcons()
 		{
 			List<EntityWrapper> toRemove = new List<EntityWrapper>();
-			foreach (KeyValuePair<EntityWrapper, MapIcon> kv in currentIcons)
+			foreach (KeyValuePair<EntityWrapper, AlertDrawStyle> kv in currentAlerts)
 			{
-				if (kv.Value.IsEntityStillValid())
-					yield return kv.Value;
+				if (kv.Value.IconForMap.IsEntityStillValid())
+					yield return kv.Value.IconForMap;
 				else
 					toRemove.Add(kv.Key);
 			}
 			foreach (EntityWrapper wrapper in toRemove)
 			{
-				currentIcons.Remove(wrapper);
+				currentAlerts.Remove(wrapper);
 			}
 		}
 
@@ -219,70 +239,15 @@ namespace PoeHUD.Hud.Loot
 			return text;
 		}
 
-		private Dictionary<string, CraftingBase> LoadCraftingBases()
+		private HashSet<string> LoadCurrency(string fileName)
 		{
-			if (!File.Exists("config/crafting_bases.txt"))
-			{
-				return new Dictionary<string, CraftingBase>();
-			}
-			Dictionary<string, CraftingBase> dictionary = new Dictionary<string, CraftingBase>(StringComparer.OrdinalIgnoreCase);
-			List<string> parseErrors = new List<string>();
-			string[] array = File.ReadAllLines("config/crafting_bases.txt");
-			foreach (
-				string text2 in
-					array.Select(text => text.Trim()).Where(text2 => !string.IsNullOrWhiteSpace(text2) && !text2.StartsWith("#")))
-			{
-				string[] parts = text2.Split(new[]{','});
-				string itemName = parts[0].Trim();
-
-				CraftingBase item = new CraftingBase() {Name = itemName};
-
-				int tmpVal = 0;
-				if (parts.Length > 1 && int.TryParse(parts[1], out tmpVal))
-					item.MinItemLevel = tmpVal;
-
-				if (parts.Length > 2 && int.TryParse(parts[2], out tmpVal))
-					item.MinQuality = tmpVal;
-
-				const int RarityPosition = 3;
-				if (parts.Length > RarityPosition)
-				{
-					item.Rarities = new ItemRarity[parts.Length - 3];
-					for (int i = RarityPosition; i < parts.Length; i++)
-					{
-						if (!Enum.TryParse(parts[i], true, out item.Rarities[i - RarityPosition]))
-						{
-							parseErrors.Add("Incorrect rarity definition at line: " + text2);
-							item.Rarities = null;
-						}
-					}
-				}
-
-				if( !dictionary.ContainsKey(itemName))
-					dictionary.Add(itemName, item);
-				else
-					parseErrors.Add("Duplicate definition for item was ignored: " + text2);
-			}
-
-			if(parseErrors.Any())
-				throw new Exception("Error parsing config/crafting_bases.txt \r\n" + string.Join(Environment.NewLine, parseErrors) + Environment.NewLine + Environment.NewLine);
-
-			return dictionary;
-		}
-		private HashSet<string> LoadCurrency()
-		{
-			if (!File.Exists("config/currency.txt"))
+			if (!File.Exists(fileName))
 				return null;
 			HashSet<string> hashSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-			string[] array = File.ReadAllLines("config/currency.txt");
-			for (int i = 0; i < array.Length; i++)
+			string[] array = File.ReadAllLines(fileName);
+			foreach (string text2 in array.Where(text2 => !string.IsNullOrWhiteSpace(text2)))
 			{
-				string text = array[i];
-				string text2 = text.Trim();
-				if (!string.IsNullOrWhiteSpace(text2))
-				{
-					hashSet.Add(text2.ToLowerInvariant());
-				}
+				hashSet.Add(text2.Trim().ToLowerInvariant());
 			}
 			return hashSet;
 		}

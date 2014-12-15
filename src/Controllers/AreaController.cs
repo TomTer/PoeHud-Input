@@ -23,7 +23,7 @@ namespace PoeHUD.Controllers
 
 		public void RefreshState()
 		{
-			var igsd = this.Root.Internal.game.IngameState.Data;
+			var igsd = this.Root.Internal.Game.IngameState.Data;
 			AreaTemplate clientsArea = igsd.CurrentArea;
 			int curAreaHash = igsd.CurrentAreaHash;
 

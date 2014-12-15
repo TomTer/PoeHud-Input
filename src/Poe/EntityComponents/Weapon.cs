@@ -6,9 +6,9 @@ namespace PoeHUD.Poe.EntityComponents
 		{
 			get
 			{
-				if (this.address != 0)
+				if (this.Address != 0)
 				{
-					return this.m.ReadInt(this.address + 16, new int[]
+					return this.M.ReadInt(this.Address + 16, new int[]
 					{
 						4
 					});
@@ -20,9 +20,9 @@ namespace PoeHUD.Poe.EntityComponents
 		{
 			get
 			{
-				if (this.address != 0)
+				if (this.Address != 0)
 				{
-					return this.m.ReadInt(this.address + 16, new int[]
+					return this.M.ReadInt(this.Address + 16, new int[]
 					{
 						8
 					});
@@ -34,9 +34,9 @@ namespace PoeHUD.Poe.EntityComponents
 		{
 			get
 			{
-				if (this.address != 0)
+				if (this.Address != 0)
 				{
-					return this.m.ReadInt(this.address + 16, new int[]
+					return this.M.ReadInt(this.Address + 16, new int[]
 					{
 						12
 					});
@@ -48,9 +48,9 @@ namespace PoeHUD.Poe.EntityComponents
 		{
 			get
 			{
-				if (this.address != 0)
+				if (this.Address != 0)
 				{
-					return this.m.ReadInt(this.address + 16, new int[]
+					return this.M.ReadInt(this.Address + 16, new int[]
 					{
 						16
 					});

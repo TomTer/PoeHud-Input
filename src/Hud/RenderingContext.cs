@@ -9,16 +9,16 @@ namespace PoeHUD.Hud
 {
 	public class RenderingContext
 	{
-		public Device dx;
-		private Sprite textSprite;
-		private GameWindow window;
-		private TextureRenderer texrenderer;
-		private Dictionary<int, SlimDX.Direct3D9.Font> fonts = new Dictionary<int, SlimDX.Direct3D9.Font>();
+		public Device Dx;
+		private readonly Sprite textSprite;
+		private readonly GameWindow window;
+		private readonly TextureRenderer texrenderer;
+		private readonly Dictionary<int, SlimDX.Direct3D9.Font> fonts = new Dictionary<int, SlimDX.Direct3D9.Font>();
 		
-		public event Action<RenderingContext> OnRender;
+		public Action<RenderingContext> RenderModules;
 		public RenderingContext(Device dx, GameWindow window)
 		{
-			this.dx = dx;
+			this.Dx = dx;
 			this.window = window;
 			this.textSprite = new Sprite(dx);
 			this.texrenderer = new TextureRenderer(dx);
@@ -27,9 +27,8 @@ namespace PoeHUD.Hud
 		{
 			this.textSprite.Begin(SpriteFlags.AlphaBlend | SpriteFlags.SortTexture);
 			this.texrenderer.Begin();
-			if (this.OnRender != null)
-			{
-				this.OnRender(this);
+			if (this.RenderModules != null) {
+				this.RenderModules(this);
 			}
 			this.texrenderer.End();
 			this.textSprite.End();
@@ -118,7 +117,7 @@ namespace PoeHUD.Hud
 				return this.fonts[size];
 			}
 			System.Drawing.Font font = new System.Drawing.Font("Verdana", (float)size);
-			SlimDX.Direct3D9.Font font2 = new SlimDX.Direct3D9.Font(this.dx, font);
+			SlimDX.Direct3D9.Font font2 = new SlimDX.Direct3D9.Font(this.Dx, font);
 			this.fonts.Add(size, font2);
 			return font2;
 		}

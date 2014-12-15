@@ -5,42 +5,40 @@ using PoeHUD.Controllers;
 using PoeHUD.Framework;
 using PoeHUD.Game;
 using PoeHUD.Poe.EntityComponents;
+using PoeHUD.Settings;
 using SlimDX.Direct3D9;
 
 namespace PoeHUD.Hud.XpRate
 {
 	public class XPHRenderer : HUDPluginBase
 	{
+		public class XpSettings : SettingsForModule
+		{
+			public readonly SettingIntRange FontSize = new SettingIntRange("Font Size", 7, 30, 12);
+			public readonly SettingIntRange BgAlpha = new SettingIntRange("Bg Opacity", 0, 255, 160);
+			public readonly Setting<bool> ShowClock = new Setting<bool>("Clock", true);
+			public readonly Setting<bool> ShowZoneAndTimeSpent = new Setting<bool>("Current map name", true);
+			
+
+			public XpSettings() : base("XP Meter") { }
+		}
+
 		private long startXp;
 		private DateTime startTime;
 		private DateTime lastCalcTime;
 		private bool hasStarted;
 		private string curDisplayString = "0.00 XP/h";
 		private string curTimeLeftString = "--h --m --s until level up";
-		private Rect bounds = new Rect(0, 0, 0, 0);
-		public Rect Bounds
+
+		public XpSettings Settings = new XpSettings();
+
+
+		public override SettingsForModule SettingsNode
 		{
-			get
-			{
-				if (!Settings.GetBool("XphDisplay"))
-				{
-					return new Rect(0, 0, 0, 0);
-				}
-				return this.bounds;
-			}
-			private set
-			{
-				this.bounds = value;
-			}
+			get { return Settings; }
 		}
-		public override void OnEnable()
-		{
-			this.model.Area.OnAreaChange += this.CurrentArea_OnAreaChange;
-		}
-		public override void OnDisable()
-		{
-		}
-		private void CurrentArea_OnAreaChange(AreaController area)
+
+		public override void OnAreaChange(AreaController area)
 		{
 			this.startXp = this.model.Player.GetComponent<Player>().XP;
 			this.startTime = DateTime.Now;
@@ -48,7 +46,7 @@ namespace PoeHUD.Hud.XpRate
 		}
 		public override void Render(RenderingContext rc, Dictionary<UiMountPoint, Vec2> mountPoints)
 		{
-			if (!Settings.GetBool("XphDisplay") || (this.model.Player != null && this.model.Player.GetComponent<Player>().Level >= 100))
+			if (this.model.Player != null && this.model.Player.GetComponent<Player>().Level >= 100)
 			{
 				return;
 			}
@@ -69,8 +67,8 @@ namespace PoeHUD.Hud.XpRate
 				this.lastCalcTime = dtNow;
 			}
 
-			int fontSize = Settings.GetInt("XphDisplay.FontSize");
-			int bgAlpha = Settings.GetInt("XphDisplay.BgAlpha");
+			int fontSize = Settings.FontSize;
+			int bgAlpha = Settings.BgAlpha;
 
 			Vec2 mapWithOffset = mountPoints[UiMountPoint.LeftOfMinimap];
 
@@ -79,21 +77,32 @@ namespace PoeHUD.Hud.XpRate
 			yCursor += rateTextSize.Y;
 			Vec2 remainingTextSize = rc.AddTextWithHeight(new Vec2(mapWithOffset.X, mapWithOffset.Y + yCursor), this.curTimeLeftString, Color.White, fontSize, DrawTextFormat.Right);
 			yCursor += remainingTextSize.Y;
-			int thirdLine = mapWithOffset.Y + yCursor;
-			Vec2 areaLevelNote = rc.AddTextWithHeight(new Vec2(mapWithOffset.X, thirdLine), this.model.Area.CurrentArea.DisplayName, Color.White, fontSize, DrawTextFormat.Right);
 
-			string strTimer = AreaInstance.GetTimeString(dtNow - this.model.Area.CurrentArea.TimeEntered);
-			Vec2 timerSize = rc.MeasureString(strTimer, fontSize, DrawTextFormat.Left);
-			yCursor += areaLevelNote.Y;
+			int thirdLine = mapWithOffset.Y + yCursor;
+
+			int textWidth = Math.Max(rateTextSize.X, remainingTextSize.X) + 10;
+			string strTimer = null;
+
+			if (Settings.ShowZoneAndTimeSpent)
+			{
+				Vec2 areaLevelNote = rc.AddTextWithHeight(new Vec2(mapWithOffset.X, thirdLine), this.model.Area.CurrentArea.DisplayName, Color.White, fontSize, DrawTextFormat.Right);
+
+				strTimer = AreaInstance.GetTimeString(dtNow - this.model.Area.CurrentArea.TimeEntered);
+				Vec2 timerSize = rc.MeasureString(strTimer, fontSize, DrawTextFormat.Left);
+				yCursor += areaLevelNote.Y;
+				textWidth = Math.Max(textWidth, areaLevelNote.X + timerSize.X + 20 + 10);
+			}
 
 			Rect clientRect = model.Internal.IngameState.IngameUi.Minimap.SmallMinimap.GetClientRect();
-			int textWidth = Math.Max( Math.Max(rateTextSize.X, remainingTextSize.X), areaLevelNote.X + timerSize.X + 20 ) + 10;
+			
 			int width = Math.Max(textWidth, Math.Max(clientRect.W, 0/*this.overlay.PreloadAlert.Bounds.W*/));
 			Rect rect = new Rect(mapWithOffset.X - width + 5, mapWithOffset.Y - 5, width, yCursor + 10);
-			this.Bounds = rect;
 			
-			rc.AddTextWithHeight(new Vec2(rect.X + 5, mapWithOffset.Y), dtNow.ToShortTimeString(), Color.White, fontSize, DrawTextFormat.Left);
-			rc.AddTextWithHeight(new Vec2(rect.X + 5, thirdLine), strTimer, Color.White, fontSize, DrawTextFormat.Left);
+			if( Settings.ShowClock)
+				rc.AddTextWithHeight(new Vec2(rect.X + 5, mapWithOffset.Y), dtNow.ToShortTimeString(), Color.White, fontSize, DrawTextFormat.Left);
+
+			if( Settings.ShowZoneAndTimeSpent)
+				rc.AddTextWithHeight(new Vec2(rect.X + 5, thirdLine), strTimer, Color.White, fontSize, DrawTextFormat.Left);
 			
 			rc.AddBox(rect, Color.FromArgb(bgAlpha, 1, 1, 1));
 

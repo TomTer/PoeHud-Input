@@ -6,14 +6,16 @@ namespace PoeHUD.Poe.UI
 		{
 			get
 			{
-				return base.ReadObject<Tooltip>(this.address + 2796);
+				return base.ReadObjectAt<Tooltip>(UiElementSize + OffsetBuffers + 0x188);
+				// return base.ReadObject<Tooltip>(this.address + 2796);
 			}
 		}
 		public Entity Item
 		{
 			get
 			{
-				return base.ReadObject<Entity>(this.address + 2832);
+				return base.ReadObjectAt<Entity>(UiElementSize + OffsetBuffers + 0x1ac);
+				//return base.ReadObject<Entity>(this.address + 2832);
 			}
 		}
 	}

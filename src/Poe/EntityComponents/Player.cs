@@ -6,29 +6,29 @@ namespace PoeHUD.Poe.EntityComponents
 		{
 			get
 			{
-				if (this.address == 0)
+				if (this.Address == 0)
 				{
 					return "";
 				}
-				int num = this.m.ReadInt(this.address + 32);
+				int num = this.M.ReadInt(this.Address + 32);
 				if (num > 512)
 				{
 					return "";
 				}
 				if (num < 8)
 				{
-					return this.m.ReadStringU(this.address + 16, num * 2, true);
+					return this.M.ReadStringU(this.Address + 16, num * 2, true);
 				}
-				return this.m.ReadStringU(this.m.ReadInt(this.address + 16), num * 2, true);
+				return this.M.ReadStringU(this.M.ReadInt(this.Address + 16), num * 2, true);
 			}
 		}
 		public long XP
 		{
 			get
 			{
-				if (this.address != 0)
+				if (this.Address != 0)
 				{
-					return (long)((ulong)this.m.ReadUInt(this.address + 52));
+					return (long)((ulong)this.M.ReadUInt(this.Address + 52));
 				}
 				return 0L;
 			}
@@ -37,9 +37,9 @@ namespace PoeHUD.Poe.EntityComponents
 		{
 			get
 			{
-				if (this.address != 0)
+				if (this.Address != 0)
 				{
-					return this.m.ReadInt(this.address + 68);
+					return this.M.ReadInt(this.Address + 68);
 				}
 				return 1;
 			}

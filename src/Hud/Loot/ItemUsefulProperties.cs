@@ -11,7 +11,7 @@ namespace PoeHUD.Hud.Loot
 		public string DisplayName { get { return (Quality > 0 ? "Superior " : String.Empty) + Name; } }
 		public bool IsCurrency;
 		public bool IsSkillGem;
-		public ItemRarity Rarity;
+		public Rarity Rarity;
 		public bool WorthChrome;
 
 		public bool IsCraftingBase;
@@ -24,17 +24,17 @@ namespace PoeHUD.Hud.Loot
 		public int MapLevel;
 		public bool IsVaalFragment;
 
-		public bool IsWorthAlertingPlayer(HashSet<string> currencyNames)
+		public bool IsWorthAlertingPlayer(ItemAlerter.ItemAlertSettings Settings, HashSet<string> currencyNames)
 		{			
-			if( Rarity == ItemRarity.Rare && Settings.GetBool("ItemAlert.Rares"))
+			if( Rarity == Rarity.Rare && Settings.AlertOfRares)
 				return true;
-			if( Rarity == ItemRarity.Unique && Settings.GetBool("ItemAlert.Uniques"))
+			if( Rarity == Rarity.Unique && Settings.AlertOfUniques)
 				return true;
-			if(( MapLevel > 0  || IsVaalFragment ) && Settings.GetBool("ItemAlert.Maps"))
+			if(( MapLevel > 0  || IsVaalFragment ) && Settings.AlertOfMaps)
 				return true;
-			if( NumLinks >= Settings.GetInt("ItemAlert.MinLinks"))
+			if( NumLinks >= Settings.Sockets.MinLinksToAlert)
 				return true;
-			if( IsCurrency && Settings.GetBool("ItemAlert.Currency")) {
+			if( IsCurrency && Settings.AlertOfCurrency) {
 				if (currencyNames == null) {
 					if( !Name.Contains("Portal") && Name.Contains("Wisdom") )
 						return true;
@@ -43,10 +43,9 @@ namespace PoeHUD.Hud.Loot
 					return true;
 			}
 
-			if (IsSkillGem && Settings.GetBool("ItemAlert.SkillGems")) return true;
-			if (IsSkillGem && Settings.GetBool("ItemAlert.QualitySkillGems") && Quality >= Settings.GetInt("ItemAlert.QualitySkillGemsLevel")) return true;
-			if (WorthChrome && Settings.GetBool("ItemAlert.RGB")) return true;
-			if (NumSockets >= Settings.GetInt("ItemAlert.MinSockets")) return true;
+			if (IsSkillGem && Settings.AlertOfGems.Enabled && Quality >= Settings.AlertOfGems.MinQuality) return true;
+			if (WorthChrome && Settings.Sockets.AlertOfRgb) return true;
+			if (NumSockets >= Settings.Sockets.MinSocketsToAlert) return true;
 
 			return IsCraftingBase;
 		}
@@ -55,10 +54,10 @@ namespace PoeHUD.Hud.Loot
 		{
 			System.Drawing.Color color = Color.White;
 			switch(this.Rarity) {
-				case ItemRarity.White : color = Color.White; break;
-				case ItemRarity.Magic: color = HudSkin.MagicColor; break;
-				case ItemRarity.Rare: color = HudSkin.RareColor; break;
-				case ItemRarity.Unique: color = HudSkin.UniqueColor; break;
+				case Rarity.White : color = Color.White; break;
+				case Rarity.Magic: color = HudSkin.MagicColor; break;
+				case Rarity.Rare: color = HudSkin.RareColor; break;
+				case Rarity.Unique: color = HudSkin.UniqueColor; break;
 			}
 			if( IsSkillGem )
 				color = HudSkin.SkillGemColor;

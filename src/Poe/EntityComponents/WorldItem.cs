@@ -6,9 +6,9 @@ namespace PoeHUD.Poe.EntityComponents
 		{
 			get
 			{
-				if (this.address != 0)
+				if (this.Address != 0)
 				{
-					return base.ReadObject<Entity>(this.address + 20);
+					return base.ReadObject<Entity>(this.Address + 20);
 				}
 				return base.GetObject<Entity>(0);
 			}

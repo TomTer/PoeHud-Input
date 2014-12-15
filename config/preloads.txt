@@ -1,0 +1,164 @@
+Metadata/Chests/StrongBoxes/Strongbox, Area contains Strongbox
+Metadata/Chests/StrongBoxes/Strongbox.ao, Area contains Strongbox
+Metadata/Chests/StrongBoxes/Ornate, Area contains Ornate Strongbox
+Metadata/Chests/StrongBoxes/OrnateStrongbox.ao, Area contains Ornate Strongbox
+Metadata/Chests/StrongBoxes/Large, Area contains Large Strongbox
+Metadata/Chests/StrongBoxes/LargeStrongbox.ao, Area contains Large Strongbox
+Metadata/Chests/StrongBoxes/Jeweller, Area contains Jeweler's Strongbox
+Metadata/Chests/StrongBoxes/JewellerStrongBox.ao, Area contains Jeweler's Strongbox
+Metadata/Chests/StrongBoxes/Gemcutter, Area contains Gemcutter's Strongbox
+Metadata/Chests/StrongBoxes/GemcutterStrongBox.ao, Area contains Gemcutter's Strongbox
+Metadata/Chests/StrongBoxes/Chemist, Area contains Chemist's Strongbox
+Metadata/Chests/StrongBoxes/ChemistStrongBox.ao, Area contains Chemist's Strongbox
+Metadata/Chests/StrongBoxes/Cartographer, Area contains Cartographer's Strongbox
+Metadata/Chests/StrongBoxes/CartographerStrongBox.ao, Area contains Cartographer's Strongbox
+Metadata/Chests/StrongBoxes/Artisan, Area contains Artisan's Strongbox
+Metadata/Chests/StrongBoxes/ArtisanStrongBox.ao, Area contains Artisan's Strongbox
+Metadata/Chests/StrongBoxes/Arsenal, Area contains Blacksmith's Strongbox
+Metadata/Chests/StrongBoxes/ArsenalStrongBox.ao, Area contains Blacksmith's Strongbox
+Metadata/Chests/StrongBoxes/Armory, Area contains Armourer's Strongbox
+Metadata/Chests/StrongBoxes/ArmoryStrongBox.ao, Area contains Armourer's Strongbox
+Metadata/Chests/StrongBoxes/Arcanist, Area contains Arcanist's Strongbox
+Metadata/Chests/StrongBoxes/ArcanistStrongBox.ao, Area contains Arcanist's Strongbox
+Metadata/Chests/CopperChestEpic3, Area contains Large Chest
+Metadata/Chests/CopperChests/CopperChestEpic3.ao, Area contains Large Chest
+Metadata/Chests/StrongBoxes/PerandusBox.ao, Area contains Perandus Strongbox
+Metadata/Chests/StrongBoxes/KaomBox.ao, Area contains Kaom Strongbox
+Metadata/Chests/StrongBoxes/MalachaisBox.ao, Area contains Malachai Strongbox
+Metadata/Monsters/Exiles/ExileRanger1, Area contains Orra Greengate
+Metadata/Monsters/Exiles/ExileRanger2, Area contains Thena Moga
+Metadata/Monsters/Exiles/ExileRanger3, Area contains Antalie Napora
+Metadata/Monsters/Exiles/ExileDuelist1, Area contains Torr Olgosso
+Metadata/Monsters/Exiles/ExileDuelist2, Area contains Armios Bell
+Metadata/Monsters/Exiles/ExileDuelist4, Area contains Zacharie Desmarais
+Metadata/Monsters/Exiles/ExileWitch1, Area contains Minara Anenima
+Metadata/Monsters/Exiles/ExileWitch2, Area contains Igna Phoenix
+Metadata/Monsters/Exiles/ExileMarauder1, Area contains Jonah Unchained
+Metadata/Monsters/Exiles/ExileMarauder2, Area contains Damoi Tui
+Metadata/Monsters/Exiles/ExileMarauder3, Area contains Xandro Blooddrinker
+Metadata/Monsters/Exiles/ExileMarauder5, Area contains Vickas Giantbone
+Metadata/Monsters/Exiles/ExileTemplar1, Area contains Eoin Greyfur
+Metadata/Monsters/Exiles/ExileTemplar2, Area contains Tinevin Highdove
+Metadata/Monsters/Exiles/ExileTemplar4, Area contains Magnus Stonethorn
+Metadata/Monsters/Exiles/ExileShadow1, Area contains Ion Darkshroud
+Metadata/Monsters/Exiles/ExileShadow2, Area contains Ash Lessard
+Metadata/Monsters/Exiles/ExileShadow4, Area contains Wilorin Demontamer
+Metadata/Monsters/Exiles/ExileScion2, Area contains Augustina Solaria
+Metadata/Monsters/Squid/SquidBossSideArea, Area contains The All-seeing Eye
+Metadata/Monsters/Goatman/GoatmanLeapBossSideArea, Area contains Konu, Maker of Wind
+Metadata/Monsters/GhostPirates/GhostPirateBossSideArea, Area contains Coniraya, Shadow of Malice
+Metadata/Monsters/DemonModular/DemonModularElementsBossSideArea, Area contains Atziri's Pride
+Metadata/Monsters/Goatman/GoatmanShamanBossSideArea, Area contains Sheaq, Maker of Floods
+Metadata/Monsters/Skeleton/SkeletonMeleeLargeBossSideArea, Area contains Ossecati, Boneshaper
+Metadata/Monsters/RootSpiders/RootSpiderBossSideArea, Area contains Kamaq, Soilmaker
+Metadata/Monsters/Kiweth/KiwethBossSideArea, Area contains Inti of the Blood Moon
+Metadata/Monsters/incaminion/FragmentBossSideArea, Area contains Shrapnelbearer
+Metadata/Monsters/Snake/SnakeRoboBossSideArea, Area contains Wiraqucha, Ancient Guardian
+Metadata/Monsters/DemonFemale/WhipDemonBossSideArea, Area contains Cava, Artist of Pain
+Metadata/Monsters/Pyromaniac/PyromaniacBossSideArea, Area contains Curator Miem
+Metadata/Monsters/BloodChieftain/MonkeyChiefBossSideArea, Area contains Simi, the Nature Touched
+Metadata/Monsters/InsectSpawner/CarrionQueenBossSideArea, Area contains The Sunburst Queen
+Metadata/Monsters/Totems/TotemBossSideArea, Area contains M'gaska, the Living Pyre
+Metadata/Monsters/Spiders/SpiderBossSideArea, Area contains Cintiq, the Inescapable
+Metadata/Monsters/Snake/SnakeScorpionBossSideArea, Area contains Thornrunner
+Metadata/Monsters/Cannibal/CannibalBossSideArea, Area contains Perquil the Lucky
+Metadata/Monsters/Skeletons/ConstructMeleeBossSideArea, Area contains Haviri, Vaal Metalsmith
+Metadata/Monsters/Skeletons/ConstructRangedBossSideArea, Area contains Kutec, Vaal Fleshsmith
+Metadata/Monsters/AnimatedItem/AnimatedArmourBossSideArea, Area contains Shadow of Vengeance
+Metadata/Monsters/DemonBosses/DemonBoss1/Demon1BossSideArea, Area contains Beheader Ataguchu
+Metadata/Monsters/DemonBosses/DemonBoss2/Demon2BossSideArea, Area contains Wiraq, the Impaler
+Metadata/Monsters/DemonBosses/DemonBoss3/Demon3BossSideArea, Area contains Ch'aska, Maker of Rain
+Metadata/Monsters/SandSpitterEmerge/SandSpitterBossSideArea, Area contains Mother of the Hive
+Metadata/Monsters/Seawitch/SeaWitchBossSideArea, Area contains Rima, Deep Temptress
+Metadata/Monsters/Axis/AxisCasterBossInvasion, Area contains Evocata Apocalyptica
+Metadata/Monsters/Axis/AxisExperimenterBossInvasion, Area contains Docere Incarnatis
+Metadata/Monsters/Axis/AxisSoldierBossInvasion, Area contains Corrector Draconides
+Metadata/Monsters/Bandits/BanditMeleeBossInvasion, Area contains Balus Stoneskull
+Metadata/Monsters/Bandits/BanditBowBossInvasion, Area contains Kall Foxfly
+Metadata/Monsters/Beasts/BeastBossInvasion, Area contains Marrowcrush
+Metadata/Monsters/Rhoas/RhoaBossInvasion, Area contains The Cadaver Bull
+Metadata/Monsters/BloodChieftain/BloodChieftainBossInvasion, Area contains Junglemare
+Metadata/Monsters/BloodElemental/BloodElementalBossInvasion, Area contains The Sanguine Wave
+Metadata/Monsters/Cannibal/CannibalMaleBossInvasion, Area contains Graveblood
+Metadata/Monsters/Cannibal/CannibalFemaleBossInvasion, Area contains Nighteater
+Metadata/Monsters/Undying/CityStalkerMaleBossInvasion, Area contains The Book Burner
+Metadata/Monsters/Undying/CityStalkerFemaleBossInvasion, Area contains The Bolt Juggler
+Metadata/Monsters/DemonFemale/DemonFemaleBossInvasion, Area contains Avatar of Pain
+Metadata/Monsters/DemonModular/DemonModularBossInvasion, Area contains Rancor
+Metadata/Monsters/DemonModular/DemonFemaleRangedBossInvasion, Area contains Hatespitter
+Metadata/Monsters/MossMonster/FireMonsterBossInvasion, Area contains Bluntslag
+Metadata/Monsters/Monkeys/FlameBearerBossInvasion, Area contains The Revenant
+Metadata/Monsters/incaminion/FragmentBossInvasion, Area contains Judgement Apparatus
+Metadata/Monsters/Frog/FrogBossInvasion, Area contains Spinesnap
+Metadata/Monsters/GemMonster/GemFrogBossInvasion, Area contains Genesis Paradisae
+Metadata/Monsters/Goatman/GoatmanBossInvasion, Area contains Death from Above
+Metadata/Monsters/Goatman/GoatmanShamanBossInvasion, Area contains Guardian of the Mound
+Metadata/Monsters/Grappler/GrapplerBossInvasion, Area contains Wonderwalker
+Metadata/Monsters/Guardians/GuardianFireBossInvasion, Area contains The Raging Mask
+Metadata/Monsters/Guardians/GuardianLightningBossInvasion, Area contains The Teetering Mask
+Metadata/Monsters/Guardians/GuardianHeadFireBossInvasion, Area contains The Furious Mask
+Metadata/Monsters/Guardians/GuardianHeadColdBossInvasion, Area contains The Callous Mask
+Metadata/Monsters/Guardians/GuardianHeadLightningBossInvasion, Area contains The Capricious Mask
+Metadata/Monsters/GemMonster/IguanaBossInvasion, Area contains Alpha Paradisae
+Metadata/Monsters/InsectSpawner/CarrionQueenBossInvasion, Area contains Mother of the Swarm
+Metadata/Monsters/Kiweth/KiwethBossInvasion, Area contains Deathflutter
+Metadata/Monsters/Lion/LionBossInvasion, Area contains Bladetooth
+Metadata/Monsters/MossMonster/MossMonsterBossInvasion, Area contains Granitecrush
+Metadata/Monsters/Necromancer/NecromancerBossInvasion, Area contains Corpsestitch
+Metadata/Monsters/Pyromaniac/PyromaniacBossInvasion, Area contains The Firestarter
+Metadata/Monsters/RootSpiders/RootSpiderBossInvasion, Area contains Wrigglechaw
+Metadata/Monsters/SandSpitterEmerge/SandSpitterBossInvasion, Area contains Blinkflame
+Metadata/Monsters/Seawitch/SeaWitchBossInvasion, Area contains The Duchess
+Metadata/Monsters/ShieldCrabs/ShieldCrabBossInvasion, Area contains Shivershell
+Metadata/Monsters/SandSpitters/SandSpitterFromCrabBossInvasion, Area contains Shivershell
+Metadata/Monsters/Beasts/BeastSkeletonBossInvasion, Area contains Mammothcage
+Metadata/Monsters/Skeletons/SkeletonElementalBossInvasion, Area contains Harbinger of Elements
+Metadata/Monsters/Skeletons/SkeletonBowBossInvasion, Area contains Nightsight
+Metadata/Monsters/Snake/SnakeMeleeBossInvasion, Area contains Tailsinger
+Metadata/Monsters/Snake/SnakeRangedBossInvasion, Area contains Razorleaf
+Metadata/Monsters/Spawn/SpawnBossInvasion, Area contains Stranglecreep
+Metadata/Monsters/Spiders/SpiderBossInvasion, Area contains Pewterfang
+Metadata/Monsters/Spikers/SpikerBossInvasion, Area contains Bladeback Guardian
+Metadata/Monsters/Squid/SquidBossInvasion, Area contains Strangledrift
+Metadata/Monsters/Totems/TotemBossInvasion, Area contains Jikeji
+Metadata/Monsters/Rhoas/RhoaUndeadBossInvasion, Area contains Ghostram
+Metadata/Monsters/Undying/UndyingBossInvasion, Area contains Stranglecrawl
+Metadata/Monsters/WaterElemental/WaterElementalBossInvasion, Area contains Mirageblast
+Metadata/Monsters/Zombies/ZombieBossInvasion, Area contains The Walking Waste
+Metadata/Monsters/Skeletons/SkeletonMeleeBossInvasion, Area contains Glassmaul
+Metadata/Monsters/Skeletons/SkeletonLargeBossInvasion, Area contains Grath
+Metadata/Monsters/Skeletons/ConstructBossInvasion, Area contains The Spiritless
+Metadata/Monsters/GhostPirates/GhostPirateBossInvasion, Area contains Droolscar
+Metadata/Monsters/Rhoas/RhoaAlbino, Area contains Albino Rhoa
+Metadata/NPC/Missions/Wild/Dex, Area contains Tora, Master of the Hunt
+Metadata/NPC/Missions/Wild/DexInt, Area contains Vorici, Master Assassin
+Metadata/NPC/Missions/Wild/Int, Area contains Catarina, Master of the Dead
+Metadata/NPC/Missions/Wild/Str, Area contains Haku, Armourmaster
+Metadata/NPC/Missions/Wild/StrDex, Area contains Vagan, Weaponmaster
+Metadata/NPC/Missions/Wild/StrDexInt, Area contains Zana, Master Cartographer
+Metadata/NPC/Missions/Wild/StrInt, Area contains Elreon, Loremaster
+Metadata/NPC/Missions/Wild/Fish, Area contains Krillson, Master Fisherman
+
+Metadata/Monsters/Spirit/TormentedArsonist, Area contains Tormented Arsonist
+Metadata/Monsters/Spirit/TormentedFreezer, Area contains Tormented Aurora Cultist
+Metadata/Monsters/Spirit/TormentedBlasphemer, Area contains Tormented Blasphemer
+Metadata/Monsters/Spirit/TormentedCannibal, Area contains Tormented Cannibal
+Metadata/Monsters/Spirit/TormentedCharlatan, Area contains Tormented Charlatan
+Metadata/Monsters/Spirit/TormentedCutthroat, Area contains Tormented Cutthroat
+Metadata/Monsters/Spirit/TormentedEmbezzler, Area contains Tormented Embezzler
+Metadata/Monsters/Spirit/TormentedCounterfeiter, Area contains Tormented Forger
+Metadata/Monsters/Spirit/TormentedMartyr, Area contains Tormented Martyr
+Metadata/Monsters/Spirit/TormentedMutilator, Area contains Tormented Mutilator
+Metadata/Monsters/Spirit/TormentedNecromancer, Area contains Tormented Necromancer
+Metadata/Monsters/Spirit/TormentedPoisoner, Area contains Tormented Poisoner
+Metadata/Monsters/Spirit/TormentedRogue, Area contains Tormented Rogue
+Metadata/Monsters/Spirit/TormentedLibrarian, Area contains Tormented Seditionist
+Metadata/Monsters/Spirit/TormentedSmuggler, Area contains Tormented Smuggler
+Metadata/Monsters/Spirit/TormentedSpy, Area contains Tormented Spy          
+Metadata/Monsters/Spirit/TormentedExperimenter, Area contains Tormented Storm Cultist
+Metadata/Monsters/Spirit/TormentedThief, Area contains Tormented Thief
+Metadata/Monsters/Spirit/TormentedThug, Area contains Tormented Thug
+Metadata/Monsters/Spirit/TormentedCorrupter, Area contains Tormented Vaal Cultist
+Metadata/Monsters/Spirit/TormentedWarlord, Area contains Tormented Warlord
+
+Metadata/Monsters/Spirit/TormentedFisherman, Area contains Tormented Illegal Fisherman

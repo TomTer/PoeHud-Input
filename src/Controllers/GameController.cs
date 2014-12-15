@@ -52,7 +52,7 @@ namespace PoeHUD.Controllers
 		public EntityLabel GetLabelForEntity(EntityWrapper entity)
 		{
 			HashSet<int> hashSet = new HashSet<int>();
-			int entityLabelMap = this.Internal.game.IngameState.EntityLabelMap;
+			int entityLabelMap = this.Internal.Game.IngameState.EntityLabelMap;
 			int num = entityLabelMap;
 			while (true)
 			{

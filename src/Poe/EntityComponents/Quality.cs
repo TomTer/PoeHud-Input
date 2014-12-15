@@ -6,9 +6,9 @@ namespace PoeHUD.Poe.EntityComponents
 		{
 			get
 			{
-				if (this.address != 0)
+				if (this.Address != 0)
 				{
-					return this.m.ReadInt(this.address + 12);
+					return this.M.ReadInt(this.Address + 12);
 				}
 				return 0;
 			}

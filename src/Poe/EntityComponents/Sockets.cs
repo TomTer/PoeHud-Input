@@ -9,12 +9,12 @@ namespace PoeHUD.Poe.EntityComponents
 		{
 			get
 			{
-				if (this.address == 0)
+				if (this.Address == 0)
 				{
 					return 0;
 				}
-				int num = this.m.ReadInt(this.address + 60);
-				int num2 = this.m.ReadInt(this.address + 64);
+				int num = this.M.ReadInt(this.Address + 60);
+				int num2 = this.M.ReadInt(this.Address + 64);
 				int num3 = num2 - num;
 				if (num3 <= 0 || num3 > 6)
 				{
@@ -23,7 +23,7 @@ namespace PoeHUD.Poe.EntityComponents
 				int num4 = 0;
 				for (int i = 0; i < num3; i++)
 				{
-					int num5 = (int)this.m.ReadByte(num + i);
+					int num5 = (int)this.M.ReadByte(num + i);
 					if (num5 > num4)
 					{
 						num4 = num5;
@@ -37,12 +37,12 @@ namespace PoeHUD.Poe.EntityComponents
 			get
 			{
 				List<int[]> list = new List<int[]>();
-				if (this.address == 0)
+				if (this.Address == 0)
 				{
 					return list;
 				}
-				int num = this.m.ReadInt(this.address + 60);
-				int num2 = this.m.ReadInt(this.address + 64);
+				int num = this.M.ReadInt(this.Address + 60);
+				int num2 = this.M.ReadInt(this.Address + 64);
 				int num3 = num2 - num;
 				if (num3 <= 0 || num3 > 6)
 				{
@@ -52,7 +52,7 @@ namespace PoeHUD.Poe.EntityComponents
 				List<int> socketList = this.SocketList;
 				for (int i = 0; i < num3; i++)
 				{
-					int num5 = (int)this.m.ReadByte(num + i);
+					int num5 = (int)this.M.ReadByte(num + i);
 					int[] array = new int[num5];
 					for (int j = 0; j < num5; j++)
 					{
@@ -69,17 +69,17 @@ namespace PoeHUD.Poe.EntityComponents
 			get
 			{
 				List<int> list = new List<int>();
-				if (this.address == 0)
+				if (this.Address == 0)
 				{
 					return list;
 				}
-				int num = this.address + 12;
+				int num = this.Address + 12;
 				for (int i = 0; i < 6; i++)
 				{
-					int num2 = this.m.ReadInt(num);
+					int num2 = this.M.ReadInt(num);
 					if (num2 >= 1 && num2 <= 4)
 					{
-						list.Add(this.m.ReadInt(num));
+						list.Add(this.M.ReadInt(num));
 					}
 					num += 4;
 				}
@@ -97,7 +97,7 @@ namespace PoeHUD.Poe.EntityComponents
 		{
 			get
 			{
-				if (this.address == 0)
+				if (this.Address == 0)
 				{
 					return false;
 				}

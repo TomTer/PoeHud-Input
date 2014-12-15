@@ -43,5 +43,20 @@ namespace PoeHUD.Framework
 		{
 			return new Vec2f(left.X - right.X, left.Y - right.Y);
 		}
+
+		public static Vec2f operator *(Vec2f left, float right)
+		{
+			return new Vec2f((int)(left.X * right), (int)(left.Y * right));
+		}
+		public static Vec2f operator /(Vec2f left, float right)
+		{
+			return new Vec2f((int)(left.X / right), (int)(left.Y / right));
+		}
+
+		public static implicit operator Vec2(Vec2f v)
+		{
+			return new Vec2((int)v.X, (int)v.Y);
+		}
+
 	}
 }

@@ -5,24 +5,24 @@ namespace PoeHUD.Poe
 {
 	public class Camera : RemoteMemoryObject
 	{
-		public int Width { get { return m.ReadInt(address + 4); } }
-		public int Height { get { return m.ReadInt(address + 8); } }
+		public int Width { get { return M.ReadInt(Address + 4); } }
+		public int Height { get { return M.ReadInt(Address + 8); } }
 		public float ZFar
 		{
 			get
 			{
-				return m.ReadFloat(address + 392);
+				return M.ReadFloat(Address + 392);
 			}
 			set
 			{
-				m.WriteFloat(address + 392, value);
+				M.WriteFloat(Address + 392, value);
 			}
 		}
 		public Vec3 Position
 		{
 			get
 			{
-				return new Vec3(m.ReadFloat(address + 256), m.ReadFloat(address + 260), m.ReadFloat(address + 264));
+				return new Vec3(M.ReadFloat(Address + 256), M.ReadFloat(Address + 260), M.ReadFloat(Address + 264));
 			}
 		}
         public unsafe Vec2 WorldToScreen(Vec3 vec3, bool allowOffscreen = false)
@@ -30,8 +30,8 @@ namespace PoeHUD.Poe
             double num2;
             double num3;
             double num4;
-            int addr = base.address + 0xbc;
-            fixed (byte* numRef = base.m.ReadBytes(addr, 0x40))
+            int addr = base.Address + 0xbc;
+            fixed (byte* numRef = base.M.ReadBytes(addr, 0x40))
             {
                 float* numPtr = (float*)numRef;
                 double num5 = (((numPtr[3] * vec3.x) + (numPtr[7] * vec3.y)) + (numPtr[11] * vec3.z)) + numPtr[15];

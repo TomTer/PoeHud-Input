@@ -5,37 +5,49 @@ using System.Linq;
 using PoeHUD.Controllers;
 using PoeHUD.Framework;
 using PoeHUD.Game;
-using PoeHUD.Hud.Icons;
 using PoeHUD.Poe.EntityComponents;
+using PoeHUD.Settings;
 using SlimDX.Direct3D9;
 
 namespace PoeHUD.Hud.Monster
 {
 	public class MonsterTracker : HUDPluginBase, EntityListObserver, HUDPluginWithMapIcons
 	{
+		public class MonstersSettings : SettingsForModule
+		{
+			public MonstersSettings() : base("Monster Alerts") { }
+
+			public readonly Setting<bool> PlaySound = new Setting<bool>("Play Sound", true);
+			public readonly Setting<bool> ShowText = new Setting<bool>("Show Text", true);
+			public readonly SettingIntRange TextFontSize = new SettingIntRange("Font Size", 7, 30, 16);
+			public readonly SettingIntRange TextBgAlpha = new SettingIntRange("Bg Alpha",0, 255, 128);
+		}
+
+
+		public readonly MonstersSettings Settings = new MonstersSettings();
 		private HashSet<int> alreadyAlertedOf;
 		private Dictionary<EntityWrapper, string> alertTexts;
-
-		private Dictionary<string, string> modAlerts;
-		private Dictionary<string, string> typeAlerts;
 		private readonly Dictionary<EntityWrapper, MapIcon> currentIcons = new Dictionary<EntityWrapper, MapIcon>();
+
+
+		private Dictionary<string, string> ModsToAlertOf;
+		private Dictionary<string, string> NamesToAlertOf;
 
 		public override void OnEnable()
 		{
-			this.alreadyAlertedOf = new HashSet<int>();
-			this.alertTexts = new Dictionary<EntityWrapper, string>();
-			this.InitAlertStrings();
-			this.model.Area.OnAreaChange += this.CurrentArea_OnAreaChange;
+			alreadyAlertedOf = new HashSet<int>();
+			alertTexts = new Dictionary<EntityWrapper, string>();
+			InitAlertStrings();
 
 			currentIcons.Clear();
-			foreach (EntityWrapper current in this.model.Entities)
+			foreach (EntityWrapper current in model.Entities)
 			{
-				this.EntityAdded(current);
+				EntityAdded(current);
 			}
 		}
-		public override void OnDisable()
-		{
-		}
+
+		public override SettingsForModule SettingsNode { get { return Settings; } }
+
 		public void EntityRemoved(EntityWrapper entity)
 		{
 			alertTexts.Remove(entity);
@@ -44,7 +56,7 @@ namespace PoeHUD.Hud.Monster
 
 		public void EntityAdded(EntityWrapper entity)
 		{
-			if (!Settings.GetBool("MonsterTracker") || this.alertTexts.ContainsKey(entity))
+			if ( !Settings.Enabled || alertTexts.ContainsKey(entity))
 			{
 				return;
 			}
@@ -56,18 +68,18 @@ namespace PoeHUD.Hud.Monster
 				{
 					text = text.Split('@')[0];
 				}
-				if (this.typeAlerts.ContainsKey(text))
+				if (NamesToAlertOf.ContainsKey(text))
 				{
-					this.alertTexts.Add(entity, this.typeAlerts[text]);
-					this.PlaySound(entity);
+					alertTexts.Add(entity, NamesToAlertOf[text]);
+					PlaySound(entity);
 					return;
 				}
 				foreach (string current in entity.GetComponent<ObjectMagicProperties>().Mods)
 				{
-					if (this.modAlerts.ContainsKey(current))
+					if (ModsToAlertOf.ContainsKey(current))
 					{
-						this.alertTexts.Add(entity, this.modAlerts[current]);
-						this.PlaySound(entity);
+						alertTexts.Add(entity, ModsToAlertOf[current]);
+						PlaySound(entity);
 						break;
 					}
 				}
@@ -75,37 +87,37 @@ namespace PoeHUD.Hud.Monster
 		}
 		private void PlaySound(EntityWrapper entity)
 		{
-			if (!Settings.GetBool("MonsterTracker.PlaySound"))
+			if (!Settings.PlaySound)
 			{
 				return;
 			}
-			if (!this.alreadyAlertedOf.Contains(entity.Id))
+			if (!alreadyAlertedOf.Contains(entity.Id))
 			{
 				Sounds.DangerSound.Play();
-				this.alreadyAlertedOf.Add(entity.Id);
+				alreadyAlertedOf.Add(entity.Id);
 			}
 		}
-		private void CurrentArea_OnAreaChange(AreaController area)
+		public override void OnAreaChange(AreaController area)
 		{
-			this.alreadyAlertedOf.Clear();
-			this.alertTexts.Clear();
+			alreadyAlertedOf.Clear();
+			alertTexts.Clear();
 			currentIcons.Clear();
 		}
 		public override void Render(RenderingContext rc, Dictionary<UiMountPoint, Vec2> mountPoints)
 		{
-			if (!Settings.GetBool("MonsterTracker.ShowText"))
+			if (!Settings.ShowText)
 			{
 				return;
 			}
-			Rect rect = this.model.Window.ClientRect();
+			Rect rect = model.Window.ClientRect();
 			int xScreenCenter = rect.W / 2 + rect.X;
 			int yPos = rect.H / 5 + rect.Y;
 
-			var playerPos = this.model.Player.GetComponent<Positioned>().GridPos;
-			int fontSize = Settings.GetInt("MonsterTracker.ShowText.FontSize");
+			var playerPos = model.Player.GetComponent<Positioned>().GridPos;
+			int fontSize = Settings.TextFontSize;
 			bool first = true;
 			Rect rectBackground = new Rect();
-			foreach (var alert in this.alertTexts)
+			foreach (var alert in alertTexts)
 			{
 				if( !alert.Key.IsAlive )
 					continue;
@@ -129,7 +141,7 @@ namespace PoeHUD.Hud.Monster
 					rectBackground.H += 5;
 					first = false;
 				}
-				rc.AddBox(rectBackground, Color.FromArgb(Settings.GetInt("MonsterTracker.ShowText.BgAlpha"), 1, 1, 1));
+				rc.AddBox(rectBackground, Color.FromArgb(Settings.TextBgAlpha, 1, 1, 1));
 				rc.AddSprite("directions.png", rectDirection, uv, Color.Red);
 				yPos += textSize.Y;
 			}
@@ -137,7 +149,7 @@ namespace PoeHUD.Hud.Monster
 			{
 				rectBackground.Y = rectBackground.Y + rectBackground.H;
 				rectBackground.H = 5;
-				rc.AddBox(rectBackground, Color.FromArgb(Settings.GetInt("MonsterTracker.ShowText.BgAlpha"), 1, 1, 1));
+				rc.AddBox(rectBackground, Color.FromArgb(Settings.TextBgAlpha, 1, 1, 1));
 			}
 		}
 
@@ -160,57 +172,24 @@ namespace PoeHUD.Hud.Monster
 
 		private void InitAlertStrings()
 		{
-			this.modAlerts = LoadMonsterModAlerts();
-			this.typeAlerts = LoadMonsterNameAlerts();
+			ModsToAlertOf = FsUtils.LoadKeyValueCommaSeparatedFromFile("config/monster_mod_alerts.txt");
+			NamesToAlertOf = FsUtils.LoadKeyValueCommaSeparatedFromFile("config/monster_name_alerts.txt");
 		}
 
 		private MapIcon GetMapIconForMonster(EntityWrapper e)
 		{
+			Rarity rarity = e.GetComponent<ObjectMagicProperties>().Rarity;
 			if (!e.IsHostile)
-				return new MapIconCreature(e, new HudTexture("monster_ally.png"), 6);
+				return new MapIconCreature(e, new HudTexture("monster_ally.png"), 6) { Rarity = rarity, Type = MapIcon.IconType.Minion };
 
-			switch (e.GetComponent<ObjectMagicProperties>().Rarity)
+			switch (rarity)
 			{
-				case MonsterRarity.White: return new MapIconCreature(e, new HudTexture("monster_enemy.png"), 6);
-				case MonsterRarity.Magic: return new MapIconCreature(e, new HudTexture("monster_enemy_blue.png"), 8);
-				case MonsterRarity.Rare: return new MapIconCreature(e, new HudTexture("monster_enemy_yellow.png"), 10);
-				case MonsterRarity.Unique: return new MapIconCreature(e, new HudTexture("monster_enemy_orange.png"), 10);
+				case Rarity.White: return new MapIconCreature(e, new HudTexture("monster_enemy.png"), 6) { Type = MapIcon.IconType.Monster, Rarity = rarity };
+				case Rarity.Magic: return new MapIconCreature(e, new HudTexture("monster_enemy_blue.png"), 8) { Type = MapIcon.IconType.Monster, Rarity = rarity };
+				case Rarity.Rare: return new MapIconCreature(e, new HudTexture("monster_enemy_yellow.png"), 10) { Type = MapIcon.IconType.Monster, Rarity = rarity };
+				case Rarity.Unique: return new MapIconCreature(e, new HudTexture("monster_enemy_orange.png"), 10) { Type = MapIcon.IconType.Monster, Rarity = rarity };
 			}
 			return null;
-		}
-
-		private static Dictionary<string, string> LoadMonsterModAlerts()
-		{
-			var result = new Dictionary<string, string>();
-
-			string[] lines = File.ReadAllLines("config/monster_mod_alerts.txt");
-			foreach (string line in lines.Select(a => a.Trim()))
-			{
-				if (string.IsNullOrWhiteSpace(line) || line.IndexOf(',') < 0)
-					continue;
-
-				var parts = line.Split(new[] {','}, 2);
-				result[parts[0].Trim()] = parts[1].Trim();
-			}
-
-			return result;
-		}
-
-		private static Dictionary<string, string> LoadMonsterNameAlerts()
-		{
-			var result = new Dictionary<string, string>();
-
-			string[] lines = File.ReadAllLines("config/monster_name_alerts.txt");
-			foreach (string line in lines.Select(a => a.Trim()))
-			{
-				if (string.IsNullOrWhiteSpace(line) || line.IndexOf(',') < 0)
-					continue;
-
-				var parts = line.Split(new[] { ',' }, 2);
-				result[parts[0].Trim()] = parts[1].Trim();
-			}
-
-			return result;
 		}
 	}
 }

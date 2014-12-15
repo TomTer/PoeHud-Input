@@ -6,35 +6,35 @@ namespace PoeHUD.Poe
 		{
 			get
 			{
-				return this.m.ReadStringU(this.m.ReadInt(this.address), 256, true);
+				return this.M.ReadStringU(this.M.ReadInt(this.Address), 256, true);
 			}
 		}
 		public string Name
 		{
 			get
 			{
-				return this.m.ReadStringU(this.m.ReadInt(this.address + 4), 256, true);
+				return this.M.ReadStringU(this.M.ReadInt(this.Address + 4), 256, true);
 			}
 		}
 		public int Act
 		{
 			get
 			{
-				return this.m.ReadInt(this.address + 8);
+				return this.M.ReadInt(this.Address + 8);
 			}
 		}
 		public bool IsTown
 		{
 			get
 			{
-				return (this.m.ReadInt(this.address + 12) & 1) == 1;
+				return (this.M.ReadInt(this.Address + 12) & 1) == 1;
 			}
 		}
 		public bool HasWaypoint
 		{
 			get
 			{
-				return (this.m.ReadInt(this.address + 13) & 1) == 1;
+				return (this.M.ReadInt(this.Address + 13) & 1) == 1;
 			}
 		}
 
@@ -42,7 +42,7 @@ namespace PoeHUD.Poe
 		{
 			get
 			{
-				return (this.m.ReadInt(this.address + 0x16));
+				return (this.M.ReadInt(this.Address + 0x16));
 			}
 		}
 	}

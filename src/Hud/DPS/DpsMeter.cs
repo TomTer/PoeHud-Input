@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using PoeHUD.Controllers;
 using PoeHUD.Framework;
 using PoeHUD.Poe.EntityComponents;
+using PoeHUD.Settings;
 using SlimDX.Direct3D9;
 
 namespace PoeHUD.Hud.DPS
@@ -21,15 +21,23 @@ namespace PoeHUD.Hud.DPS
 		private const float dps_period = 0.2f;
 		private readonly float[] damageMemory = new float[10];
 		private int ixDamageMemory;
-		private int maxDps = 0;
+		private int maxDps;
+
+		public class DpsDisplaySettings : SettingsForModule
+		{
+			public SettingIntRange PeakFontSize = new SettingIntRange("Peak font size", 7, 18, 8);
+			public SettingIntRange DpsFontSize = new SettingIntRange("DPS font size", 10, 30, 16);
+			public DpsDisplaySettings() : base("DPS-meter") { }
+		}
+
+		public DpsDisplaySettings Settings = new DpsDisplaySettings(); 
 
 		public override void OnEnable()
 		{
 			lastEntities = new Dictionary<int, int>();
-			model.Area.OnAreaChange += CurrentArea_OnAreaChange;
 		}
 
-		private void CurrentArea_OnAreaChange(AreaController area)
+		public override void OnAreaChange(AreaController area)
 		{
 			lastEntities = new Dictionary<int, int>();
 			hasStarted = false;
@@ -38,11 +46,6 @@ namespace PoeHUD.Hud.DPS
 
 		public override void Render(RenderingContext rc, Dictionary<UiMountPoint, Vec2> mountPoints)
 		{
-			if (!Settings.GetBool("DpsDisplay"))
-			{
-				return;
-			}
-
 			if (!hasStarted)
 			{
 				lastCalcTime = DateTime.Now;
@@ -62,14 +65,13 @@ namespace PoeHUD.Hud.DPS
 				lastCalcTime = dtNow;
 			}
 
-			int fontSize = Settings.GetInt("XphDisplay.FontSize");
 			Vec2 mapWithOffset = mountPoints[UiMountPoint.LeftOfMinimap];
 			int dps = ((int)damageMemory.Average());
 			if (maxDps < dps)
 				maxDps = dps;
 			
-			var textSize = rc.AddTextWithHeight(mapWithOffset,  dps + " DPS", Color.White, fontSize * 3 / 2, DrawTextFormat.Right);
-			var tx2 = rc.AddTextWithHeight(new Vec2(mapWithOffset.X, mapWithOffset.Y + textSize.Y), maxDps + " peak DPS", Color.White, fontSize * 2 / 3, DrawTextFormat.Right);
+			var textSize = rc.AddTextWithHeight(mapWithOffset,  dps + " DPS", Color.White, Settings.DpsFontSize, DrawTextFormat.Right);
+			var tx2 = rc.AddTextWithHeight(new Vec2(mapWithOffset.X, mapWithOffset.Y + textSize.Y), maxDps + " peak DPS", Color.White, Settings.PeakFontSize, DrawTextFormat.Right);
 
 			int width = Math.Max(tx2.X, textSize.X);
 			Rect rect = new Rect(mapWithOffset.X - 5 - width, mapWithOffset.Y - 5, width + 10, textSize.Y + tx2.Y + 10);
@@ -106,6 +108,11 @@ namespace PoeHUD.Hud.DPS
 
 		public override void OnDisable()
 		{
+		}
+
+		public override SettingsForModule SettingsNode
+		{
+			get { return Settings; }
 		}
 	}
 }

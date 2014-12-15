@@ -16,25 +16,25 @@ namespace PoeHUD.Poe.UI
 
 		// 214 is something about weapon swap (just a ptr to vtable, with strings nearb)
 
-		public SingleItemContainerElement HeadSlot { get { return base.ReadObjectAfterBuffers<SingleItemContainerElement>(0x218); } }
-		public SingleItemContainerElement AmuletSlot { get { return base.ReadObjectAfterBuffers<SingleItemContainerElement>(0x21C); } }
-		public SingleItemContainerElement ChestSlot { get { return base.ReadObjectAfterBuffers<SingleItemContainerElement>(0x220); } }
+		public ItemContainer HeadSlot { get { return base.ReadObjectAfterBuffers<ItemContainer>(0x218); } }
+		public ItemContainer AmuletSlot { get { return base.ReadObjectAfterBuffers<ItemContainer>(0x21C); } }
+		public ItemContainer ChestSlot { get { return base.ReadObjectAfterBuffers<ItemContainer>(0x220); } }
 
-		public SingleItemContainerElement MainWeaponSlot { get { return base.ReadObjectAfterBuffers<SingleItemContainerElement>(0x224); } }
-		public SingleItemContainerElement OffWeaponSlot { get { return base.ReadObjectAfterBuffers<SingleItemContainerElement>(0x228); } }
+		public ItemContainer MainWeaponSlot { get { return base.ReadObjectAfterBuffers<ItemContainer>(0x224); } }
+		public ItemContainer OffWeaponSlot { get { return base.ReadObjectAfterBuffers<ItemContainer>(0x228); } }
 
 		public Element SwapMainWeaponSlot { get { return base.ReadObjectAfterBuffers<Element>(0x22C); } }
 		public Element SwapOffWeaponSlot { get { return base.ReadObjectAfterBuffers<Element>(0x230); } }
-		public SingleItemContainerElement LeftRingSlot { get { return base.ReadObjectAfterBuffers<SingleItemContainerElement>(0x234); } }
-		public SingleItemContainerElement RightRingSlot { get { return base.ReadObjectAfterBuffers<SingleItemContainerElement>(0x238); } }
+		public ItemContainer LeftRingSlot { get { return base.ReadObjectAfterBuffers<ItemContainer>(0x234); } }
+		public ItemContainer RightRingSlot { get { return base.ReadObjectAfterBuffers<ItemContainer>(0x238); } }
 
-		public SingleItemContainerElement GlovesSlot { get { return base.ReadObjectAfterBuffers<SingleItemContainerElement>(0x23C); } }
-		public SingleItemContainerElement BeltSlot { get { return base.ReadObjectAfterBuffers<SingleItemContainerElement>(0x240); } }
-		public SingleItemContainerElement BootsSlot { get { return base.ReadObjectAfterBuffers<SingleItemContainerElement>(0x244); } }
+		public ItemContainer GlovesSlot { get { return base.ReadObjectAfterBuffers<ItemContainer>(0x23C); } }
+		public ItemContainer BeltSlot { get { return base.ReadObjectAfterBuffers<ItemContainer>(0x240); } }
+		public ItemContainer BootsSlot { get { return base.ReadObjectAfterBuffers<ItemContainer>(0x244); } }
 
-		public Element BackpackInnerFrame { get { return base.ReadObjectAfterBuffers<Element>(0x248); } }
+		public ItemContainer BackpackInnerFrame { get { return base.ReadObjectAfterBuffers<ItemContainer>(0x248); } }
 
-		public Element FlasksFrame { get { return base.ReadObjectAfterBuffers<Element>(0x24C); } }
+		public ItemContainer FlasksFrame { get { return base.ReadObjectAfterBuffers<ItemContainer>(0x24C); } }
 
 		public Element GemLevelUpsFrame { get { return base.ReadObjectAfterBuffers<Element>(0x250); } }
 

@@ -1,4 +1,5 @@
 using System.Drawing;
+using System.Media;
 
 namespace PoeHUD.Hud.Loot
 {
@@ -9,5 +10,9 @@ namespace PoeHUD.Hud.Loot
 		public int FrameWidth;
 		public string Text;
 		public int IconIndex;
+
+		public MapIcon IconForMap;
+		public string SoundFileName;
+		public SoundPlayer soundToPlay;
 	}
 }

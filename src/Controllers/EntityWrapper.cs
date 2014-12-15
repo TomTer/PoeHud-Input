@@ -16,7 +16,7 @@ namespace PoeHUD.Controllers
 
 		public string Path { get; private set; }
 		public bool IsValid { get { return this.InternalEntity.IsValid && this.IsInList && this.cachedId == this.InternalEntity.ID; } }
-		public int Address { get { return this.InternalEntity.address; } }
+		public int Address { get { return this.InternalEntity.Address; } }
 		public int Id { get { return this.cachedId; } }
 		public bool IsHostile { get { return this.InternalEntity.IsHostile; } }
 		public long LongId { get; private set; }
@@ -39,8 +39,12 @@ namespace PoeHUD.Controllers
 		public EntityWrapper(GameController Poe, Poe.Entity entity)
 		{
 			this.Root = Poe;
+
 			this.InternalEntity = entity;
-			this.Components = this.InternalEntity.GetComponents();
+			this.Components = new Dictionary<string, int>();
+			foreach (KeyValuePair<string, int> kv in this.InternalEntity.EnumComponents(true)) {
+				Components.Add(kv.Key, kv.Value);
+			}
 			this.Path = this.InternalEntity.Path;
 			this.cachedId = this.InternalEntity.ID;
 			this.LongId = this.InternalEntity.LongId;
@@ -50,16 +54,16 @@ namespace PoeHUD.Controllers
 		}
 		public T GetComponent<T>() where T : Component, new()
 		{
-			string name = typeof(T).Name;
-			return this.Root.Internal.GetObject<T>(this.Components.ContainsKey(name) ? this.Components[name] : 0);
+			int addr = this.Components.TryGetValue(ComponentNames.Map[typeof(T)], out addr) ? addr : 0;
+			return this.Root.Internal.GetObject<T>(addr);
 		}
 		public bool HasComponent<T>() where T : Component, new()
 		{
-			return this.Components.ContainsKey(typeof(T).Name);
+			return this.Components.ContainsKey(ComponentNames.Map[typeof(T)]);
 		}
 		public void PrintComponents()
 		{
-			Console.WriteLine(this.InternalEntity.Path + " " + this.InternalEntity.address.ToString("X"));
+			Console.WriteLine(this.InternalEntity.Path + " " + this.InternalEntity.Address.ToString("X"));
 			foreach (KeyValuePair<string, int> current in this.Components)
 			{
 				Console.WriteLine(current.Key + " " + current.Value.ToString("X"));

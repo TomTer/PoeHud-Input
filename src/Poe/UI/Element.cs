@@ -13,14 +13,20 @@ namespace PoeHUD.Poe.UI
 		// 16 dup <128-bytes structure>
 		// then the rest is
 
-		public int vTable { get { return m.ReadInt(this.address + 0); } }
+		public int vTable { get { return M.ReadInt(this.Address + 0); } }
 
-		public Element Root { get { return base.ReadObject<Element>(this.address + 0x5c + OffsetBuffers); } }
-		public Element Parent { get { return base.ReadObject<Element>(this.address + 0x60 + OffsetBuffers); } }
-		public float X { get { return this.m.ReadFloat(this.address + 0x64 + OffsetBuffers); } }
-		public float Y { get { return this.m.ReadFloat(this.address + 0x68 + OffsetBuffers); } }
-		public float Width { get { return this.m.ReadFloat(this.address + 0xF0 + OffsetBuffers); } }
-		public float Height { get { return this.m.ReadFloat(this.address + 0xF4 + OffsetBuffers); } }
+		public Element Root { get { return base.ReadObject<Element>(this.Address + 0x5c + OffsetBuffers); } }
+		public Element Parent { get { return base.ReadObject<Element>(this.Address + 0x60 + OffsetBuffers); } }
+
+		public Element HintToChatLink { get { return base.ReadObject<Element>(this.Address + 0x80 + OffsetBuffers); } }
+
+		public float ScrollY { get { return this.M.ReadFloat(this.Address + 0x2C + OffsetBuffers); } }
+		public float Scale { get { return this.M.ReadFloat(this.Address + 0xD8 + OffsetBuffers); } }
+		
+		public float X { get { return this.M.ReadFloat(this.Address + 0x64 + OffsetBuffers); } }
+		public float Y { get { return this.M.ReadFloat(this.Address + 0x68 + OffsetBuffers); } }
+		public float Width { get { return this.M.ReadFloat(this.Address + 0xF0 + OffsetBuffers); } }
+		public float Height { get { return this.M.ReadFloat(this.Address + 0xF4 + OffsetBuffers); } }
 		
 		// +110, 114 contain reference to texture
 		// +11C points to array of textures
@@ -31,13 +37,13 @@ namespace PoeHUD.Poe.UI
 		{
 			get
 			{
-				return (this.m.ReadInt(this.address + 0x14 + OffsetBuffers) - this.m.ReadInt(this.address + 0x10 + OffsetBuffers)) / 4;
+				return (this.M.ReadInt(this.Address + 0x14 + OffsetBuffers) - this.M.ReadInt(this.Address + 0x10 + OffsetBuffers)) / 4;
 			}
 		}
 		public bool IsVisibleLocal
 		{
 			get {
-				return (this.m.ReadInt(this.address + 2144) & 1) == 1;
+				return (this.M.ReadInt(this.Address + 0x58 +  OffsetBuffers) & 1) == 1;
 			}
 		}
 
@@ -54,13 +60,13 @@ namespace PoeHUD.Poe.UI
 			{
 				const int listOffset = 0x10 + OffsetBuffers;
 				List<Element> list = new List<Element>();
-				if (this.m.ReadInt(this.address + listOffset + 4) == 0 || this.m.ReadInt(this.address + listOffset) == 0 || this.ChildCount > 1000)
+				if (this.M.ReadInt(this.Address + listOffset + 4) == 0 || this.M.ReadInt(this.Address + listOffset) == 0 || this.ChildCount > 1000)
 				{
 					return list;
 				}
 				for (int i = 0; i < this.ChildCount; i++)
 				{
-					list.Add(base.GetObject<Element>(this.m.ReadInt(this.address + listOffset, i * 4)));
+					list.Add(base.GetObject<Element>(this.M.ReadInt(this.Address + listOffset, i * 4)));
 				}
 				return list;
 			}
@@ -71,7 +77,7 @@ namespace PoeHUD.Poe.UI
 			HashSet<Element> hashSet = new HashSet<Element>();
 			Element root = this.Root;
 			Element parent = this.Parent;
-			while (!hashSet.Contains(parent) && root.address != parent.address && parent.address != 0)
+			while (!hashSet.Contains(parent) && root.Address != parent.Address && parent.Address != 0)
 			{
 				list.Add(parent);
 				hashSet.Add(parent);
@@ -87,7 +93,7 @@ namespace PoeHUD.Poe.UI
 			foreach (Element current in this.GetParentChain())
 			{
 				num += current.X;
-				num2 += current.Y;
+				num2 += current.Y + current.ScrollY;
 			}
 			return new Vec2f(num, num2);
 		}
@@ -95,8 +101,8 @@ namespace PoeHUD.Poe.UI
 		public Rect GetClientRect()
 		{
 			Vec2f vPos = GetParentPos();
-			float width = this.game.IngameState.Camera.Width;
-			float height = this.game.IngameState.Camera.Height;
+			float width = this.Game.IngameState.Camera.Width;
+			float height = this.Game.IngameState.Camera.Height;
 			float ratioFixMult = width / height / 1.6f;
 			float xScale = width / 2560f / ratioFixMult;
 			float yScale = height / 1600f;
@@ -121,10 +127,10 @@ namespace PoeHUD.Poe.UI
 		}
 		public Element GetChildAtIndex(int index)
 		{
-			return index >= this.ChildCount ? null : base.GetObject<Element>(this.m.ReadInt(this.address + OffsetBuffers + 0x10, index * 4));
+			return index >= this.ChildCount ? null : base.GetObject<Element>(this.M.ReadInt(this.Address + OffsetBuffers + 0x10, index * 4));
 		}
 
-		public T ReadObjectAfterBuffers<T>(int offet) where T : RemoteMemoryObject, new()
+		public virtual T ReadObjectAfterBuffers<T>(int offet) where T : RemoteMemoryObject, new()
 		{
 			return base.ReadObjectAt<T>(offet + OffsetBuffers);
 		}

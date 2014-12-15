@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows.Forms;
 using PoeHUD.Controllers;
 using PoeHUD.Framework;
+using PoeHUD.Hud.AdvTooltips;
 using PoeHUD.Hud.DebugView;
 using PoeHUD.Hud.DPS;
 using PoeHUD.Hud.Health;
@@ -15,46 +16,58 @@ using PoeHUD.Hud.MaxRolls;
 using PoeHUD.Hud.Monster;
 using PoeHUD.Hud.Preload;
 using PoeHUD.Hud.XpRate;
+using PoeHUD.Settings;
 
 namespace PoeHUD.Hud
 {
-
 	public class OverlayRenderer
 	{
 		private readonly List<HUDPlugin> plugins;
 		private readonly GameController gameController;
+		private readonly SettingsRoot Settings;
 		private int _modelUpdatePeriod;
-		public OverlayRenderer(GameController gameController, RenderingContext rc)
+		public OverlayRenderer(GameController gameController, SettingsRoot settings, RenderingContext rc)
 		{
+			this.Settings = settings;
 			this.gameController = gameController;
-			gameController.Area.OnAreaChange += area => _modelUpdatePeriod = 6;
 
 			this.plugins = new List<HUDPlugin>{
 				new HealthBarRenderer(),
 				new ItemAlerter(),
-				new MinimapRenderer(gatherMapIcons),
-				new LargeMapRenderer(gatherMapIcons),
-				new ItemLevelRenderer(),
-				new ItemRollsRenderer(),
+				new MapIconsRenderer(gatherMapIcons),
+				new AdvTooltopRenderer(),
 				new MonsterTracker(),
 				new PoiTracker(),
 				new XPHRenderer(),
 				new ClientHacks(),
 	#if DEBUG
-				// new ShowUiHierarchy(),
-				new MainAddresses(),
+				//new ShowUiHierarchy(),
+				//new MainAddresses(),
 	#endif
 				new PreloadAlert(),
 				new DpsMeter(),
 			};
-			if (Settings.GetBool("Window.ShowIngameMenu"))
+
+			gameController.Area.OnAreaChange += (area) => {
+				_modelUpdatePeriod = 6;
+				foreach (var hudPlugin in plugins)
+					hudPlugin.OnAreaChange(area);
+			};
+
+			foreach (var plugin in plugins)
+			{
+				if( null != plugin.SettingsNode )
+					Settings.AddModule(plugin.SettingsNode);
+			}
+			if (Settings.Global.ShowIngameMenu)
 			{
 	#if !DEBUG
-				this.plugins.Add(new Menu.Menu());
+				this.plugins.Add(new Menu.Menu(settings));
 	#endif
 			}
 			UpdateObserverLists();
-			rc.OnRender += this.rc_OnRender;
+
+			rc.RenderModules = this.rc_OnRender;
 
 			this.plugins.ForEach(x => x.Init(gameController));
 		}
@@ -82,7 +95,7 @@ namespace PoeHUD.Hud
 
 		private void rc_OnRender(RenderingContext rc)
 		{
-			// if (Settings.GetBool("Window.RequireForeground") && !this.gameController.Window.IsForeground()) return;
+			if (Settings.Global.RequireForeground && !this.gameController.Window.IsForeground()) return;
 
 			this._modelUpdatePeriod++;
 			if (this._modelUpdatePeriod > 6)
@@ -102,7 +115,8 @@ namespace PoeHUD.Hud
 
 			foreach (HUDPlugin current in this.plugins)
 			{
-				current.Render(rc, mountPoints);
+				if (current.SettingsNode == null || current.SettingsNode.Enabled)
+					current.Render(rc, mountPoints);
 			}
 		}
 
@@ -112,13 +126,11 @@ namespace PoeHUD.Hud
 			{
 				Clipboard.SetText(new IdcScriptMaker(gameController).GetBaseAddressScript());
 			}
-		}
-
-		private string PrepareIdcScript()
-		{
-			StringBuilder sb = new StringBuilder();
-
-			return sb.ToString();
+			if (args.KeyChar == 'f')
+			{
+				Clipboard.SetText(new IdcScriptMaker(gameController).GetFlaskAddressScript());
+			}
+			
 		}
 
 

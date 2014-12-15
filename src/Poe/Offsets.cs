@@ -113,8 +113,8 @@ namespace PoeHUD.Poe
 			});
 			MaphackFunc = array[0];
 			ZoomHackFunc = array[1] + 247;
-			Fullbright1 = m.ReadInt(m.BaseAddress + array[2] + 1487) - m.BaseAddress;
-			Fullbright2 = m.ReadInt(m.BaseAddress + array[2] + 1573) - m.BaseAddress;
+			Fullbright1 = m.ReadInt(m.BaseAddress + array[2] + 0x600) - m.BaseAddress;
+			Fullbright2 = m.ReadInt(m.BaseAddress + array[2] + 0x656) - m.BaseAddress;
 			Base = m.ReadInt(m.BaseAddress + array[3] + 22) - m.BaseAddress;
 			FileRoot = m.ReadInt(m.BaseAddress + array[4] + 40) - m.BaseAddress;
 			AreaChangeCount = m.ReadInt(m.BaseAddress + array[5] + 13) - m.BaseAddress;

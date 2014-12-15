@@ -8,28 +8,28 @@ namespace PoeHUD.Poe
 		{
 			get
 			{
-				return this.m.ReadInt(this.address + 28);
+				return this.M.ReadInt(this.Address + 28);
 			}
 		}
 		public int Height
 		{
 			get
 			{
-				return this.m.ReadInt(this.address + 32);
+				return this.M.ReadInt(this.Address + 32);
 			}
 		}
 		private int ListStart
 		{
 			get
 			{
-				return this.m.ReadInt(this.address + 48);
+				return this.M.ReadInt(this.Address + 48);
 			}
 		}
 		private int ListEnd
 		{
 			get
 			{
-				return this.m.ReadInt(this.address + 52);
+				return this.M.ReadInt(this.Address + 52);
 			}
 		}
 		public List<Entity> Items
@@ -45,7 +45,7 @@ namespace PoeHUD.Poe
 				HashSet<int> hashSet = new HashSet<int>();
 				for (int i = 0; i < num; i++)
 				{
-					int num2 = this.m.ReadInt(this.ListStart + i * 4);
+					int num2 = this.M.ReadInt(this.ListStart + i * 4);
 					if (num2 != 0 && !hashSet.Contains(num2))
 					{
 						list.Add(base.ReadObject<Entity>(num2));

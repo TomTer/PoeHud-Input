@@ -6,7 +6,7 @@ namespace PoeHUD.Poe
 		{
 			get
 			{
-				return base.ReadObject<AreaTemplate>(this.address + 8);
+				return base.ReadObject<AreaTemplate>(this.Address + 8);
 			}
 		}
 
@@ -14,14 +14,14 @@ namespace PoeHUD.Poe
 		{
 			get
 			{
-				return this.m.ReadInt(this.address + 12);
+				return this.M.ReadInt(this.Address + 12);
 			}
 		}
 		public int CurrentAreaHash
 		{
 			get
 			{
-				return this.m.ReadInt(this.address + 16);
+				return this.M.ReadInt(this.Address + 16);
 			}
 		}
 
@@ -29,14 +29,14 @@ namespace PoeHUD.Poe
 		{
 			get
 			{
-				return base.ReadObject<Entity>(this.address + 1440);
+				return base.ReadObject<Entity>(this.Address + 1440);
 			}
 		}
 		public EntityList EntityList
 		{
 			get
 			{
-				return base.GetObject<EntityList>(this.address + 1472);
+				return base.GetObject<EntityList>(this.Address + 1476);
 			}
 		}
 	}

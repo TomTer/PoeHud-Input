@@ -68,7 +68,6 @@ namespace PoeHUD.Framework
 			return new Vec2((int)(left.X / right), (int)(left.Y / right));
 		}
 
-
 		public double GetPolarCoordinates(out double phi)
 		{
 			double distance = Math.Sqrt(this.X*this.X + this.Y*this.Y);

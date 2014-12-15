@@ -12,13 +12,13 @@ namespace PoeHUD.Hud
 
 		public HudTexture(string fileName) : this(fileName, Color.White) { }
 
-		public HudTexture(string fileName, MonsterRarity rarity) : this(fileName, Color.White)
+		public HudTexture(string fileName, Rarity rarity) : this(fileName, Color.White)
 		{
 			switch (rarity)
 			{
-				case MonsterRarity.Magic: TintColor = HudSkin.MagicColor; break;
-				case MonsterRarity.Rare: TintColor = HudSkin.RareColor; break;
-				case MonsterRarity.Unique: TintColor = HudSkin.UniqueColor; break;
+				case Rarity.Magic: TintColor = HudSkin.MagicColor; break;
+				case Rarity.Rare: TintColor = HudSkin.RareColor; break;
+				case Rarity.Unique: TintColor = HudSkin.UniqueColor; break;
 			}
 		}
 

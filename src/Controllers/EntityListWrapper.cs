@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace PoeHUD.Controllers
 {
@@ -37,7 +36,6 @@ namespace PoeHUD.Controllers
 		private readonly GameController Root;
 		private Dictionary<int, EntityWrapper> entityCache;
 		private readonly HashSet<string> ignoredEntities;
-		private Stopwatch stopwatch = new Stopwatch();
 
 		public EntityListObserver Observer = new EntityListBlankObserver();
 
@@ -52,9 +50,10 @@ namespace PoeHUD.Controllers
 			this.Root = root;
 			this.entityCache = new Dictionary<int, EntityWrapper>();
 			this.ignoredEntities = new HashSet<string>();
-			Root.Area.OnAreaChange += this.AreaChanged;
+			Root.Area.OnAreaChange += this.OnAreaChange;
 		}
-		private void AreaChanged(AreaController area)
+
+		private void OnAreaChange(AreaController area)
 		{
 			this.ignoredEntities.Clear();
 			foreach (EntityWrapper current in this.entityCache.Values)
@@ -63,14 +62,14 @@ namespace PoeHUD.Controllers
 				this.Observer.EntityRemoved(current);
 			}
 			this.entityCache.Clear();
-			int address = this.Root.Internal.IngameState.Data.LocalPlayer.address;
+			int address = this.Root.Internal.IngameState.Data.LocalPlayer.Address;
 			if (this.Player == null || this.Player.Address != address) {
 				this.Player = new EntityWrapper(this.Root, address);
 			}
 		}
 		public void RefreshState()
 		{
-			int address = this.Root.Internal.IngameState.Data.LocalPlayer.address;
+			int address = this.Root.Internal.IngameState.Data.LocalPlayer.Address;
 			if ((this.Player == null) || (this.Player.Address != address))
 			{
 				this.Player = new EntityWrapper(this.Root, address);

@@ -8,9 +8,9 @@ namespace PoeHUD.Poe.EntityComponents
 		{
 			get
 			{
-				if (this.address != 0)
+				if (this.Address != 0)
 				{
-					return this.m.ReadInt(this.address + 80);
+					return this.M.ReadInt(this.Address + 80);
 				}
 				return 1;
 			}
@@ -19,9 +19,9 @@ namespace PoeHUD.Poe.EntityComponents
 		{
 			get
 			{
-				if (this.address != 0)
+				if (this.Address != 0)
 				{
-					return this.m.ReadInt(this.address + 84);
+					return this.M.ReadInt(this.Address + 84);
 				}
 				return 1;
 			}
@@ -30,9 +30,9 @@ namespace PoeHUD.Poe.EntityComponents
 		{
 			get
 			{
-				if (this.address != 0)
+				if (this.Address != 0)
 				{
-					return this.m.ReadInt(this.address + 92);
+					return this.M.ReadInt(this.Address + 92);
 				}
 				return 0;
 			}
@@ -41,9 +41,9 @@ namespace PoeHUD.Poe.EntityComponents
 		{
 			get
 			{
-				if (this.address != 0)
+				if (this.Address != 0)
 				{
-					return this.m.ReadInt(this.address + 116);
+					return this.M.ReadInt(this.Address + 116);
 				}
 				return 1;
 			}
@@ -52,9 +52,9 @@ namespace PoeHUD.Poe.EntityComponents
 		{
 			get
 			{
-				if (this.address != 0)
+				if (this.Address != 0)
 				{
-					return this.m.ReadInt(this.address + 120);
+					return this.M.ReadInt(this.Address + 120);
 				}
 				return 1;
 			}
@@ -63,9 +63,9 @@ namespace PoeHUD.Poe.EntityComponents
 		{
 			get
 			{
-				if (this.address != 0)
+				if (this.Address != 0)
 				{
-					return this.m.ReadInt(this.address + 128);
+					return this.M.ReadInt(this.Address + 128);
 				}
 				return 0;
 			}
@@ -74,9 +74,9 @@ namespace PoeHUD.Poe.EntityComponents
 		{
 			get
 			{
-				if (this.address != 0)
+				if (this.Address != 0)
 				{
-					return this.m.ReadInt(this.address + 152);
+					return this.M.ReadInt(this.Address + 152);
 				}
 				return 0;
 			}
@@ -85,9 +85,9 @@ namespace PoeHUD.Poe.EntityComponents
 		{
 			get
 			{
-				if (this.address != 0)
+				if (this.Address != 0)
 				{
-					return this.m.ReadInt(this.address + 156);
+					return this.M.ReadInt(this.Address + 156);
 				}
 				return 0;
 			}
@@ -121,7 +121,7 @@ namespace PoeHUD.Poe.EntityComponents
 		{
 			get
 			{
-				return this.m.ReadBytes(this.address + 212, 1)[0] == 1;
+				return this.M.ReadBytes(this.Address + 212, 1)[0] == 1;
 			}
 		}
 		public List<Buff> Buffs
@@ -129,8 +129,8 @@ namespace PoeHUD.Poe.EntityComponents
 			get
 			{
 				List<Buff> list = new List<Buff>();
-				int num = this.m.ReadInt(this.address + 184);
-				int num2 = this.m.ReadInt(this.address + 188);
+				int num = this.M.ReadInt(this.Address + 184);
+				int num2 = this.M.ReadInt(this.Address + 188);
 				int num3 = (num2 - num) / 4;
 				if (num3 <= 0 || num3 > 32)
 				{
@@ -138,7 +138,7 @@ namespace PoeHUD.Poe.EntityComponents
 				}
 				for (int i = 0; i < num3; i++)
 				{
-					list.Add(base.ReadObject<Buff>(this.m.ReadInt(num + i * 4) + 4));
+					list.Add(base.ReadObject<Buff>(this.M.ReadInt(num + i * 4) + 4));
 				}
 				return list;
 			}
